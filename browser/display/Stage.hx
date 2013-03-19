@@ -16,7 +16,7 @@ import browser.geom.Rectangle;
 import browser.ui.Acceleration;
 import browser.ui.Keyboard;
 import browser.Lib;
-import nme.Vector;
+import browser.Vector;
 import js.html.CanvasElement;
 import js.html.DeviceMotionEvent;
 import js.Browser;

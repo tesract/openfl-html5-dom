@@ -17,7 +17,7 @@ import browser.geom.Matrix;
 import browser.geom.Point;
 import browser.geom.Rectangle;
 import browser.Lib;
-import nme.Vector;
+import browser.Vector;
 import js.html.CanvasElement;
 import js.html.CanvasGradient;
 import js.html.CanvasRenderingContext2D;

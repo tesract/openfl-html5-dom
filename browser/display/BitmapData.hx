@@ -26,7 +26,7 @@ import js.html.Uint8ClampedArray;
 import js.Browser;
 
 
-@:autoBuild(nme.Assets.embedBitmap())
+@:autoBuild(pazu.Assets.embedBitmap())
 class BitmapData implements IBitmapDrawable {
 	
 	

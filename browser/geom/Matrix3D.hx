@@ -2,7 +2,7 @@ package browser.geom;
 #if js
 
 
-import nme.Vector;
+import browser.Vector;
 
 
 class Matrix3D {

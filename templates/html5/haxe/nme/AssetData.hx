@@ -1,7 +1,7 @@
 package nme;
 
 
-import nme.Assets;
+import pazu.Assets;
 
 
 class AssetData {
@@ -34,5 +34,5 @@ class AssetData {
 }
 
 
-::foreach assets::::if (type == "font")::class NME_::flatName:: extends nme.text.Font { }::end::
+::foreach assets::::if (type == "font")::class NME_::flatName:: extends flash.text.Font { }::end::
 ::end::

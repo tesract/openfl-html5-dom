@@ -12,7 +12,7 @@ import js.html.MediaElement;
 import js.Browser;
 
 
-@:autoBuild(nme.Assets.embedSound())
+@:autoBuild(pazu.Assets.embedSound())
 class Sound extends EventDispatcher {
 	
 	

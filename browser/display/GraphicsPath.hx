@@ -3,7 +3,7 @@ package browser.display;
 
 
 import browser.display.IGraphicsData;
-import nme.Vector;
+import browser.Vector;
 
 
 class GraphicsPath implements IGraphicsData implements IGraphicsPath {

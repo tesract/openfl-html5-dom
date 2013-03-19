@@ -8,7 +8,7 @@ import browser.geom.Rectangle;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.Uint8ClampedArray;
-import nme.Vector;
+import browser.Vector;
 
 
 class BlurFilter extends BitmapFilter {
