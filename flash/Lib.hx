@@ -91,6 +91,12 @@ class Lib {
 	}
 	
 	
+	public static function attach(name:String):MovieClip
+	{
+		return new MovieClip ();
+	}
+	
+	
 	public static function getTimer():Int {
 		
 		return Std.int((Timer.stamp() - starttime) * 1000);
