@@ -29,11 +29,11 @@ class ApplicationMain {
 		urlLoaders = new Map <String, URLLoader>();
 		total = 0;
 		
-		//browser.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
-		browser.Lib.current.loaderInfo = browser.display.LoaderInfo.create (null);
+		//flash.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
+		flash.Lib.current.loaderInfo = flash.display.LoaderInfo.create (null);
 
 		::if (WIN_WIDTH == "0")::::if (WIN_HEIGHT == "0")::
-		browser.Lib.preventDefaultTouchMove();
+		flash.Lib.preventDefaultTouchMove();
 		::end::::end::
 
 		::if (PRELOADER_NAME!="")::
@@ -119,7 +119,7 @@ class ApplicationMain {
 		if (Reflect.field(::APP_MAIN::, "main") == null)
 		{
 			var mainDisplayObj = Type.createInstance(DocumentClass, []);
-			if (Std.is(mainDisplayObj, browser.display.DisplayObject))
+			if (Std.is(mainDisplayObj, flash.display.DisplayObject))
 				flash.Lib.current.addChild(cast mainDisplayObj);
 		}
 		else
