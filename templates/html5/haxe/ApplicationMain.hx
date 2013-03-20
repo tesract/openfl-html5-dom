@@ -1,18 +1,18 @@
 #if !macro
-#if (nme && !flambe)
+#if (pazu_html5 && !flambe)
 
 import ::APP_MAIN_PACKAGE::::APP_MAIN_CLASS::;
 import haxe.Resource;
-import nme.display.Bitmap;
-import nme.display.BitmapData;
-import nme.display.Loader;
-import nme.events.Event;
-import nme.media.Sound;
-import nme.net.URLLoader;
-import nme.net.URLRequest;
-import nme.net.URLLoaderDataFormat;
-import nme.Assets;
-import nme.Lib;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.events.Event;
+import flash.media.Sound;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.net.URLLoaderDataFormat;
+//import flash.Assets;
+import flash.Lib;
 
 class ApplicationMain {
 
@@ -29,8 +29,8 @@ class ApplicationMain {
 		urlLoaders = new Map <String, URLLoader>();
 		total = 0;
 		
-		nme.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
-		nme.Lib.current.loaderInfo = nme.display.LoaderInfo.create (null);
+		//browser.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
+		browser.Lib.current.loaderInfo = browser.display.LoaderInfo.create (null);
 
 		::if (WIN_WIDTH == "0")::::if (WIN_HEIGHT == "0")::
 		browser.Lib.preventDefaultTouchMove();
@@ -120,7 +120,7 @@ class ApplicationMain {
 		{
 			var mainDisplayObj = Type.createInstance(DocumentClass, []);
 			if (Std.is(mainDisplayObj, browser.display.DisplayObject))
-				nme.Lib.current.addChild(cast mainDisplayObj);
+				flash.Lib.current.addChild(cast mainDisplayObj);
 		}
 		else
 		{
@@ -162,9 +162,9 @@ class DocumentClass {
 			if (searchTypes.pack.length == 2 && searchTypes.pack[1] == "display" && searchTypes.name == "DisplayObject") {
 				var fields = Context.getBuildFields();
 				var method = macro {
-					return nme.Lib.current.stage;
+					return flash.Lib.current.stage;
 				}
-				fields.push ({ name: "get_stage", access: [ APrivate, AOverride ], kind: FFun({ args: [], expr: method, params: [], ret: macro :nme.display.Stage }), pos: Context.currentPos() });
+				fields.push ({ name: "get_stage", access: [ APrivate, AOverride ], kind: FFun({ args: [], expr: method, params: [], ret: macro :flash.display.Stage }), pos: Context.currentPos() });
 				return fields;
 			}
 			searchTypes = searchTypes.superClass.t.get();
