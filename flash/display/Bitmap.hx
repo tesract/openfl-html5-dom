@@ -140,7 +140,7 @@ class Bitmap extends DisplayObject {
 			
 			nmeApplyFilters(nmeGraphics.nmeSurface);
 			var m = getBitmapSurfaceTransform(nmeGraphics);
-			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m,(parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect);
+			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m,(parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect, smoothing);
 			
 		} else {
 			

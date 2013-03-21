@@ -381,7 +381,7 @@ class Lib {
 	}
 	
 	
-	public static function nmeDrawToSurface(surface:CanvasElement, tgt:CanvasElement, matrix:Matrix = null, alpha:Float = 1.0, clipRect:Rectangle = null):Void {
+	public static function nmeDrawToSurface(surface:CanvasElement, tgt:CanvasElement, matrix:Matrix = null, alpha:Float = 1.0, clipRect:Rectangle = null, smoothing:Bool = true):Void {
 		
 		var srcCtx:CanvasRenderingContext2D = surface.getContext("2d");
 		var tgtCtx:CanvasRenderingContext2D = tgt.getContext("2d");
@@ -404,6 +404,7 @@ class Lib {
 					
 				} else { 
 					
+					nmeSetImageSmoothing(tgtCtx, smoothing);
 					tgtCtx.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
 					
 				}
@@ -770,6 +771,17 @@ class Lib {
 				default: "default";
 				
 			}
+			
+		}
+		
+	}
+	
+	
+	public static function nmeSetImageSmoothing(context:CanvasRenderingContext2D, enabled:Bool):Void {
+		
+		for (variant in ["imageSmoothingEnabled", "mozImageSmoothingEnabled", "webkitImageSmoothingEnabled"]) {
+			
+			Reflect.setField (context, variant, enabled);
 			
 		}
 		

@@ -427,7 +427,7 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public function drawToSurface(inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smothing:Bool):Void {
+	public function drawToSurface(inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
 		
 		nmeBuildLease();
 		var ctx:CanvasRenderingContext2D = inSurface.getContext('2d');
@@ -442,6 +442,7 @@ class BitmapData implements IBitmapDrawable {
 				
 			} else {
 				
+				Lib.nmeSetImageSmoothing(ctx, smoothing);
 				ctx.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
 				
 			}
