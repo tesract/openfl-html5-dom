@@ -987,14 +987,14 @@ class BitmapData implements IBitmapDrawable {
 		
 		if (!nmeLocked) {
 			
-			if (nmeTransparent) {
-				
-				var trpCtx:CanvasRenderingContext2D = nmeTransparentFiller.getContext('2d');
-				var trpData = trpCtx.getImageData(rect.x, rect.y, rect.width, rect.height);
-				
-				ctx.putImageData(trpData, rect.x, rect.y);
-				
-			}
+			//if (nmeTransparent) {
+				//
+				//var trpCtx:CanvasRenderingContext2D = nmeTransparentFiller.getContext('2d');
+				//var trpData = trpCtx.getImageData(rect.x, rect.y, rect.width, rect.height);
+				//
+				//ctx.putImageData(trpData, rect.x, rect.y);
+				//
+			//}
 			
 			var style = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (a / 255) + ')';
 			
