@@ -354,11 +354,15 @@ class BitmapData implements IBitmapDrawable {
 			
 			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
 			
-			if (nmeTransparent && sourceBitmapData.nmeTransparent) {
+			if (!mergeAlpha) {
 				
-				var trpCtx:CanvasRenderingContext2D = sourceBitmapData.nmeTransparentFiller.getContext('2d');
-				var trpData = trpCtx.getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
-				ctx.putImageData(trpData, destPoint.x, destPoint.y);
+				if (nmeTransparent && sourceBitmapData.nmeTransparent) {
+					
+					var trpCtx:CanvasRenderingContext2D = sourceBitmapData.nmeTransparentFiller.getContext('2d');
+					var trpData = trpCtx.getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+					ctx.putImageData(trpData, destPoint.x, destPoint.y);
+					
+				}
 				
 			}
 			
@@ -366,7 +370,7 @@ class BitmapData implements IBitmapDrawable {
 			
 		} else {
 			
-			nmeCopyPixelList[nmeCopyPixelList.length] = { handle: sourceBitmapData.handle(), transparentFiller: sourceBitmapData.nmeTransparentFiller, sourceX: sourceRect.x, sourceY: sourceRect.y, sourceWidth: sourceRect.width, sourceHeight: sourceRect.height, destX: destPoint.x, destY: destPoint.y };
+			nmeCopyPixelList[nmeCopyPixelList.length] = { handle: sourceBitmapData.handle(), transparentFiller:  (mergeAlpha ? null : sourceBitmapData.nmeTransparentFiller), sourceX: sourceRect.x, sourceY: sourceRect.y, sourceWidth: sourceRect.width, sourceHeight: sourceRect.height, destX: destPoint.x, destY: destPoint.y };
 			
 		}
 		
