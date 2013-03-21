@@ -336,6 +336,18 @@ class BitmapData implements IBitmapDrawable {
 		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle().width) sourceRect.width = sourceBitmapData.handle().width - sourceRect.x;
 		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle().height) sourceRect.height = sourceBitmapData.handle().height - sourceRect.y;
 		
+		if (alphaBitmapData != null && alphaBitmapData.nmeTransparent) {
+			
+			if (alphaPoint == null) alphaPoint = new Point();
+			
+			var bitmapData = new BitmapData (sourceBitmapData.width, sourceBitmapData.height, true);
+			bitmapData.copyPixels (sourceBitmapData, sourceRect, new Point (sourceRect.x, sourceRect.y));
+			bitmapData.copyChannel (alphaBitmapData, new Rectangle (alphaPoint.x, alphaPoint.y, sourceRect.width, sourceRect.height), new Point (sourceRect.x, sourceRect.y), BitmapDataChannel.ALPHA, BitmapDataChannel.ALPHA);
+			
+			sourceBitmapData = bitmapData;
+			
+		}
+		
 		if (!nmeLocked) {
 			
 			nmeBuildLease();
