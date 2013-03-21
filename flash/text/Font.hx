@@ -10,7 +10,7 @@ import haxe.Unserializer;
 import haxe.Resource;
 
 
-@:autoBuild(nme.Assets.embedFont())
+@:autoBuild(pazu.Assets.embedFont())
 class Font {
 	
 	

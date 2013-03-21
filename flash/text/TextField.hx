@@ -271,6 +271,12 @@ class TextField extends InteractiveObject {
 		if (!nmeCombinedVisible) return;
 		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
 		
+		//if (nmeGraphics.nmeSurface != null) {
+			//
+			//Lib.nmeSetImageSmoothing (nmeGraphics.nmeSurface.getContext("2d"), (gridFitType != GridFitType.PIXEL));
+			//
+		//}
+		
 		if (nmeGraphics.nmeRender(inMask, nmeFilters, 1, 1)) {
 			
 			handleGraphicsUpdated(nmeGraphics);
@@ -280,7 +286,7 @@ class TextField extends InteractiveObject {
 		if (!mHTMLMode && inMask != null) {
 			
 			var m = getSurfaceTransform(nmeGraphics);
-			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m,(parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect);
+			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m, (parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
 			
 		} else {
 			
