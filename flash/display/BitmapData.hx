@@ -370,6 +370,66 @@ class BitmapData implements IBitmapDrawable {
 			
 		} else {
 			
+			//var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
+			//ctx.putImageData (sourceBitmapData._nmeTextureBuffer.getContext('2d').getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height), destPoint.x, destPoint.y);
+			
+			
+			//var offsetX = Std.int (destPoint.x - sourceRect.x);
+			//var offsetY = Std.int (destPoint.y - sourceRect.y);
+			//
+			//var wasLocked = sourceBitmapData.nmeLocked;
+			//if (!wasLocked) sourceBitmapData.lock();
+			//
+			//var sourceRectX = Std.int (sourceRect.x);
+			//var sourceRectY = Std.int (sourceRect.y);
+			//var sourceRectWidth = Std.int (sourceRect.width);
+			//var sourceRectHeight = Std.int (sourceRect.height);
+			//var targetData = nmeImageData.data;
+			//var sourceData = sourceBitmapData.nmeImageData.data;
+			//var targetWidth = width;
+			//var sourceWidth = sourceBitmapData.width;
+			//
+			//if (sourceBitmapData.nmeImageData != null) {
+				//
+				//for (sourceX in sourceRectX...sourceRectWidth + 1) {
+					//
+					//for (sourceY in sourceRectY...sourceRectHeight + 1) {
+						//
+						//var sourceOffset = ((sourceX * sourceWidth) * 4 + sourceX * 4);
+						//var targetOffset = (((sourceX + offsetX) * targetWidth) * 4 + (sourceX + offsetX) * 4);
+						//
+						//targetData[targetOffset] = sourceData[sourceOffset];
+						//targetData[targetOffset+1] = sourceData[sourceOffset+1];
+						//targetData[targetOffset+2] = sourceData[sourceOffset+2];
+						//targetData[targetOffset+3] = sourceData[sourceOffset+3];
+						//
+					//}
+					//
+				//}
+				//
+			//}
+			//
+			//if (!wasLocked) sourceBitmapData.unlock();
+			
+			//
+			//
+			//
+			//nmeImageData.data[offset] = (color & 0x00FF0000) >>> 16;
+			//nmeImageData.data[offset + 1] = (color & 0x0000FF00) >>> 8;
+			//nmeImageData.data[offset + 2] = (color & 0x000000FF);
+			//
+			//if (nmeTransparent) {
+				//
+				//nmeImageData.data[offset + 3] = (color & 0xFF000000) >>> 24;
+				//
+			//} else {
+				//
+				//nmeImageData.data[offset + 3] = (0xFF);
+				//
+			//}
+			//
+			//nmeImageDataChanged = true;
+			//
 			nmeCopyPixelList[nmeCopyPixelList.length] = { handle: sourceBitmapData.handle(), transparentFiller:  (mergeAlpha ? null : sourceBitmapData.nmeTransparentFiller), sourceX: sourceRect.x, sourceY: sourceRect.y, sourceWidth: sourceRect.width, sourceHeight: sourceRect.height, destX: destPoint.x, destY: destPoint.y };
 			
 		}
@@ -1024,7 +1084,7 @@ class BitmapData implements IBitmapDrawable {
 			}
 			
 			nmeImageDataChanged = true;
-			ctx.putImageData(nmeImageData, 0, 0, rect.x, rect.y, rect.width, rect.height);
+			//ctx.putImageData(nmeImageData, 0, 0, rect.x, rect.y, rect.width, rect.height);
 			
 		}
 		
