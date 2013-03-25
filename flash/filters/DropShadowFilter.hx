@@ -2,6 +2,8 @@ package flash.filters;
 #if js
 
 
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 
@@ -51,7 +53,7 @@ class DropShadowFilter extends BitmapFilter {
 	}
 	
 	
-	override public function nmeApplyFilter(surface:CanvasElement, refreshCache:Bool = false):Void {
+	override public function nmeApplyFilter(surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
 		
 		if (!_nmeCached || refreshCache) {
 			

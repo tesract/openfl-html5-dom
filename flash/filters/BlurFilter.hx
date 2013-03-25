@@ -161,7 +161,7 @@ class BlurFilter extends BitmapFilter {
 	}
 	
 	
-	override public function nmeApplyFilter(surface:CanvasElement, refreshCache:Bool = false):Void {
+	override public function nmeApplyFilter(surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
 		
 		if (surface.width > 0 && surface.height > 0) {
 			

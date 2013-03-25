@@ -2,6 +2,8 @@ package flash.filters;
 #if js
 
 
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import js.html.CanvasElement;
 
 
@@ -34,7 +36,7 @@ class BitmapFilter {
 	}
 	
 	
-	public function nmeApplyFilter(surface:CanvasElement, refreshCache:Bool = false) {
+	public function nmeApplyFilter(surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false) {
 		
 		
 		

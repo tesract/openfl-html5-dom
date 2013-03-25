@@ -1135,7 +1135,7 @@ class Graphics {
 				if (Std.is(filter, DropShadowFilter)) {
 					
 					// shadow must be applied before we draw to the context
-					filter.nmeApplyFilter(nmeSurface, true);
+					filter.nmeApplyFilter(nmeSurface, null, true);
 					
 				}
 				

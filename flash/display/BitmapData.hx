@@ -95,7 +95,19 @@ class BitmapData implements IBitmapDrawable {
 	
 	public function applyFilter(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, filter:BitmapFilter):Void {
 		
-		trace("BitmapData.applyFilter not implemented");
+		if (sourceBitmapData == this && sourceRect.x == destPoint.x && sourceRect.y == destPoint.y) {
+			
+			filter.nmeApplyFilter(handle(), sourceRect);
+			
+		} else {
+			
+			var bitmapData = new BitmapData(Std.int (sourceRect.width), Std.int (sourceRect.height));
+			bitmapData.copyPixels(sourceBitmapData, sourceRect, new Point());
+			filter.nmeApplyFilter(bitmapData.handle());
+			
+			copyPixels(bitmapData, bitmapData.rect, destPoint);
+			
+		}
 		
 	}
 	
