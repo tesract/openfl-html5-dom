@@ -2,9 +2,6 @@ package flash.text;
 #if js
 
 
-import flash.text.FontStyle;
-import flash.text.FontType;
-import flash.text.TextFormat;
 import flash.display.Graphics;
 import haxe.Unserializer;
 import haxe.Resource;
@@ -18,6 +15,7 @@ class Font {
 	public static inline var DEFAULT_FONT_SCALE = 9.0;
 	public static inline var DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
 	public static inline var DEFAULT_CLASS_NAME = "flash.text.Font";
+	public static var nmeRegisteredFonts = new Array<Font> ();
 	
 	public var fontName(default, set_fontName):String;
 	public var fontStyle(default, null):FontStyle;
@@ -58,11 +56,13 @@ class Font {
 	
 	public static function enumerateFonts(enumerateDeviceFonts:Bool = false):Array<Font> {
 		
-		var sans = new Font();
+		/*var sans = new Font();
 		sans.fontName = DEFAULT_FONT_NAME;
 		sans.fontStyle = REGULAR;
 		sans.fontType = DEVICE;
-		return [sans];
+		return [sans];*/
+		
+		return nmeRegisteredFonts.copy();
 		
 	}
 	
@@ -98,17 +98,18 @@ class Font {
 	
 	
 	// hxswfml ttf2hash myfont.ttf -glyphs [32-126] > myfont.hash; haxe -resource myfont.hash@myfont ...; Font.registerFont( Resource.get( "myfont" ) );
-	public static function nmeOfResource(name:String):Void {
+	public static function nmeOfResource(resourceName:String, fontName:String = ""):Void {
 
-		var data = Resource.getString(name);
+		var data = Resource.getString(resourceName);
+		if (fontName == "") fontName = resourceName;
 		
 		if (data == null) {
 			
-			trace("Resource data for string '" + name + "' not found.");
+			//trace("Resource data for string '" + resourceName + "' not found.");
 			
 		} else { 
 
-			nmeFontData[cast name] = data;
+			nmeFontData[cast fontName] = data;
 			
 		}
 		
@@ -148,7 +149,19 @@ class Font {
 	
 	public static function registerFont(font:Class<Dynamic>) {
 		
+		var instance = cast (Type.createInstance (font, []), Font);
 		
+		if (instance != null) {
+			
+			if (Reflect.hasField(font, "resourceName")) {
+				
+				nmeOfResource (Reflect.field(font, "resourceName"), instance.fontName);
+				
+			}
+			
+			nmeRegisteredFonts.push (instance);
+			
+		}
 		
 	}
 	
