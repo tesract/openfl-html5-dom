@@ -11,6 +11,7 @@ class Transform {
 	public static var DEG_TO_RAD:Float = Math.PI / 180.0;
 	
 	public var colorTransform(default, set_colorTransform):ColorTransform;
+	public var concatenatedMatrix(get_concatenatedMatrix, null):Matrix;
 	public var matrix(get_matrix, set_matrix):Matrix;
 	public var pixelBounds(get_pixelBounds, never):Rectangle;
 	
@@ -76,6 +77,13 @@ class Transform {
 		
 		this.colorTransform = inValue;
 		return inValue;
+		
+	}
+	
+	
+	private function get_concatenatedMatrix():Matrix {
+		
+		return nmeGetFullMatrix(_matrix);
 		
 	}
 	

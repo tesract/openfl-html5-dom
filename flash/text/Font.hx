@@ -15,13 +15,13 @@ class Font {
 	public static inline var DEFAULT_FONT_SCALE = 9.0;
 	public static inline var DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
 	public static inline var DEFAULT_CLASS_NAME = "flash.text.Font";
-	public static var nmeRegisteredFonts = new Array<Font> ();
 	
 	public var fontName(default, set_fontName):String;
 	public var fontStyle(default, null):FontStyle;
 	public var fontType(default, null):FontType;
 	
 	private static var nmeFontData:Array<String>;
+	private static var nmeRegisteredFonts = new Array<Font> ();
 	
 	private var nmeFontScale:Float;
 	private var nmeGlyphData:Map<Int, GlyphData>;
