@@ -386,11 +386,11 @@ class Lib {
 		var srcCtx:CanvasRenderingContext2D = surface.getContext("2d");
 		var tgtCtx:CanvasRenderingContext2D = tgt.getContext("2d");
 		
-		if (alpha != 1.0) {
+		//if (alpha != 1.0) {
 			
 			tgtCtx.globalAlpha = alpha;
 			
-		}
+		//}
 		
 		if (surface.width > 0 && surface.height > 0) {
 			
