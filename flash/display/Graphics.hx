@@ -1286,7 +1286,7 @@ class Graphics {
 				
 				if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
 					
-					//ctx.clip();
+					ctx.clip();
 					var img = bitmap.texture_buffer;
 					var m = bitmap.matrix;
 					
