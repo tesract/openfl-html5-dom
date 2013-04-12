@@ -1,9 +1,0 @@
--main ApplicationMain ::HAXE_FLAGS::
--cp ::BUILD_DIR::/html5/haxe
--cpp ::CPP_DIR::
---remap flash:nme
---remap browser:native
--lib nme
--D emscripten
--D webgl
--debug
