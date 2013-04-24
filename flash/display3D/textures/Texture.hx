@@ -1,16 +1,15 @@
 package flash.display3D.textures;
 #if js
 
-import native.utils.ArrayBufferView;
 
-using nme.display.BitmapData;
-
-import nme.geom.Rectangle;
-import nme.gl.GL;
-import nme.gl.GLTexture;
-import nme.utils.ArrayBuffer;
-import nme.utils.UInt8Array;
-import nme.utils.ByteArray;
+import flash.display.BitmapData;
+import flash.geom.Rectangle;
+import flash.utils.ByteArray;
+import pazu.gl.GL;
+import pazu.gl.GLTexture;
+import pazu.utils.ArrayBuffer;
+import pazu.utils.ArrayBufferView;
+import pazu.utils.UInt8Array;
 
 
 class Texture extends TextureBase {
@@ -40,7 +39,7 @@ class Texture extends TextureBase {
 
 	public function uploadFromBitmapData (bitmapData:BitmapData, miplevel:Int = 0):Void {
 
-        var p = bitmapData.getRGBAPixels();
+        var p = BitmapData.getRGBAPixels(bitmapData);
         uploadFromByteArray(p, 0, miplevel);
 
 	}
@@ -49,7 +48,7 @@ class Texture extends TextureBase {
 	public function uploadFromByteArray(data:ByteArray, byteArrayOffset:Int, miplevel:Int = 0):Void {
 
         GL.bindTexture (GL.TEXTURE_2D, glTexture);
-        GL.texSubImage2D(GL.TEXTURE_2D, miplevel, 0, 0, width, height, GL.RGBA, GL.UNSIGNED_BYTE, new UInt8Array(data));
+        GL.texSubImage2D(GL.TEXTURE_2D, miplevel, 0, 0, width, height, GL.RGBA, GL.UNSIGNED_BYTE, data.byteView);
 
 	}
 	

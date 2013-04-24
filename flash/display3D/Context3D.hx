@@ -2,21 +2,21 @@ package flash.display3D;
 #if js
 
 
-import nme.utils.Float32Array;
-import nme.display3D.textures.CubeTexture;
-import nme.display3D.textures.Texture;
-import nme.display3D.textures.TextureBase;
-import nme.display.BitmapData;
-import nme.display.OpenGLView;
-import nme.errors.Error;
-import nme.geom.Matrix3D;
-import nme.geom.Rectangle;
-import nme.gl.GL;
-import nme.gl.GLFramebuffer;
-import nme.gl.GLProgram;
-import nme.utils.ByteArray;
-import nme.Lib;
-import nme.Vector;
+import flash.display3D.textures.CubeTexture;
+import flash.display3D.textures.Texture;
+import flash.display3D.textures.TextureBase;
+import flash.display.BitmapData;
+import flash.errors.Error;
+import flash.geom.Matrix3D;
+import flash.geom.Rectangle;
+import flash.utils.ByteArray;
+import flash.Lib;
+import flash.Vector;
+import pazu.display.OpenGLView;
+import pazu.gl.GL;
+import pazu.gl.GLFramebuffer;
+import pazu.gl.GLProgram;
+import pazu.utils.Float32Array;
 
 
 class Context3D {

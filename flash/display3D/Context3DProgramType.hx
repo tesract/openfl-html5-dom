@@ -2,7 +2,7 @@ package flash.display3D;
 #if js
 
 
-import nme.gl.GL;
+import pazu.gl.GL;
 
 
 enum Context3DProgramType {

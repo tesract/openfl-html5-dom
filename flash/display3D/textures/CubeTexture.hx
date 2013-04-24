@@ -2,11 +2,11 @@ package flash.display3D.textures;
 #if js
 
 
-import nme.geom.Rectangle;
-using nme.display.BitmapData;
-import nme.utils.ByteArray;
-import nme.gl.GL;
-import nme.gl.GLTexture;
+import flash.geom.Rectangle;
+import flash.display.BitmapData;
+import flash.utils.ByteArray;
+import pazu.gl.GL;
+import pazu.gl.GLTexture;
 
 
 class CubeTexture extends TextureBase {
@@ -31,7 +31,7 @@ class CubeTexture extends TextureBase {
 
 	public function uploadFromBitmapData (source:BitmapData, side:Int, miplevel:Int = 0):Void {
 
-        var p = source.getRGBAPixels();
+        var p = BitmapData.getRGBAPixels(source);
 
         GL.bindTexture (GL.TEXTURE_CUBE_MAP, glTexture);
         // TODO

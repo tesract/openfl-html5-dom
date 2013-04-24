@@ -2,11 +2,12 @@ package flash.display;
 #if js
 
 
-import nme.display3D.Context3D;
-import nme.events.ErrorEvent;
-import nme.events.Event;
-import nme.events.EventDispatcher;
-import nme.display.OpenGLView;
+import flash.display3D.Context3D;
+import flash.events.ErrorEvent;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import pazu.display.OpenGLView;
+
 
 class Stage3D extends EventDispatcher {
 	

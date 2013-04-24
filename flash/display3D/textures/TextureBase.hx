@@ -2,12 +2,12 @@ package flash.display3D.textures;
 #if js
 
 
-import nme.geom.Rectangle;
-import nme.utils.ByteArray;
-import nme.display.BitmapData;
-import nme.gl.GL;
-import nme.gl.GLTexture;
-import nme.events.EventDispatcher;
+import flash.geom.Rectangle;
+import flash.utils.ByteArray;
+import flash.display.BitmapData;
+import flash.events.EventDispatcher;
+import pazu.gl.GL;
+import pazu.gl.GLTexture;
 
 
 class TextureBase extends EventDispatcher {

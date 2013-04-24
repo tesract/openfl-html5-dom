@@ -2,9 +2,9 @@ package flash.display3D;
 #if js
 
 
-import nme.gl.GL;
-import nme.gl.GLProgram;
-import nme.gl.GLShader;
+import pazu.gl.GL;
+import pazu.gl.GLProgram;
+import pazu.gl.GLShader;
 
 
 class Program3D {

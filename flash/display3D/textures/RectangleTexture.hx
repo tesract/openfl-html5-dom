@@ -2,10 +2,10 @@ package flash.display3D.textures;
 #if js
 
 
-import nme.display.BitmapData;
-import nme.gl.GL;
-import nme.gl.GLTexture;
-import nme.utils.ByteArray;
+import flash.display.BitmapData;
+import flash.utils.ByteArray;
+import pazu.gl.GL;
+import pazu.gl.GLTexture;
 
 
 class RectangleTexture extends TextureBase {

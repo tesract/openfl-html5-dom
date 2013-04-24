@@ -27,7 +27,7 @@ class ByteArray #if js_can_implement_array_access implements ArrayAccess<Int> #e
 	public var position:Int = 0;
 	
 	private var allocated:Int = 0;
-	private var byteView:Uint8Array;
+	public var byteView:Uint8Array;
 	private var data:DataView;
 	// NOTE: default ByteArray endian is BIG_ENDIAN
 	private var littleEndian:Bool = false;
