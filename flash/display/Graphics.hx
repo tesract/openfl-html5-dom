@@ -24,6 +24,7 @@ import js.html.CanvasRenderingContext2D;
 import js.html.Element;
 import js.html.MediaElement;
 import js.Browser;
+import pazu.display.Tilesheet;
 
 
 class Graphics {
