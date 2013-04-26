@@ -61,7 +61,8 @@ class Context3D {
         ogl.width = stage.stageWidth;
         ogl.height = stage.stageHeight;
 		
-		stage.addChildAt(ogl, 0);
+		Lib.current.addChildAt (ogl, 0);
+		//stage.addChildAt(ogl, 0);
 		
 	}
 	
