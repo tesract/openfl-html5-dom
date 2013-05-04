@@ -17,7 +17,7 @@ import format.tools.Inflate;
 
 
 @:autoBuild(pazu.Assets.embedFile())
-class ByteArray #if js_can_implement_array_access implements ArrayAccess<Int> #end {
+class ByteArray implements ArrayAccess<Int> {
 	
 	
 	public var bytesAvailable(get_bytesAvailable, null):Int;
@@ -42,10 +42,8 @@ class ByteArray #if js_can_implement_array_access implements ArrayAccess<Int> #e
 	}
 	
 	
-	#if js_can_implement_array_access // ArrayAccess
 	public function __get(pos:Int):Int { return data.getUint8(pos); }
 	public function __set(pos:Int, v:Int):Void { data.setUint8(pos, v); }
-	#end
 	
 	
 	private function _getUTFBytesCount(value:String):Int {
@@ -97,8 +95,15 @@ class ByteArray #if js_can_implement_array_access implements ArrayAccess<Int> #e
 		this.data = untyped __new__("DataView", newByteView.buffer);
 		
 	}
-
-
+	
+	
+	public function clear() {
+		
+		length = 0;
+		
+	}
+	
+	
 	@:extern private inline function ensureWrite(lengthToEnsure:Int):Void {
 		
 		if (this.length < lengthToEnsure) this.length = lengthToEnsure;
