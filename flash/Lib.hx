@@ -392,6 +392,8 @@ class Lib {
 			
 		//}
 		
+		nmeSetImageSmoothing(tgtCtx, smoothing);
+		
 		if (surface.width > 0 && surface.height > 0) {
 			
 			if (matrix != null) {
@@ -404,7 +406,6 @@ class Lib {
 					
 				} else { 
 					
-					nmeSetImageSmoothing(tgtCtx, smoothing);
 					tgtCtx.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
 					
 				}

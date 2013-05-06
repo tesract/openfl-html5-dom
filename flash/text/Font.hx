@@ -20,7 +20,7 @@ class Font {
 	public var fontStyle(default, null):FontStyle;
 	public var fontType(default, null):FontType;
 	
-	private static var nmeFontData:Array<String>;
+	private static var nmeFontData:Array<Dynamic>;
 	private static var nmeRegisteredFonts = new Array<Font> ();
 	
 	private var nmeFontScale:Float;
@@ -37,7 +37,7 @@ class Font {
 		if (nmeFontData == null) {
 			
 			nmeFontData = [];
-			nmeFontData[cast DEFAULT_FONT_NAME] = DEFAULT_FONT_DATA;
+			nmeFontData[cast DEFAULT_FONT_NAME] = Unserializer.run (DEFAULT_FONT_DATA);
 			
 		}
 		
@@ -98,20 +98,22 @@ class Font {
 	
 	
 	// hxswfml ttf2hash myfont.ttf -glyphs [32-126] > myfont.hash; haxe -resource myfont.hash@myfont ...; Font.registerFont( Resource.get( "myfont" ) );
-	public static function nmeOfResource(resourceName:String, fontName:String = ""):Void {
+	public static function nmeOfResource(resourceName:String, fontName:String = ""):String {
 
-		var data = Resource.getString(resourceName);
-		if (fontName == "") fontName = resourceName;
+		var data = Unserializer.run (Resource.getString(resourceName));
+		if (fontName == "") fontName = data.fontName;
 		
 		if (data == null) {
 			
 			//trace("Resource data for string '" + resourceName + "' not found.");
 			
 		} else { 
-
-			nmeFontData[cast fontName] = data;
+			
+			nmeFontData[cast data.fontName] = data.hash;
 			
 		}
+		
+		return fontName;
 		
 	}
 	
@@ -155,7 +157,7 @@ class Font {
 			
 			if (Reflect.hasField(font, "resourceName")) {
 				
-				nmeOfResource (Reflect.field(font, "resourceName"), instance.fontName);
+				instance.fontName = nmeOfResource (Reflect.field(font, "resourceName"));
 				
 			}
 			
@@ -201,7 +203,7 @@ class Font {
 			
 			try {
 				
-				nmeGlyphData = Unserializer.run(nmeFontData[cast fontName]);
+				nmeGlyphData = nmeFontData[cast fontName];
 				
 			} catch(e:Dynamic) {
 				
