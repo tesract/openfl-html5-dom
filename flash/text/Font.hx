@@ -100,8 +100,6 @@ class Font {
 	// hxswfml ttf2hash myfont.ttf -glyphs [32-126] > myfont.hash; haxe -resource myfont.hash@myfont ...; Font.registerFont( Resource.get( "myfont" ) );
 	public static function nmeOfResource(resourceName:String, fontName:String = ""):String {
 		
-		trace (Resource.getString (resourceName));
-		
 		var data = Unserializer.run (Resource.getString(resourceName));
 		
 		if (data == null) {
