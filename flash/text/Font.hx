@@ -99,15 +99,23 @@ class Font {
 	
 	// hxswfml ttf2hash myfont.ttf -glyphs [32-126] > myfont.hash; haxe -resource myfont.hash@myfont ...; Font.registerFont( Resource.get( "myfont" ) );
 	public static function nmeOfResource(resourceName:String, fontName:String = ""):String {
-
+		
+		trace (Resource.getString (resourceName));
+		
 		var data = Unserializer.run (Resource.getString(resourceName));
-		if (fontName == "") fontName = data.fontName;
 		
 		if (data == null) {
 			
 			//trace("Resource data for string '" + resourceName + "' not found.");
 			
 		} else { 
+			
+			if (fontName == "") { 
+				
+				nmeFontData[cast resourceName] = data.hash;
+				fontName = data.fontName;
+				
+			}
 			
 			nmeFontData[cast data.fontName] = data.hash;
 			
