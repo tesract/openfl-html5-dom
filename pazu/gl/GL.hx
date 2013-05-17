@@ -829,7 +829,7 @@ class GL {
 	
 	public static function framebufferTexture2D(target:Int, attachment:Int, textarget:Int, texture:GLTexture, level:Int):Void {
 		
-		nmeContext.framebufferTexture2D(target, ATTACHED_SHADERS, textarget, texture, level);
+		nmeContext.framebufferTexture2D(target, attachment, textarget, texture, level);
 		
 	}
 	
