@@ -43,6 +43,12 @@ class Bitmap extends DisplayObject {
 			
 		}
 		
+		if (pixelSnapping == null) {
+			
+			pixelSnapping = PixelSnapping.AUTO;
+			
+		}
+		
 		if (nmeGraphics == null) {
 			
 			nmeGraphics = new Graphics();

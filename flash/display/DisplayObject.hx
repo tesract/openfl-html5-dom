@@ -544,11 +544,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (gfx != null) {
 			
+			gfx.nmeRender ();
+			
 			var extX = gfx.nmeExtent.x;
 			var extY = gfx.nmeExtent.y;
 			var local = globalToLocal(point);
 			
-			if (local.x - extX < 0 || local.y - extY < 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) return null;
+			if (local.x - extX <= 0 || local.y - extY <= 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) return null;
 			
 			//switch (stage.nmePointInPathMode) {
 				//
