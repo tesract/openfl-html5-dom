@@ -190,8 +190,9 @@ class Lib {
 			
 			if (target == null) {
 				
-				trace("Error: Cannot find element ID \"" + NME_IDENTIFIER + "\"");
-				untyped __js__("target.id; // throw error");
+				target = cast Browser.document.createElement ("div");
+				//trace("Error: Cannot find element ID \"" + NME_IDENTIFIER + "\"");
+				//untyped __js__("target.id; // throw error");
 				
 			}
 			

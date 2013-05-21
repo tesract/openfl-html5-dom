@@ -4,8 +4,9 @@ package flash.display;
 
 enum StageDisplayState {
 	
-	FULL_SCREEN;
 	NORMAL;
+	FULL_SCREEN;
+	FULL_SCREEN_INTERACTIVE;
 	
 }
 
