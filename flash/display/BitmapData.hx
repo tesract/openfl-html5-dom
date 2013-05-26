@@ -240,6 +240,7 @@ class BitmapData implements IBitmapDrawable {
 		rect = clipRect(rect);
 		if (rect == null) return;
 		
+		if (destChannel == BitmapDataChannel.ALPHA && !nmeTransparent) return;
 		if (sourceBitmapData.handle() == null || _nmeTextureBuffer == null || sourceRect.width <= 0 || sourceRect.height <= 0 ) return;
 		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle().width) sourceRect.width = sourceBitmapData.handle().width - sourceRect.x;
 		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle().height) sourceRect.height = sourceBitmapData.handle().height - sourceRect.y;

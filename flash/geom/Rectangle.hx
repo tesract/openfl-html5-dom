@@ -51,7 +51,15 @@ class Rectangle {
 	
 	public function containsRect(rect:Rectangle):Bool {
 		
-		return contains(rect.x, rect.y) && containsPoint(rect.bottomRight);
+		if (rect.width <= 0 || rect.height <= 0) {
+			
+			return rect.x > x && rect.y > y && rect.right < right && rect.bottom < bottom;
+			
+		} else {
+			
+			return rect.x >= x && rect.y >= y && rect.right <= right && rect.bottom <= bottom;
+			
+		}
 		
 	}
 	
@@ -159,7 +167,7 @@ class Rectangle {
 	
 	public function isEmpty():Bool {
 		
-		return width == 0 && height == 0;
+		return (width <= 0 || height <= 0);
 		
 	}
 	

@@ -712,7 +712,7 @@ class Stage extends DisplayObjectContainer {
 			switch (displayState) {
 				
 				case NORMAL: Lib.nmeDisableFullScreen();
-				case FULL_SCREEN: Lib.nmeEnableFullScreen();
+				case FULL_SCREEN, FULL_SCREEN_INTERACTIVE: Lib.nmeEnableFullScreen();
 				
 			}
 			
