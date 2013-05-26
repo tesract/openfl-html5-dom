@@ -1,10 +1,10 @@
-package pazu.display;
+package openfl.display;
 #if js
 
 
 import flash.geom.Matrix3D;
 import flash.Lib;
-import pazu.gl.GL;
+import openfl.gl.GL;
 //import native.gl.GLInstance;
 
 

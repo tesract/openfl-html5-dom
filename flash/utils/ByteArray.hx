@@ -16,7 +16,7 @@ import format.tools.Inflate;
 #end
 
 
-@:autoBuild(pazu.Assets.embedFile())
+@:autoBuild(openfl.Assets.embedFile())
 class ByteArray implements ArrayAccess<Int> {
 	
 	

@@ -26,7 +26,7 @@ import js.html.Uint8ClampedArray;
 import js.Browser;
 
 
-@:autoBuild(pazu.Assets.embedBitmap())
+@:autoBuild(openfl.Assets.embedBitmap())
 class BitmapData implements IBitmapDrawable {
 	
 	

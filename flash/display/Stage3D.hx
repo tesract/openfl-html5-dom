@@ -6,7 +6,7 @@ import flash.display3D.Context3D;
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import pazu.display.OpenGLView;
+import openfl.display.OpenGLView;
 
 
 class Stage3D extends EventDispatcher {

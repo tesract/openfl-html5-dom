@@ -12,7 +12,7 @@ import js.html.MediaElement;
 import js.Browser;
 
 
-@:autoBuild(pazu.Assets.embedSound())
+@:autoBuild(openfl.Assets.embedSound())
 class Sound extends EventDispatcher {
 	
 	

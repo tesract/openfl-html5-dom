@@ -1,4 +1,4 @@
-package pazu.display;
+package openfl.display;
 #if js
 
 
@@ -9,7 +9,7 @@ import flash.geom.Matrix;
 import flash.Lib;
 import js.html.CanvasElement;
 import js.html.webgl.RenderingContext;
-import pazu.gl.GL;
+import openfl.gl.GL;
 
 
 class DirectRenderer extends DisplayObject {

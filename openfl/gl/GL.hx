@@ -1,4 +1,4 @@
-package pazu.gl;
+package openfl.gl;
 #if js
 
 
@@ -7,10 +7,10 @@ import flash.geom.Matrix3D;
 import flash.utils.ByteArray;
 import flash.Lib;
 import js.html.webgl.RenderingContext;
-import pazu.utils.ArrayBuffer;
-import pazu.utils.ArrayBufferView;
-import pazu.utils.Int32Array;
-import pazu.utils.Float32Array;
+import openfl.utils.ArrayBuffer;
+import openfl.utils.ArrayBufferView;
+import openfl.utils.Int32Array;
+import openfl.utils.Float32Array;
 
 
 class GL {

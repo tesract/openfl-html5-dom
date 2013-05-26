@@ -7,7 +7,7 @@ import haxe.Unserializer;
 import haxe.Resource;
 
 
-@:autoBuild(pazu.Assets.embedFont())
+@:autoBuild(openfl.Assets.embedFont())
 class Font {
 	
 	
