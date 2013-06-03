@@ -18,6 +18,8 @@ class Tilesheet {
 	public static inline var TILE_TRANS_2x2 = 0x0010;
 	public static inline var TILE_BLEND_NORMAL   = 0x00000000;
 	public static inline var TILE_BLEND_ADD      = 0x00010000;
+	public static inline var TILE_BLEND_MULTIPLY = 0x00020000;
+	public static inline var TILE_BLEND_SCREEN = 0x00040000;
 	
 	/** @private */ public var nmeBitmap:BitmapData;
 	/** @private */ public var nmeCenterPoints:Array <Point>;
