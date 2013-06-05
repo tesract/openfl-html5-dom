@@ -10,8 +10,8 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	public var framesLoaded(get_framesLoaded, null):Int;
 	public var totalFrames(get_totalFrames, null):Int;
 	
-	private var mCurrentFrame:Int;
-	private var mTotalFrames:Int;
+	private var __currentFrame:Int;
+	private var __totalFrames:Int;
 	
 	
 	public function new() {
@@ -19,8 +19,8 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 		super();
 		
 		enabled = true;
-		mCurrentFrame = 0;
-		mTotalFrames = 0;
+		__currentFrame = 0;
+		__totalFrames = 0;
 		
 		this.loaderInfo = LoaderInfo.create(null);
 		
@@ -41,7 +41,21 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	}
 	
 	
+	public function nextFrame ():Void {
+		
+		
+		
+	}
+	
+	
 	public function play():Void {
+		
+		
+		
+	}
+	
+	
+	public function prevFrame ():Void {
 		
 		
 		
@@ -69,9 +83,9 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	
 	
 	
-	private function get_currentFrame():Int { return mCurrentFrame; }
-	private function get_framesLoaded():Int { return mTotalFrames; }
-	private function get_totalFrames():Int { return mTotalFrames; }
+	private function get_currentFrame():Int { return __currentFrame; }
+	private function get_framesLoaded():Int { return __totalFrames; }
+	private function get_totalFrames():Int { return __totalFrames; }
 	
 	
 }
