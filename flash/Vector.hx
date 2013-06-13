@@ -173,7 +173,19 @@ private typedef VectorData<T> = Array<T>;
 	}
 	
 	
-	private function set_length(value:Int):Int {
+	private inline function set_length(value:Int):Int {
+		
+		if (value < this.length) {
+			
+			this = this.slice (0, value);
+			
+		}
+		
+		while (value > this.length) {
+			
+			this.push (null);
+			
+		}
 		
 		return value;
 		
