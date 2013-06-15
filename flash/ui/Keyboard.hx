@@ -5,16 +5,16 @@ package flash.ui;
 class Keyboard {
 	
 	
-	public static inline var KEY_0 = 48;
-	public static inline var KEY_1 = 49;
-	public static inline var KEY_2 = 50;
-	public static inline var KEY_3 = 51;
-	public static inline var KEY_4 = 52;
-	public static inline var KEY_5 = 53;
-	public static inline var KEY_6 = 54;
-	public static inline var KEY_7 = 55;
-	public static inline var KEY_8 = 56; 
-	public static inline var KEY_9 = 57; 
+	public static inline var NUMBER_0 = 48;
+	public static inline var NUMBER_1 = 49;
+	public static inline var NUMBER_2 = 50;
+	public static inline var NUMBER_3 = 51;
+	public static inline var NUMBER_4 = 52;
+	public static inline var NUMBER_5 = 53;
+	public static inline var NUMBER_6 = 54;
+	public static inline var NUMBER_7 = 55;
+	public static inline var NUMBER_8 = 56; 
+	public static inline var NUMBER_9 = 57; 
 	public static inline var A = 65;
 	public static inline var B = 66;
 	public static inline var C = 67;
