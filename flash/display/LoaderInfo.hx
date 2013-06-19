@@ -3,12 +3,14 @@ package flash.display;
 
 
 import flash.events.EventDispatcher;
+import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 
 
 class LoaderInfo extends EventDispatcher {
 	
 	
+	public var applicationDomain:ApplicationDomain;
 	public var bytes(default, null):ByteArray;
 	public var bytesLoaded(default, null):Int;
 	public var bytesTotal(default, null):Int;
@@ -32,6 +34,7 @@ class LoaderInfo extends EventDispatcher {
 		
 		super();
 		
+		applicationDomain = ApplicationDomain.currentDomain;
 		bytesLoaded = 0;
 		bytesTotal = 0;
 		childAllowsParent = true;

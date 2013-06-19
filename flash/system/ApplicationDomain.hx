@@ -1,35 +1,41 @@
 package flash.system;
-#if js
 
 
 class ApplicationDomain {
 	
 	
-	public static var currentDomain:ApplicationDomain = this;
+	public static var currentDomain (default, null) = new ApplicationDomain (null);
+	
+	public var parentDomain (default, null):ApplicationDomain;
 	
 	
-	public function new(parentDomain:ApplicationDomain = null) {
+	public function new (parentDomain:ApplicationDomain = null) {
 		
-		
+		if (parentDomain != null) {
+			
+			this.parentDomain = parentDomain;
+			
+		} else {
+			
+			this.parentDomain = currentDomain;
+			
+		}
 		
 	}
 	
 	
-	public function getDefinition(name:String) {
+	public function getDefinition (name:String):Dynamic {
 		
-		return Type.getClass(Type.getClassName(name));
+		return Type.resolveClass (name);
 		
 	}
 	
 	
-	public function hasDefinition(name:String) {
+	public function hasDefinition (name:String):Bool {
 		
-		return Type.getClass(Type.getClassName(name)) != null;
+		return (Type.resolveClass (name) != null);
 		
 	}
 	
 	
 }
-
-
-#end

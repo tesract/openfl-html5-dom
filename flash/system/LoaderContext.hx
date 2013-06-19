@@ -1,24 +1,32 @@
 package flash.system;
-#if js
 
 
 class LoaderContext {
 	
 	
+	public var allowCodeImport:Bool;
+	public var allowLoadBytesCodeExecution:Bool;
+	public var applicationDomain:ApplicationDomain;
 	public var checkPolicyFile:Bool;
-	
-	private var applicationDomain:Dynamic;
-	private var securityDomain:Dynamic;
+	public var securityDomain:SecurityDomain;
 	
 	
-	public function new(checkPolicyFile:Bool = false, ?applicationDomain, ?securityDomain) {
+	public function new (checkPolicyFile:Bool = false, applicationDomain:ApplicationDomain = null, securityDomain:SecurityDomain = null):Void {
 		
 		this.checkPolicyFile = checkPolicyFile;
+		this.securityDomain = securityDomain;
+		
+		if (applicationDomain != null) {
+			
+			this.applicationDomain = applicationDomain;
+			
+		} else {
+			
+			this.applicationDomain = ApplicationDomain.currentDomain;
+			
+		}
 		
 	}
 	
 	
 }
-
-
-#end
