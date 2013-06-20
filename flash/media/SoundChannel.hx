@@ -114,7 +114,9 @@ class SoundChannel extends EventDispatcher {
 	
 	private function __onProgress(evt:Event):Void {
 		
+		#if debug
 		trace("sound progress: " + evt);
+		#end
 		
 	}
 	
@@ -168,7 +170,9 @@ class SoundChannel extends EventDispatcher {
 	
 	private function __onStalled(evt:Event):Void {
 		
+		#if debug
 		trace("sound stalled");
+		#end
 		
 		if (nmeAudio != null) {
 			
