@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "OpenFL support for HTML5",
-	"version": "1.0.1",
-	"releasenote": "Minor update",
+	"version": "1.0.2",
+	"releasenote": "Added byteArray.toString ()",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
