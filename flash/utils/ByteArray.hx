@@ -323,6 +323,17 @@ class ByteArray implements ArrayAccess<Int> {
 	}
 	
 	
+	public function toString ():String {
+		
+		var cachePosition = position;
+		position = 0;
+		var value = readUTFBytes (length);
+		position = cachePosition;
+		return value;
+		
+	}
+	
+	
 	#if format
 	public function uncompress():Void {
 		
