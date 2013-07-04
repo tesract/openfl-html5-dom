@@ -662,6 +662,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	public function nmeMatrixOverridden():Void {
 		
+		nmeX = transform.matrix.tx;
+		nmeY = transform.matrix.ty;
+		
 		nmeSetFlag(MATRIX_OVERRIDDEN);
 		nmeSetFlag(MATRIX_INVALID);
 		nmeInvalidateBounds();
@@ -1052,6 +1055,17 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (nmeScaleY * h != inValue) {
 			
+			if (h == 0) {
+				
+				// patch to fix recovery from a height of zero
+				
+				nmeScaleY = 1;
+				nmeInvalidateMatrix(true);
+				nmeInvalidateBounds();
+				h = nmeBoundsRect.height;
+				
+			}
+			
 			if (h <= 0) return 0;
 			nmeScaleY = inValue / h;
 			nmeInvalidateMatrix(true);
@@ -1291,6 +1305,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function set_transform(inValue:Transform):Transform {
 		
 		this.transform = inValue;
+		nmeX = transform.matrix.tx;
+		nmeY = transform.matrix.ty;
 		nmeInvalidateMatrix(true);
 		return inValue;
 		
@@ -1391,6 +1407,17 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		var w = nmeBoundsRect.width;
 		
 		if (nmeScaleX * w != inValue) {
+			
+			if (w == 0) {
+				
+				// patch to fix recovery from a width of zero
+				
+				nmeScaleX = 1;
+				nmeInvalidateMatrix(true);
+				nmeInvalidateBounds();
+				w = nmeBoundsRect.width;
+				
+			}
 			
 			if (w <= 0) return 0;
 			nmeScaleX = inValue / w;
