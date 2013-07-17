@@ -1317,7 +1317,7 @@ class Graphics {
 		ctx.restore();
 		
 		nmeChanged = false;
-		nextDrawIndex = len;
+		nextDrawIndex = len > 0 ? len - 1 : 0;
 		mDrawList = [];
 		
 		return true;
