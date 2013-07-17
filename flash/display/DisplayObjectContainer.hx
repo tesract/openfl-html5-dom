@@ -644,7 +644,7 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	override private function set_visible(inVal:Bool):Bool {
 		
-		nmeCombinedVisible = inVal;
+		nmeCombinedVisible = parent != null ? parent.nmeCombinedVisible && inVal : inVal;
 		return super.set_visible(inVal);
 		
 	}
