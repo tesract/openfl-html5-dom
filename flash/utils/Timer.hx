@@ -70,24 +70,17 @@ class Timer extends EventDispatcher {
 	
 	private function __onInterval():Void {
 		
-		var evtCom:TimerEvent = null;
+		currentCount ++;
 		
-		if (repeatCount != 0 && ++currentCount >= repeatCount) {
+		if (repeatCount > 0 && currentCount >= repeatCount) {
 			
-			stop();
-			evtCom = new TimerEvent(TimerEvent.TIMER_COMPLETE);
-			evtCom.target = this;
+			stop ();
+			dispatchEvent (new TimerEvent (TimerEvent.TIMER));
+			dispatchEvent (new TimerEvent (TimerEvent.TIMER_COMPLETE));
 			
-		}
-		
-		var evt = new TimerEvent(TimerEvent.TIMER);
-		evt.target = this;
-		dispatchEvent(evt);
-		
-		// dispatch complete if necessary
-		if (evtCom != null) {
+		} else {
 			
-			dispatchEvent(evtCom);
+			dispatchEvent (new TimerEvent (TimerEvent.TIMER));
 			
 		}
 		

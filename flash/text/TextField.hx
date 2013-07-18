@@ -31,6 +31,7 @@ class TextField extends InteractiveObject {
 	public var backgroundColor(default, set_backgroundColor):Int;
 	public var border(default, set_border):Bool;
 	public var borderColor(default, set_borderColor):Int;
+	public var bottomScrollV(get_bottomScrollV, null):Int;
 	public var caretIndex:Int;
 	public var caretPos(get_caretPos, null):Int;
 	public var defaultTextFormat(get_defaultTextFormat, set_defaultTextFormat):TextFormat;
@@ -40,13 +41,18 @@ class TextField extends InteractiveObject {
 	public var htmlText(get_htmlText, set_htmlText):String;
 	public var length(default, null):Int;
 	public var maxChars:Int;
+	public var maxScrollH(get_maxScrollH, null):Int;
+	public var maxScrollV(get_maxScrollV, null):Int;
 	public var mDownChar:Int;
 	public var mFace:String;
 	public var mParagraphs:Paragraphs;
 	public var mTextHeight:Int;
 	public var mTryFreeType:Bool;
-	public var multiline:Bool;
+	@:isVar public var multiline(default, default):Bool;
+	public var numLines(get_numLines, null):Int;
 	public var restrict:String;
+	public var scrollH:Int;
+	public var scrollV:Int;
 	public var selectable:Bool;
 	public var selectionBeginIndex:Int;
 	public var selectionEndIndex:Int;
@@ -56,7 +62,7 @@ class TextField extends InteractiveObject {
 	public var textHeight(get_textHeight, null):Float;
 	public var textWidth(get_textWidth, null):Float;
 	public var type(get_type, set_type):String;
-	public var wordWrap(default, set_wordWrap):Bool;
+	@:isVar public var wordWrap(get_wordWrap, set_wordWrap):Bool;
 	
 	private static var sSelectionOwner:TextField = null;
 	
@@ -69,8 +75,6 @@ class TextField extends InteractiveObject {
 	private var mLineInfo:Array<LineInfo>;
 	private var mMaxHeight:Float;
 	private var mMaxWidth:Float;
-	private var mScrollH:Int;
-	private var mScrollV:Int;
 	private var mSelectionAnchor:Int;
 	private var mSelectionAnchored:Bool;
 	private var mSelEnd:Int;
@@ -99,8 +103,8 @@ class TextField extends InteractiveObject {
 		mParagraphs = new Paragraphs();
 		mSelStart = -1;
 		mSelEnd = -1;
-		mScrollH = 0;
-		mScrollV = 1;
+		scrollH = 0;
+		scrollV = 1;
 		
 		mType = TextFieldType.DYNAMIC;
 		autoSize = TextFieldAutoSize.NONE;
@@ -225,7 +229,7 @@ class TextField extends InteractiveObject {
 	
 	public function getTextFormat(beginIndex:Int = 0, endIndex:Int = 0):TextFormat {
 		
-		return new TextFormat();
+		return new TextFormat (mFace, mTextHeight, mTextColour);
 		
 	}
 	
@@ -516,26 +520,26 @@ class TextField extends InteractiveObject {
 			// TODO: check if this is necessary.
 			if (autoSize != TextFieldAutoSize.NONE) {
 				
-				mScrollH = 0;
+				scrollH = 0;
 				insert_x = inInsert;
 				
 			} else {
 				
-				insert_x = inInsert - mScrollH;
+				insert_x = inInsert - scrollH;
 				
 				if (insert_x < 0) {
 					
-					mScrollH -= ((mLimitRenderX * 3) >> 2 ) - insert_x;
+					scrollH -= ((mLimitRenderX * 3) >> 2 ) - insert_x;
 					
 				} else if (insert_x > mLimitRenderX) {
 					
-					mScrollH +=  insert_x - ((mLimitRenderX * 3) >> 2);
+					scrollH +=  insert_x - ((mLimitRenderX * 3) >> 2);
 					
 				}
 				
-				if (mScrollH < 0) {
+				if (scrollH < 0) {
 					
-					mScrollH = 0;
+					scrollH = 0;
 					
 				}
 				
@@ -544,15 +548,17 @@ class TextField extends InteractiveObject {
 		}
 		
 		if (autoSize == TextFieldAutoSize.NONE && w <= mLimitRenderX) {
+			
 			if (inAlign == TextFormatAlign.CENTER) {
-
+			
 				align_x = (Math.round(mWidth)-w)>>1;
-
+			
 			} else if (inAlign == TextFormatAlign.RIGHT) {
 				
 				align_x = Math.round(mWidth)-w;
 				
 			}
+			
 		}
 		
 		var x_list = new Array<Int>();
@@ -560,7 +566,7 @@ class TextField extends InteractiveObject {
 		
 		var cache_sel_font:FontInstance = null;
 		var cache_normal_font:FontInstance = null;
-		var x = align_x - mScrollH;
+		var x = align_x - scrollH;
 		var x0 = x;
 		
 		for (chr in inRow) {
@@ -608,7 +614,7 @@ class TextField extends InteractiveObject {
 			
 		}
 		
-		x += mScrollH;
+		x += scrollH;
 		return full_height;
 		
 	}
@@ -669,6 +675,10 @@ class TextField extends InteractiveObject {
 	
 	
 	
+	private function get_autoSize():String {
+		
+		return autoSize;
+	}
 	private function set_autoSize(inAutoSize:String):String {
 		
 		autoSize = inAutoSize;
@@ -711,6 +721,9 @@ class TextField extends InteractiveObject {
 		return inBorderCol;
 		
 	}
+	
+	
+	private function get_bottomScrollV():Int { return 0; }
 	
 	
 	private function get_caretPos():Int {
@@ -783,27 +796,47 @@ class TextField extends InteractiveObject {
 		
 		if (!mHTMLMode) {
 			var domElement:Dynamic = Browser.document.createElement("div");
-
+			
 			if (background || border) {
-
+				
 				domElement.style.width=mWidth+"px";
 				domElement.style.height=mHeight+"px";
-
+				
 			}
-
+			
 			if (background) {
-
+				
 				domElement.style.backgroundColor="#"+StringTools.hex(backgroundColor,6);
-
+				
 			}
-
+			
 			if (border) {
-
+				
 				domElement.style.border="1px solid #"+StringTools.hex(borderColor,6);
-
+				
 			}
-
-
+			
+			
+			// ---
+			// This will set: font-face, color, font-size, align in <div style="..." />
+			// It assumes that, the font-face used is already loaded by the browser.
+			// As it uses canvas wrapper tags, this is the best possible here.
+			//
+			// WARNING: do not set (domElement.style.cssText), or (domElement.style.font)
+			//
+			// TODO (Encore): we need to script our custom font loading into a .css file 
+			// TODO (Service): app server should send correct mime-type for .ttf files
+			//                 not application/octet-stream, may be application/x-font-ttf
+			// 
+			// 
+			// TODO HAXE: compiler needs to be fixed to link .css files into html header.
+			//
+			
+			domElement.style.color = "#" + StringTools.hex(mTextColour, 6);
+			domElement.style.fontFamily = mFace;
+			domElement.style.fontSize = mTextHeight + "px";
+			domElement.style.textAlign = Std.string (mAlign);
+			
 			var wrapper:CanvasElement = cast domElement;
 			wrapper.innerHTML = inHTMLText;
 			
@@ -827,7 +860,7 @@ class TextField extends InteractiveObject {
 			nmeGraphics.nmeSurface.innerHTML = inHTMLText;
 			
 		}
-
+		
 		mHTMLMode = true;
 		RebuildText();
 		nmeInvalidateBounds();
@@ -835,6 +868,17 @@ class TextField extends InteractiveObject {
 		return mHTMLText;
 		
 	}
+	
+	
+	private function get_maxScrollH():Int { return 0; }
+	private function get_maxScrollV():Int { return 0; }
+	private function get_multiline():Bool { return multiline; }
+	private function set_multiline(value:Bool):Bool { return multiline = value; }
+	private function get_numLines():Int { return 0; }
+	private function get_scrollH():Int { return scrollH; }
+	private function set_scrollH(value:Int):Int { return scrollH = value; }
+	private function get_scrollV():Int { return scrollV; }
+	private function set_scrollV(value:Int):Int { return scrollV = value; }
 	
 	
 	public function get_text():String {
@@ -945,6 +989,11 @@ class TextField extends InteractiveObject {
 	}
 	
 	
+	public function get_wordWrap():Bool {
+		
+		return wordWrap;
+		
+	}
 	public function set_wordWrap(inWordWrap:Bool):Bool {
 		
 		wordWrap = inWordWrap;

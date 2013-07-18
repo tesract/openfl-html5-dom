@@ -96,6 +96,17 @@ class Keyboard {
 	public static inline var NUMLOCK = 144;
 	public static inline var BREAK = 19;
 	
+	public static inline var SEMICOLON = 186;
+	public static inline var EQUAL = 187;
+	public static inline var COMMA = 188;
+	public static inline var MINUS = 189;
+	public static inline var PERIOD = 190;
+	public static inline var SLASH = 191;
+	public static inline var BACKQUOTE = 192;
+	public static inline var LEFTBRACKET = 219;
+	public static inline var BACKSLASH = 220;
+	public static inline var RIGHTBRACKET = 221;
+	
 	// Mozilla keyCodes
 	// reference: https://developer.mozilla.org/en/DOM/Event/UIEvent/KeyEvent
 	public static inline var DOM_VK_CANCEL = 3;
