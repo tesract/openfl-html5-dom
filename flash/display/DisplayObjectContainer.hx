@@ -129,16 +129,7 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	public function contains(child:DisplayObject):Bool {
 		
-		if (child == null) return false;
-		if (this == child) return true;
-		
-		for (c in nmeChildren) {
-			
-			if (c == child) return true;
-			
-		}
-		
-		return false;
+		return __contains (child);
 		
 	}
 	
@@ -591,6 +582,22 @@ class DisplayObjectContainer extends InteractiveObject {
 			nmeSetDimensions();
 			
 		}
+		
+	}
+	
+	
+	@:noCompletion public override function __contains (child:DisplayObject):Bool {
+		
+		if (child == null) return false;
+		if (this == child) return true;
+		
+		for (c in nmeChildren) {
+			
+			if (c == child || c.__contains (child)) return true;
+			
+		}
+		
+		return false;
 		
 	}
 	

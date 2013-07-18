@@ -963,6 +963,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
+	@:noCompletion public function __contains (child:DisplayObject):Bool {
+		
+		return false;
+		
+	}
+	
+	
 	
 	
 	// Getters & Setters
