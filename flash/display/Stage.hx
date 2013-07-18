@@ -67,7 +67,7 @@ class Stage extends DisplayObjectContainer {
 	private var nmeDragOffsetX:Float;
 	private var nmeDragOffsetY:Float;
 	private var nmeFocusObject:InteractiveObject;
-	private var nmeFocusOverObjects:Array<InteractiveObject>;
+	private var nmeFocusObjectActivated:Bool;
 	private var nmeFrameRate:Float;
 	private var nmeInterval:Int;
 	private var nmeInvalid:Bool;
@@ -90,6 +90,7 @@ class Stage extends DisplayObjectContainer {
 		super();
 		
 		nmeFocusObject = null;
+		nmeFocusObjectActivated = false;
 		nmeWindowWidth = width;
 		nmeWindowHeight = height;
 		stageFocusRect = false;
@@ -107,7 +108,6 @@ class Stage extends DisplayObjectContainer {
 		nmeMouseOverObjects = [];
 		showDefaultContextMenu = true;
 		nmeTouchInfo = [];
-		nmeFocusOverObjects = [];
 		nmeUIEventsQueue = untyped __new__("Array", UI_EVENTS_QUEUE_MAX);
 		nmeUIEventsQueueIndex = 0;
 
@@ -141,51 +141,6 @@ class Stage extends DisplayObjectContainer {
 	public function invalidate():Void {
 		
 		nmeInvalid = true;
-		
-	}
-	
-	
-	private function nmeCheckFocusInOuts(event:FocusEvent, inStack:Array<InteractiveObject>):Void {
-		
-		var new_n = inStack.length;
-		var new_obj:InteractiveObject = (new_n > 0 ? inStack[new_n - 1] : null);
-		var old_n = nmeFocusOverObjects.length;
-		var old_obj:InteractiveObject = (old_n > 0 ? nmeFocusOverObjects[old_n - 1] : null);
-		
-		if (new_obj != old_obj) {
-			
-			// focusOver/focusOut goes only over the non-common objects in the tree...
-			var common = 0;
-			while (common < new_n && common < old_n && inStack[common] == nmeFocusOverObjects[common]) {
-				
-				common++;
-				
-			}
-			
-			var focusOut = new FocusEvent(FocusEvent.FOCUS_OUT, false, false, new_obj, false /* not implemented */, 0 /* not implemented */);
-			
-			var i = old_n - 1;
-			while (i >= common) {
-				
-				nmeFocusOverObjects[i].dispatchEvent(focusOut);
-				i--;
-				
-			}
-			
-			var focusIn = new FocusEvent(FocusEvent.FOCUS_IN, false, false, old_obj, false /* not implemented */, 0 /* not implemented */);
-			var i = new_n - 1;
-			
-			while (i >= common) {
-				
-				inStack[i].dispatchEvent(focusIn);
-				i--;
-				
-			}
-			
-			nmeFocusOverObjects = inStack;
-			focus = new_obj;
-			
-		}
 		
 	}
 	
@@ -320,11 +275,23 @@ class Stage extends DisplayObjectContainer {
 			
 			case "focus":
 				
-				nmeOnFocus(cast evt, true);
+				nmeOnFocus (this);
+				
+				if (!nmeFocusObjectActivated) {
+					
+					nmeFocusObjectActivated = true;
+					dispatchEvent (new Event (Event.ACTIVATE));
+					
+				}
 			
 			case "blur":
 				
-				nmeOnFocus(evt, false);
+				if (nmeFocusObjectActivated) {
+					
+					nmeFocusObjectActivated = false;
+					dispatchEvent (new Event (Event.DEACTIVATE));
+					
+				}
 			
 			case "mousemove":
 				
@@ -556,25 +523,56 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	private function nmeOnKey(code:Int, pressed:Bool, inChar:Int, ctrl:Bool, alt:Bool, shift:Bool, keyLocation:Int) {
+	private function nmeOnKey(code:Int, pressed:Bool, inChar:Int, ctrl:Bool, alt:Bool, shift:Bool, keyLocation:Int):Void {
 		
-		var event = new KeyboardEvent(pressed ? KeyboardEvent.KEY_DOWN : KeyboardEvent.KEY_UP, true, false, inChar, code, keyLocation, ctrl, alt, shift);
-		dispatchEvent(event);
+		var stack = new Array <InteractiveObject> ();
+		
+		if (nmeFocusObject == null) {
+			
+			this.nmeGetInteractiveObjectStack (stack);
+			
+		} else {
+			
+			nmeFocusObject.nmeGetInteractiveObjectStack (stack);
+			
+		}
+		
+		if (stack.length > 0) {
+			
+			var obj = stack[0];
+			var evt = new KeyboardEvent (pressed ? KeyboardEvent.KEY_DOWN : KeyboardEvent.KEY_UP, true, false, inChar, code, keyLocation, ctrl, alt, shift);
+			obj.nmeFireEvent (evt);
+			
+		}
 		
 	}
 	
 	
-	private function nmeOnFocus(event:Dynamic, hasFocus:Bool) {
+	private function nmeOnFocus (target:InteractiveObject):Void {
 		
-		if (hasFocus) {
+		// Don't do MOUSE_FOCUS_CHANGE or KEY_FOCUS_CHANGE events; doing those
+		// would imply knowing whether the event was due to a user-initiated
+		// mouse or key event, and that's not knowable in this implementation
+		
+		// If the focus has changed
+		if (target != nmeFocusObject) {
 			
-			dispatchEvent (new FocusEvent (FocusEvent.FOCUS_IN));
-			nmeBroadcast (new Event (Event.ACTIVATE));
+			// If there was a previously focused object, fire the FOCUS_OUT
+			// event for it using the Flash event propogation semantics
+			// implemented in nmeFireEvent
 			
-		} else {
+			if (nmeFocusObject != null) {
+				
+				nmeFocusObject.nmeFireEvent (new FocusEvent (FocusEvent.FOCUS_OUT, true, false, nmeFocusObject, false, 0));
+				
+			}
 			
-			dispatchEvent (new FocusEvent (FocusEvent.FOCUS_OUT));
-			nmeBroadcast (new Event (Event.DEACTIVATE));
+			// Now dispatch a focus in event similarly using Flash event
+			// propogation semantics
+			target.nmeFireEvent (new FocusEvent (FocusEvent.FOCUS_IN, true, false, target, false, 0));
+			
+			// Finally, store the updated focus object
+			nmeFocusObject = target;
 			
 		}
 		
@@ -610,7 +608,14 @@ class Stage extends DisplayObjectContainer {
 			var evt = MouseEvent.nmeCreate(type, event, local, cast obj);
 			
 			nmeCheckInOuts(evt, stack);
-			if (type == MouseEvent.MOUSE_DOWN) nmeCheckFocusInOuts(cast evt, stack);
+			
+			// MOUSE_DOWN brings focus to the clicked object, and takes it
+			// away from any currently focused object
+			if (type == MouseEvent.MOUSE_DOWN) {
+				
+				nmeOnFocus (stack[stack.length - 1]);
+				
+			}
 			
 			obj.nmeFireEvent(evt);
 			
@@ -618,7 +623,6 @@ class Stage extends DisplayObjectContainer {
 			
 			var evt = MouseEvent.nmeCreate(type, event, point, null);
 			nmeCheckInOuts(evt, stack);
-			if (type == MouseEvent.MOUSE_DOWN) nmeCheckFocusInOuts(cast evt, stack);
 			
 		}
 		
@@ -725,7 +729,13 @@ class Stage extends DisplayObjectContainer {
 	
 	
 	private function get_focus():InteractiveObject { return nmeFocusObject; }
-	private function set_focus(inObj:InteractiveObject):InteractiveObject { return nmeFocusObject = inObj; }
+	private function set_focus(inObj:InteractiveObject):InteractiveObject {
+		
+		nmeOnFocus(inObj);
+		// nmeOnFocus will have set nmeFocusObject to inObj
+		return nmeFocusObject;
+		
+	}
 	
 	
 	private function get_frameRate():Float { return nmeFrameRate; }
