@@ -540,7 +540,13 @@ class Graphics {
 	}
 	
 	
-	public function drawRoundRect(x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float):Void {
+	public function drawRoundRect(x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1):Void {
+		
+		if (ry == -1) {
+			
+			ry = rx;
+			
+		}
 		
 		rx *= 0.5;
 		ry *= 0.5;
