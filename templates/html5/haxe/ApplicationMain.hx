@@ -31,6 +31,18 @@ class ApplicationMain {
 		
 		//flash.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
 		flash.Lib.current.loaderInfo = flash.display.LoaderInfo.create (null);
+		
+		try {
+			
+			if (Reflect.hasField (js.Browser.window, "winParameters")) {
+				
+				Reflect.setField (flash.Lib.current.loaderInfo, "parameters", Reflect.field (js.Browser.window, "winParameters")());
+				
+			}
+			
+			flash.Lib.current.stage.loaderInfo = flash.Lib.current.loaderInfo;
+			
+		} catch (e:Dynamic) {}
 
 		::if (WIN_WIDTH == "0")::::if (WIN_HEIGHT == "0")::
 		flash.Lib.preventDefaultTouchMove();

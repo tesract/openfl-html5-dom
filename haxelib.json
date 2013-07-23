@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "OpenFL support for HTML5",
-	"version": "1.0.3",
-	"releasenote": "Simple DisplayObject transform fix",
+	"version": "1.0.4",
+	"releasenote": "Minor fixes",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
