@@ -106,8 +106,8 @@ class Lib {
 	
 	public static function getURL(request:URLRequest, target:String = null) {
 		
-		//Browser.document.open(request.url);
-		untyped { document.open(request.url); }
+		//Browser.window.open(request.url);
+		untyped { window.open(request.url); }
 		
 	}
 	
