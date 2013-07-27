@@ -44,6 +44,22 @@ class ApplicationMain {
 			
 		} catch (e:Dynamic) {}
 
+		try {
+			
+			var winParameters = untyped js.Browser.window.winParameters();
+
+			if (winParameters != null) {
+
+				for (prop in Reflect.fields(winParameters)) {
+
+					Reflect.setField(flash.Lib.current.loaderInfo.parameters, prop, Reflect.field(winParameters, prop));
+
+				}
+
+			}
+		
+		} catch(e:Dynamic) { }
+
 		::if (WIN_WIDTH == "0")::::if (WIN_HEIGHT == "0")::
 		flash.Lib.preventDefaultTouchMove();
 		::end::::end::

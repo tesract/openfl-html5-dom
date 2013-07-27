@@ -1073,19 +1073,7 @@ class Lib {
 		Lib.current.graphics.drawRect(0, 0, width, height);
 		nmeSetSurfaceId(Lib.current.graphics.nmeSurface, "Root MovieClip");
 		nmeGetStage().nmeUpdateNextWake();
-		
-		try {
-			
-			var winParameters = untyped Browser.window.winParameters();
-			
-			for (prop in Reflect.fields(winParameters)) {
-				
-				Reflect.setField(current.loaderInfo.parameters, prop, Reflect.field(winParameters, prop));
-				
-			}
-			
-		} catch(e:Dynamic) { }
-		
+
 		return mMe;
 		
 	}
@@ -1117,7 +1105,7 @@ class Lib {
 	private static function get_current():MovieClip {
 		
 		if (mMainClassRoot == null) {
-			
+
 			mMainClassRoot = new MovieClip();
 			mCurrent = mMainClassRoot;
 			nmeGetStage().addChild(mCurrent);
