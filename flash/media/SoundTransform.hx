@@ -14,8 +14,12 @@ class SoundTransform {
 	
 	
 	public function new(vol:Float = 1, panning:Float = 0):Void {
-		
-		
+		volume = vol;
+		pan = panning;
+		leftToLeft = 0;
+		leftToRight = 0;
+		rightToLeft = 0;
+		rightToRight = 0;
 		
 	}
 	
