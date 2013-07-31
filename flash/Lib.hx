@@ -1093,9 +1093,12 @@ class Lib {
 		untyped { if (window.console != null) window.console.log(arg); }
 		
 	}
-	
-	
-	
+
+	// used by ExternalInterface to add a function by name to the containing HTMLElement
+	public static function addCallback(functionName:String, closure:Dynamic):Void {
+		untyped mMe.__scr[functionName] = closure;
+	}
+
 	
 	// Getters & Setters
 	
