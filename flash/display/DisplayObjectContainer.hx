@@ -366,10 +366,12 @@ class DisplayObjectContainer extends InteractiveObject {
 		
 		if (gfx1 != null && gfx2 != null) {
 			
-			Lib.nmeSwapSurface(
-				(nmeChildren[c1].nmeScrollRect == null ? gfx1.nmeSurface : nmeChildren[c1].nmeGetSrWindow()),
-				(nmeChildren[c2].nmeScrollRect == null ? gfx2.nmeSurface : nmeChildren[c2].nmeGetSrWindow())
-			);
+			var surface1 = nmeChildren[c1].nmeScrollRect == null ? gfx1.nmeSurface : nmeChildren[c1].nmeGetSrWindow();
+			var surface2 = nmeChildren[c2].nmeScrollRect == null ? gfx2.nmeSurface : nmeChildren[c2].nmeGetSrWindow();
+			
+			if(surface1 != null && surface2 != null){
+				Lib.nmeSwapSurface(surface1, surface2);
+			}
 			
 		}
 		
