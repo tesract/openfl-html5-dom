@@ -581,7 +581,8 @@ class Stage extends DisplayObjectContainer {
 	
 	private function nmeOnMouse(event:js.html.MouseEvent, type:String) {
 		
-		var point:Point = untyped new Point(event.clientX - Lib.mMe.__scr.offsetLeft + window.pageXOffset, event.clientY - Lib.mMe.__scr.offsetTop + window.pageYOffset);
+		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect();
+		var point:Point = untyped new Point(event.clientX - rect.left, event.clientY - rect.top);
 		
 		if (nmeDragObject != null) {
 			
@@ -643,7 +644,8 @@ class Stage extends DisplayObjectContainer {
 	
 	private function nmeOnTouch(event:js.html.TouchEvent, touch:js.html.Touch, type:String, touchInfo:TouchInfo, isPrimaryTouchPoint:Bool):Void {
 		
-		var point:Point = untyped new Point(touch.pageX - Lib.mMe.__scr.offsetLeft + window.pageXOffset, touch.pageY - Lib.mMe.__scr.offsetTop + window.pageYOffset);
+		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect();
+		var point : Point = untyped new Point(touch.pageX - rect.left, touch.pageY - rect.top);
 		var obj = nmeGetObjectUnderPoint(point);
 		
 		// used in drag implementation
