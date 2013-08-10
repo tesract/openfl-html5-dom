@@ -947,7 +947,7 @@ class Lib {
 			
 		}
 		
-		if (Reflect.hasField(tgt, "on" + HTML_TOUCH_EVENT_TYPES[0])) {
+		//if (Reflect.hasField(tgt, "on" + HTML_TOUCH_EVENT_TYPES[0])) {
 			
 			for (type in HTML_TOUCH_EVENT_TYPES) {
 				
@@ -955,7 +955,7 @@ class Lib {
 				
 			}
 			
-		} else {
+		//} else {
 			
 			for (type in HTML_TOUCH_ALT_EVENT_TYPES) {
 				
@@ -963,7 +963,7 @@ class Lib {
 				
 			}
 			
-		}
+		//}
 		
 		for (type in HTML_DIV_EVENT_TYPES) {
 			

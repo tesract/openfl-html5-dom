@@ -344,12 +344,14 @@ class Stage extends DisplayObjectContainer {
 			case "touchmove":
 				
 				var evt:js.html.TouchEvent = cast evt;
+				evt.preventDefault();
 				var touchInfo = nmeTouchInfo[evt.changedTouches[0].identifier];
 				nmeOnTouch(evt, evt.changedTouches[0], TouchEvent.TOUCH_MOVE, touchInfo, true);
 			
 			case "touchend":
 				
 				var evt:js.html.TouchEvent = cast evt;
+				evt.preventDefault();
 				var touchInfo = nmeTouchInfo[evt.changedTouches[0].identifier];
 				nmeOnTouch(evt, evt.changedTouches[0], TouchEvent.TOUCH_END, touchInfo, true);
 				nmeTouchInfo[evt.changedTouches[0].identifier] = null;
