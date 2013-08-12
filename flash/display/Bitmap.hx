@@ -91,7 +91,7 @@ class Bitmap extends DisplayObject {
 			
 			var local = globalToLocal(point);
 			
-			if (local.x < 0 || local.y < 0 || local.x > width || local.y > height) {
+			if (local.x < 0 || local.y < 0 || local.x > width / scaleX || local.y > height / scaleY) {
 				
 				return null;
 				
