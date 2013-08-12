@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "OpenFL support for HTML5",
-	"version": "1.0.4",
-	"releasenote": "Minor fixes",
+	"version": "1.0.5",
+	"releasenote": "Small patches",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
