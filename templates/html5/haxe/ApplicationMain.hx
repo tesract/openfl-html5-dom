@@ -57,6 +57,7 @@ class ApplicationMain {
 		preloader.onInit();
 
 		::foreach assets::
+		::if (embed)::
 		::if (type=="image")::
 		var loader:Loader = new Loader();
 		loaders.set("::resourceName::", loader);
@@ -71,6 +72,7 @@ class ApplicationMain {
 		urlLoader.dataFormat = BINARY;
 		urlLoaders.set("::resourceName::", urlLoader);
 		total ++;
+		::end::
 		::end::::end::
 		
 		var resourcePrefix = "NME_:bitmap_";

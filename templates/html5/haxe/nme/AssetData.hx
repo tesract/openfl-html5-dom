@@ -19,9 +19,9 @@ class AssetData {
 		
 		if (!initialized) {
 			
-			::if (assets != null)::::foreach assets::::if (type == "font")::className.set ("::id::", nme.NME_::flatName::);::else::path.set ("::id::", "::resourceName::");::end::
+			::if (assets != null)::::foreach assets::::if (embed)::::if (type == "font")::className.set ("::id::", nme.NME_::flatName::);::else::path.set ("::id::", "::resourceName::");::end::
 			type.set ("::id::", Reflect.field (AssetType, "::type::".toUpperCase ()));
-			::end::::end::
+			::end::::end::::end::
 			::if (libraries != null)::::foreach libraries::library.set ("::name::", Reflect.field (LibraryType, "::type::".toUpperCase ()));
 			::end::::end::
 			initialized = true;
