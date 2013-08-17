@@ -87,6 +87,13 @@ class Point {
 	}
 	
 	
+	inline public function setTo(xa:Float, ya:Float):Void {	
+		
+		x = xa;
+		y = ya;
+	}
+	
+	
 	public function subtract(v:Point):Point {
 		
 		return new Point(x - v.x, y - v.y);
