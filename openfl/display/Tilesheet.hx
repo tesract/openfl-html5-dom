@@ -24,6 +24,7 @@ class Tilesheet {
 	/** @private */ public var nmeBitmap:BitmapData;
 	/** @private */ public var nmeCenterPoints:Array <Point>;
 	/** @private */ public var nmeTileRects:Array <Rectangle>;
+	/** @private */ public var nmeTileUVs:Array <Rectangle>;
 	
 	
 	public function new(image:BitmapData) {
@@ -31,6 +32,7 @@ class Tilesheet {
 		nmeBitmap = image;
 		nmeCenterPoints = new Array <Point>();
 		nmeTileRects = new Array <Rectangle>();
+		nmeTileUVs = new Array <Rectangle>();
 		
 	}
 	
@@ -46,6 +48,7 @@ class Tilesheet {
 		}
 		
 		nmeCenterPoints.push(centerPoint);
+		nmeTileUVs.push(new Rectangle(rectangle.left / nmeBitmap.width, rectangle.top / nmeBitmap.height, rectangle.right / nmeBitmap.width, rectangle.bottom / nmeBitmap.height));
 		
 		return nmeTileRects.length - 1;
 		
@@ -56,6 +59,18 @@ class Tilesheet {
 		
 		graphics.drawTiles(this, tileData, smooth, flags);
 		
+	}
+	
+	public inline function getTileCenter(index:Int):Point {
+		return nmeCenterPoints[index];
+	}
+	
+	public inline function getTileRect(index:Int):Rectangle {
+		return nmeTileRects[index];
+	}
+	
+	public inline function getTileUVs(index:Int):Rectangle {
+		return nmeTileUVs[index];
 	}
 	
 	
