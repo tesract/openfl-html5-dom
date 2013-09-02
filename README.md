@@ -1,7 +1,12 @@
+openfl-html5
+============
+[![Build Status](https://travis-ci.org/openfl/openfl-html5.png)](https://travis-ci.org/openfl/openfl-html5)
+
+
 Install
 -------
 
-https://github.com/openfl/openfl/wiki/Get-Started
+http://www.openfl.org/developer/documentation/get-started
 
 
 Development Build
@@ -10,6 +15,6 @@ Development Build
     git clone https://github.com/openfl/openfl-html5
     haxelib dev openfl-html5 openfl-html5
 
-To return to a release build:
+To return to release builds:
 
     haxelib dev openfl-html5
