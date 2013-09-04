@@ -24,6 +24,7 @@ class ApplicationMain {
 	public static var urlLoaders:Map <String, URLLoader>;
 
 	public static function main() {
+		
 		completed = 0;
 		loaders = new Map <String, Loader>();
 		urlLoaders = new Map <String, URLLoader>();
@@ -85,6 +86,8 @@ class ApplicationMain {
 				}
 			}
 		}
+		
+		::if (APP_INIT != null)::::APP_INIT::::end::
 		
 		if (total == 0) {
 			begin();
