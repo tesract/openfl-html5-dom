@@ -48,19 +48,27 @@ class Loader extends Sprite {
 		
 		var transparent = true;
 		
-		untyped {
+		untyped { contentLoaderInfo.url = request.url; }
+		
+		if (request.contentType == null && request.contentType != "") {
 			
-			// set properties on the LoaderInfo object
-			contentLoaderInfo.url = request.url;
-			contentLoaderInfo.contentType = switch (extension) {
+			untyped {
 				
-				case "swf": "application/x-shockwave-flash";
-				case "jpg", "jpeg": transparent = false; "image/jpeg";
-				case "png": "image/png";
-				case "gif": "image/gif";
-				default: ""; throw "Unrecognized file " + request.url;
+				contentLoaderInfo.contentType = switch (extension) {
+					
+					case "swf": "application/x-shockwave-flash";
+					case "jpg", "jpeg": transparent = false; "image/jpeg";
+					case "png": "image/png";
+					case "gif": "image/gif";
+					default: "application/x-www-form-urlencoded"; /*throw "Unrecognized file " + request.url;*/
+					
+				}
 				
 			}
+			
+		} else {
+			
+			untyped { contentLoaderInfo.contentType = request.contentType; }
 			
 		}
 		
