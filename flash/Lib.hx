@@ -106,8 +106,14 @@ class Lib {
 	
 	public static function getURL(request:URLRequest, target:String = null) {
 		
+		if (target == null) {
+			
+			target = "_blank";
+			
+		}
+		
 		//Browser.window.open(request.url);
-		untyped { window.open(request.url); }
+		untyped { window.open(request.url, target); }
 		
 	}
 	
