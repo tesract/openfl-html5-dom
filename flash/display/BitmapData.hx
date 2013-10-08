@@ -12,7 +12,6 @@ import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.gl.GLTexture;
 import flash.utils.ByteArray;
 import flash.utils.Uuid;
 import flash.Lib;
@@ -23,6 +22,7 @@ import js.html.ImageData;
 import js.html.ImageElement;
 import js.html.Uint8ClampedArray;
 import js.Browser;
+import openfl.gl.GLTexture;
 
 
 @:autoBuild(openfl.Assets.embedBitmap())
@@ -35,7 +35,7 @@ class BitmapData implements IBitmapDrawable {
 	public var width (get_width, null):Int;
 	
 	public var __imageData:ImageData;
-	public var __gLTexture:GLTexture;
+	public var __glTexture:GLTexture;
 	public var __referenceCount:Int;
 	
 	private var __assignedBitmaps:Int;

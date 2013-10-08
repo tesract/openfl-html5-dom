@@ -1,5 +1,4 @@
 package openfl.display;
-#if js
 
 
 import flash.geom.Matrix3D;
@@ -14,12 +13,12 @@ class OpenGLView extends DirectRenderer {
 	public static inline var CONTEXT_LOST = "glcontextlost";
 	public static inline var CONTEXT_RESTORED = "glcontextrestored";
 	
-	public static var isSupported(get_isSupported, null):Bool;
+	public static var isSupported (get_isSupported, null):Bool;
 	
 	//var context:GLInstance;
 	
 	
-	public function new() {
+	public function new () {
 		
 		super("OpenGLView");
 		
@@ -35,7 +34,7 @@ class OpenGLView extends DirectRenderer {
 	
 	
 	
-	private static function get_isSupported():Bool {
+	private static function get_isSupported ():Bool {
 		
 		if (untyped (!window.WebGLRenderingContext)) {
 			
@@ -57,6 +56,3 @@ class OpenGLView extends DirectRenderer {
 	
 	
 }
-
-
-#end

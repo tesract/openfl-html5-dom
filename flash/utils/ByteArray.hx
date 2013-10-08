@@ -9,6 +9,7 @@ import haxe.io.BytesData;
 import haxe.io.Input;
 import js.html.DataView;
 import js.html.Uint8Array;
+import openfl.utils.ArrayBuffer;
 
 #if format
 import format.tools.Inflate;

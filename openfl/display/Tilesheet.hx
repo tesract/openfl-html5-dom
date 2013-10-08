@@ -1,5 +1,4 @@
 package openfl.display;
-#if js
 
 
 import flash.display.BitmapData;
@@ -27,54 +26,51 @@ class Tilesheet {
 	/** @private */ public var __tileUVs:Array <Rectangle>;
 	
 	
-	public function new(image:BitmapData) {
+	public function new (image:BitmapData) {
 		
 		__bitmap = image;
-		__centerPoints = new Array <Point>();
-		__tileRects = new Array <Rectangle>();
-		__tileUVs = new Array <Rectangle>();
+		__centerPoints = new Array <Point> ();
+		__tileRects = new Array <Rectangle> ();
+		__tileUVs = new Array <Rectangle> ();
 		
 	}
 	
 	
-	public function addTileRect(rectangle:Rectangle, centerPoint:Point = null):Int {
+	public function addTileRect (rectangle:Rectangle, centerPoint:Point = null):Int {
 		
-		__tileRects.push(rectangle);
+		__tileRects.push (rectangle);
 		
 		if (centerPoint == null) {
 			
-			centerPoint = new Point();
+			centerPoint = new Point ();
 			
 		}
 		
-		__centerPoints.push(centerPoint);
-		__tileUVs.push(new Rectangle(rectangle.left / __bitmap.width, rectangle.top / __bitmap.height, rectangle.right / __bitmap.width, rectangle.bottom / __bitmap.height));
+		__centerPoints.push (centerPoint);
+		__tileUVs.push (new Rectangle(rectangle.left / __bitmap.width, rectangle.top / __bitmap.height, rectangle.right / __bitmap.width, rectangle.bottom / __bitmap.height));
 		
 		return __tileRects.length - 1;
 		
 	}
 	
 	
-	public function drawTiles(graphics:Graphics, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
+	public function drawTiles (graphics:Graphics, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
 		
-		graphics.drawTiles(this, tileData, smooth, flags);
+		graphics.drawTiles (this, tileData, smooth, flags);
 		
 	}
 	
-	public inline function getTileCenter(index:Int):Point {
+	public inline function getTileCenter (index:Int):Point {
 		return __centerPoints[index];
 	}
 	
-	public inline function getTileRect(index:Int):Rectangle {
+	public inline function getTileRect (index:Int):Rectangle {
 		return __tileRects[index];
 	}
 	
-	public inline function getTileUVs(index:Int):Rectangle {
+	public inline function getTileUVs (index:Int):Rectangle {
 		return __tileUVs[index];
 	}
 	
 	
 }
-
-
-#end

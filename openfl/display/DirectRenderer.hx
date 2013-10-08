@@ -1,5 +1,4 @@
 package openfl.display;
-#if js
 
 
 import flash.display.DisplayObject;
@@ -15,18 +14,18 @@ import openfl.gl.GL;
 class DirectRenderer extends DisplayObject {
 	
 	
-	public var render(get_render, set_render):Dynamic;
+	public var render (get_render, set_render):Dynamic;
 	
 	private var __context:RenderingContext;
 	private var __graphics:Graphics;
 	private var __renderMethod:Dynamic;
 	
 	
-	public function new(inType:String = "DirectRenderer") {
+	public function new (inType:String = "DirectRenderer") {
 		
-		super();
+		super ();
 		
-		__graphics = new Graphics();
+		__graphics = new Graphics ();
 		
 		__graphics.__surface.width = Lib.current.stage.stageWidth;
 		__graphics.__surface.height = Lib.current.stage.stageHeight;
@@ -42,7 +41,7 @@ class DirectRenderer extends DisplayObject {
 			}
 			
 			#if debug
-			__context = untyped WebGLDebugUtils.makeDebugContext(__context);
+			__context = untyped WebGLDebugUtils.makeDebugContext (__context);
 			#end
 			
 		}
@@ -50,18 +49,18 @@ class DirectRenderer extends DisplayObject {
 	}
 	
 	
-	public override function __getGraphics():Graphics {
+	public override function __getGraphics ():Graphics {
 		
 		return __graphics;
 		
 	}
 	
 	
-	private override function __render(inMask:CanvasElement = null, clipRect:Rectangle = null) {
+	private override function __render (inMask:CanvasElement = null, clipRect:Rectangle = null) {
 		
 		if (!__combinedVisible) return;
 		
-		var gfx = __getGraphics();
+		var gfx = __getGraphics ();
 		if (gfx == null) return;
 		
 		gfx.__surface.width = stage.stageWidth;
@@ -75,15 +74,15 @@ class DirectRenderer extends DisplayObject {
 			
 			if (scrollRect == null) {
 				
-				rect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+				rect = new Rectangle (0, 0, stage.stageWidth, stage.stageHeight);
 				
 			} else {
 				
-				rect = new Rectangle(x + scrollRect.x, y + scrollRect.y, scrollRect.width, scrollRect.height);
+				rect = new Rectangle (x + scrollRect.x, y + scrollRect.y, scrollRect.width, scrollRect.height);
 				
 			}
 			
-			if (render != null) render(rect);
+			if (render != null) render (rect);
 			
 		}
 		
@@ -97,17 +96,17 @@ class DirectRenderer extends DisplayObject {
 	
 	
 	
-	private function get_render():Dynamic {
+	private function get_render ():Dynamic {
 		
 		return __renderMethod;
 		
 	}
 	
 	
-	private function set_render(value:Dynamic):Dynamic {
+	private function set_render (value:Dynamic):Dynamic {
 		
 		__renderMethod = value;
-		__render();
+		__render ();
 		
 		return value;
 		
@@ -115,6 +114,3 @@ class DirectRenderer extends DisplayObject {
 	
 	
 }
-
-
-#end
