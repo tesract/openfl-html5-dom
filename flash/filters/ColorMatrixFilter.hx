@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 import flash.display.BitmapData;
@@ -15,28 +14,28 @@ class ColorMatrixFilter extends BitmapFilter {
 	public var matrix:Array<Float>;
 	
 	
-	public function new(matrix:Array<Float> = null) {
+	public function new (matrix:Array<Float> = null) {
 		
-		super("ColorMatrixFilter");
+		super ("ColorMatrixFilter");
 		
 		this.matrix = matrix;
 		
 	}
 	
 	
-	override public function clone():BitmapFilter {
+	override public function clone ():BitmapFilter {
 		
-		return new ColorMatrixFilter(matrix);
+		return new ColorMatrixFilter (matrix);
 		
 	}
 	
 	
-	override public function nmeApplyFilter(surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
+	override public function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
 		
 		if (rect == null) rect = new Rectangle (0, 0, surface.width, surface.height);
-		var ctx:CanvasRenderingContext2D = surface.getContext('2d');
+		var ctx:CanvasRenderingContext2D = surface.getContext ('2d');
 		
-		var imagedata = ctx.getImageData(rect.x, rect.y, rect.width, rect.height);
+		var imagedata = ctx.getImageData (rect.x, rect.y, rect.width, rect.height);
 		var offsetX:Int;
 		
 		for (i in 0...imagedata.data.length >> 2) {
@@ -55,12 +54,9 @@ class ColorMatrixFilter extends BitmapFilter {
 			
 		}
 		
-		ctx.putImageData(imagedata, rect.x, rect.y);
+		ctx.putImageData (imagedata, rect.x, rect.y);
 		
 	}
 	
 	
 }
-
-
-#end

@@ -1,11 +1,10 @@
 package flash.xml;
-#if js
 
 
 class XML implements Dynamic<XMLList> {
 	
 	
-	function new(?value:Dynamic) {
+	function new (?value:Dynamic) {
 		
 		
 		
@@ -64,6 +63,3 @@ class XML implements Dynamic<XMLList> {
 	
 	
 }
-
-
-#end

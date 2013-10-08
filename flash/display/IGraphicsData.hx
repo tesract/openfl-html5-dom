@@ -1,10 +1,9 @@
 package flash.display;
-#if js
 
 
 interface IGraphicsData {
 	
-	var nmeGraphicsDataType(default, null):GraphicsDataType;
+	var __graphicsDataType (default, null):GraphicsDataType;
 	
 }
 
@@ -17,6 +16,3 @@ interface IGraphicsData {
 	PATH;
 	
 }
-
-
-#end

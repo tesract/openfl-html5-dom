@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 extern class ID3Info {
@@ -12,9 +11,6 @@ extern class ID3Info {
 	public var track:String;
 	public var year:String;
 	
-	public function new():Void;
+	public function new ():Void;
 	
 }
-
-
-#end

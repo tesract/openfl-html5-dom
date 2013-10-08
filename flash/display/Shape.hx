@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.Graphics;
@@ -12,32 +11,39 @@ import flash.Lib;
 class Shape extends DisplayObject {
 	
 	
-	public var graphics(get_graphics, never):Graphics;
+	public var graphics (get_graphics, never):Graphics;
 	
-	private var nmeGraphics:Graphics;
+	private var __graphics:Graphics;
 	
 	
-	public function new() {
+	public function new () {
 		
-		super();
+		super ();
 		
-		nmeGraphics = new Graphics();
-		
-	}
-	
-	
-	public override function nmeGetGraphics():Graphics {
-		
-		return nmeGraphics;
+		__graphics = new Graphics ();
 		
 	}
 	
 	
-	override public function nmeGetObjectUnderPoint(point:Point):DisplayObject {
+	override public function toString ():String {
+		
+		return "[Shape name=" + this.name + " id=" + ___id + "]";
+		
+	}
+	
+	
+	public override function __getGraphics ():Graphics {
+		
+		return __graphics;
+		
+	}
+	
+	
+	override public function __getObjectUnderPoint (point:Point):DisplayObject {
 		
 		if (parent == null) return null;
 		
-		if (parent.mouseEnabled && super.nmeGetObjectUnderPoint(point) == this) {
+		if (parent.mouseEnabled && super.__getObjectUnderPoint (point) == this) {
 			
 			return parent;
 			
@@ -50,13 +56,6 @@ class Shape extends DisplayObject {
 	}
 	
 	
-	override public function toString():String {
-		
-		return "[Shape name=" + this.name + " id=" + _nmeId + "]";
-		
-	}
-	
-	
 	
 	
 	// Getters & Setters
@@ -64,14 +63,11 @@ class Shape extends DisplayObject {
 	
 	
 	
-	private function get_graphics():Graphics {
+	private function get_graphics ():Graphics {
 		
-		return nmeGraphics;
+		return __graphics;
 		
 	}
 	
 	
 }
-
-
-#end

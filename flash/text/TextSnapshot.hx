@@ -1,7 +1,8 @@
 package flash.text;
-#if js
+
 
 import flash.utils.UInt;
+
 
 class TextSnapshot {
 	
@@ -27,6 +28,3 @@ class TextSnapshot {
 	
 	
 }
-
-
-#end

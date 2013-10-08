@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 class BitmapDataChannel {
@@ -10,6 +9,3 @@ class BitmapDataChannel {
    public static inline var RED = 1;
    
 }
-
-
-#end

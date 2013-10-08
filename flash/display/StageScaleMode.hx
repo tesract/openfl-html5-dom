@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum StageScaleMode {
@@ -10,6 +9,3 @@ enum StageScaleMode {
 	EXACT_FIT;
 	
 }
-
-
-#end

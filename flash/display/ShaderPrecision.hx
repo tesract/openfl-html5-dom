@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum ShaderPrecision {
@@ -8,6 +7,3 @@ enum ShaderPrecision {
 	FULL;
 	
 }
-
-
-#end

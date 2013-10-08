@@ -1,18 +1,14 @@
 package flash.display;
-#if js
 
 
 class AVM1Movie extends DisplayObject {
 	
 	
-	function new() {
+	private function new () {
 		
-		super();
+		super ();
 		
 	}
 	
 	
 }
-
-
-#end

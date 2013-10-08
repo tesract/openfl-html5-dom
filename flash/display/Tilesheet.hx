@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.geom.Point;
@@ -17,45 +16,42 @@ class Tilesheet {
 	public static inline var TILE_BLEND_NORMAL   = 0x00000000;
 	public static inline var TILE_BLEND_ADD      = 0x00010000;
 	
-	/** @private */ public var nmeBitmap:BitmapData;
-	/** @private */ public var nmeCenterPoints:Array <Point>;
-	/** @private */ public var nmeTileRects:Array <Rectangle>;
+	/** @private */ public var __bitmap:BitmapData;
+	/** @private */ public var __centerPoints:Array <Point>;
+	/** @private */ public var __tileRects:Array <Rectangle>;
 	
 	
-	public function new(image:BitmapData) {
+	public function new (image:BitmapData) {
 		
-		nmeBitmap = image;
-		nmeCenterPoints = new Array <Point>();
-		nmeTileRects = new Array <Rectangle>();
+		__bitmap = image;
+		__centerPoints = new Array <Point> ();
+		__tileRects = new Array <Rectangle> ();
 		
 	}
 	
 	
-	public function addTileRect(rectangle:Rectangle, centerPoint:Point = null):Int {
+	public function addTileRect (rectangle:Rectangle, centerPoint:Point = null):Int {
 		
-		nmeTileRects.push(rectangle);
+		__tileRects.push (rectangle);
 		
 		if (centerPoint == null) {
 			
-			centerPoint = new Point();
+			centerPoint = new Point ();
 			
 		}
 		
-		nmeCenterPoints.push(centerPoint);
+		__centerPoints.push (centerPoint);
 		
-		return nmeTileRects.length - 1;
+		return __tileRects.length - 1;
 		
 	}
 	
 	
-	public function drawTiles(graphics:Graphics, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
+	public function drawTiles (graphics:Graphics, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
 		
-		graphics.drawTiles(this, tileData, smooth, flags);
+		graphics.drawTiles (this, tileData, smooth, flags);
 		
 	}
 	
 	
 }
-
-
-#end

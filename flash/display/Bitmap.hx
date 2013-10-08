@@ -1,9 +1,8 @@
 package flash.display;
-#if js
 
 
-import flash.display.DisplayObject;
 import flash.display.BitmapData;
+import flash.display.DisplayObject;
 import flash.display.PixelSnapping;
 import flash.geom.Matrix;
 import flash.geom.Point;
@@ -14,18 +13,18 @@ import js.html.CanvasElement;
 class Bitmap extends DisplayObject {
 	
 	
-	public var bitmapData(default, set_bitmapData):BitmapData;
+	public var bitmapData (default, set_bitmapData):BitmapData;
 	public var pixelSnapping:PixelSnapping;
 	public var smoothing:Bool;
 
-	public var nmeGraphics(default, null):Graphics;
-	private var nmeCurrentLease:ImageDataLease;
-	private var nmeInit:Bool;
+	public var __graphics (default, null):Graphics;
+	private var __currentLease:ImageDataLease;
+	private var __init:Bool;
 	
 	
-	public function new(inBitmapData:BitmapData = null, inPixelSnapping:PixelSnapping = null, inSmoothing:Bool = false):Void {
+	public function new (inBitmapData:BitmapData = null, inPixelSnapping:PixelSnapping = null, inSmoothing:Bool = false):Void {
 		
-		super();
+		super ();
 		
 		pixelSnapping = inPixelSnapping;
 		smoothing = inSmoothing;
@@ -33,11 +32,11 @@ class Bitmap extends DisplayObject {
 		if (inBitmapData != null) {
 			
 			this.bitmapData = inBitmapData;
-			bitmapData.nmeReferenceCount++;
+			bitmapData.__referenceCount++;
 			
-			if (bitmapData.nmeReferenceCount == 1) {
+			if (bitmapData.__referenceCount == 1) {
 				
-				nmeGraphics = new Graphics(bitmapData.handle());
+				__graphics = new Graphics (bitmapData.handle ());
 				
 			}
 			
@@ -49,39 +48,79 @@ class Bitmap extends DisplayObject {
 			
 		}
 		
-		if (nmeGraphics == null) {
+		if (__graphics == null) {
 			
-			nmeGraphics = new Graphics();
+			__graphics = new Graphics ();
 			
 		}
 		
 		if (bitmapData != null) {
 			
-			nmeRender();
+			__render();
 			
 		}
 		
 	}
 	
 	
-	private inline function getBitmapSurfaceTransform(gfx:Graphics):Matrix {
+	private inline function getBitmapSurfaceTransform (gfx:Graphics):Matrix {
 		
-		var extent = gfx.nmeExtentWithFilters;
-		var fm = nmeGetFullMatrix();
-		fm.nmeTranslateTransformed(extent.topLeft);
+		var extent = gfx.__extentWithFilters;
+		var fm = __getFullMatrix ();
+		fm.__translateTransformed (extent.topLeft);
 		return fm;
 		
 	}
 	
 	
-	override private function nmeGetGraphics():Graphics {
+	override public function toString ():String {
 		
-		return nmeGraphics;
+		return "[Bitmap name=" + this.name + " id=" + ___id + "]";
 		
 	}
 	
 	
-	override public function nmeGetObjectUnderPoint(point:Point):DisplayObject {
+	override function validateBounds ():Void {
+		
+		if (_boundsInvalid) {
+			
+			super.validateBounds ();
+			
+			if (bitmapData != null) {
+				
+				var r = new Rectangle (0, 0, bitmapData.width, bitmapData.height);		
+				
+				if (r.width != 0 || r.height != 0) {
+					
+					if (__boundsRect.width == 0 && __boundsRect.height == 0) {
+						
+						__boundsRect = r.clone ();
+						
+					} else {
+						
+						__boundsRect.extendBounds (r);
+						
+					}
+					
+				}
+				
+			}
+			
+			__setDimensions ();
+			
+		}
+		
+	}
+	
+	
+	override private function __getGraphics ():Graphics {
+		
+		return __graphics;
+		
+	}
+	
+	
+	override public function __getObjectUnderPoint (point:Point):DisplayObject {
 		
 		if (!visible) {
 			
@@ -89,7 +128,7 @@ class Bitmap extends DisplayObject {
 			
 		} else if (this.bitmapData != null) {
 			
-			var local = globalToLocal(point);
+			var local = globalToLocal (point);
 			
 			if (local.x < 0 || local.y < 0 || local.x > width / scaleX || local.y > height / scaleY) {
 				
@@ -103,40 +142,40 @@ class Bitmap extends DisplayObject {
 			
 		} else {
 			
-			return super.nmeGetObjectUnderPoint(point);
+			return super.__getObjectUnderPoint (point);
 			
 		}
 		
 	}
 	
 	
-	override public function nmeRender(inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
+	override public function __render (inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
 		
-		if (!nmeCombinedVisible) return;
+		if (!__combinedVisible) return;
 		if (bitmapData == null) return;
 		
 		if (_matrixInvalid || _matrixChainInvalid) {
 			
-			nmeValidateMatrix();
+			__validateMatrix ();
 			
 		}
 		
-		if (bitmapData.handle() != nmeGraphics.nmeSurface) {
+		if (bitmapData.handle () != __graphics.__surface) {
 			
-			var imageDataLease = bitmapData.nmeGetLease();
+			var imageDataLease = bitmapData.__getLease ();
 			
-			if (imageDataLease != null && (nmeCurrentLease == null || imageDataLease.seed != nmeCurrentLease.seed || imageDataLease.time != nmeCurrentLease.time)) {
+			if (imageDataLease != null && (__currentLease == null || imageDataLease.seed != __currentLease.seed || imageDataLease.time != __currentLease.time)) {
 				
-				var srcCanvas = bitmapData.handle();
+				var srcCanvas = bitmapData.handle ();
 				
-				nmeGraphics.nmeSurface.width = srcCanvas.width;
-				nmeGraphics.nmeSurface.height = srcCanvas.height;
-				nmeGraphics.clear();
+				__graphics.__surface.width = srcCanvas.width;
+				__graphics.__surface.height = srcCanvas.height;
+				__graphics.clear ();
 				
-				Lib.nmeDrawToSurface(srcCanvas, nmeGraphics.nmeSurface);
-				nmeCurrentLease = imageDataLease.clone();
+				Lib.__drawToSurface(srcCanvas, __graphics.__surface);
+				__currentLease = imageDataLease.clone();
 				
-				handleGraphicsUpdated(nmeGraphics);
+				handleGraphicsUpdated (__graphics);
 				
 			}
 			
@@ -144,70 +183,30 @@ class Bitmap extends DisplayObject {
 		
 		if (inMask != null) {
 			
-			nmeApplyFilters(nmeGraphics.nmeSurface);
-			var m = getBitmapSurfaceTransform(nmeGraphics);
-			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m,(parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect, smoothing);
+			__applyFilters (__graphics.__surface);
+			var m = getBitmapSurfaceTransform (__graphics);
+			Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, smoothing);
 			
 		} else {
 			
-			if (nmeTestFlag(DisplayObject.TRANSFORM_INVALID)) {
+			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
 				
-				var m = getBitmapSurfaceTransform(nmeGraphics);
-				Lib.nmeSetSurfaceTransform(nmeGraphics.nmeSurface, m);
-				nmeClearFlag(DisplayObject.TRANSFORM_INVALID);
+				var m = getBitmapSurfaceTransform (__graphics);
+				Lib.__setSurfaceTransform (__graphics.__surface, m);
+				__clearFlag (DisplayObject.TRANSFORM_INVALID);
 				
 			}
 			
-			if (!nmeInit) {
+			if (!__init) {
 				
-				Lib.nmeSetSurfaceOpacity(nmeGraphics.nmeSurface, 0);
-				nmeInit = true;
+				Lib.__setSurfaceOpacity (__graphics.__surface, 0);
+				__init = true;
 				
 			} else {
 				
-				Lib.nmeSetSurfaceOpacity(nmeGraphics.nmeSurface, (parent != null ? parent.nmeCombinedAlpha : 1) * alpha);
+				Lib.__setSurfaceOpacity(__graphics.__surface, (parent != null ? parent.__combinedAlpha : 1) * alpha);
 				
 			}
-			
-		}
-		
-	}
-	
-	
-	override public function toString():String {
-		
-		return "[Bitmap name=" + this.name + " id=" + _nmeId + "]";
-		
-	}
-	
-	
-	override function validateBounds():Void {
-		
-		if (_boundsInvalid) {
-			
-			super.validateBounds();
-			
-			if (bitmapData != null) {
-				
-				var r = new Rectangle(0, 0, bitmapData.width, bitmapData.height);		
-				
-				if (r.width != 0 || r.height != 0) {
-					
-					if (nmeBoundsRect.width == 0 && nmeBoundsRect.height == 0) {
-						
-						nmeBoundsRect = r.clone();
-						
-					} else {
-						
-						nmeBoundsRect.extendBounds(r);
-						
-					}
-					
-				}
-				
-			}
-			
-			nmeSetDimensions();
 			
 		}
 		
@@ -221,17 +220,17 @@ class Bitmap extends DisplayObject {
 	
 	
 	
-	private function set_bitmapData(inBitmapData:BitmapData):BitmapData {
+	private function set_bitmapData (inBitmapData:BitmapData):BitmapData {
 		
 		if (inBitmapData != bitmapData) {
 			
 			if (bitmapData != null) {
 				
-				bitmapData.nmeReferenceCount--;
+				bitmapData.__referenceCount--;
 				
-				if (nmeGraphics.nmeSurface == bitmapData.handle()) {
+				if (__graphics.__surface == bitmapData.handle ()) {
 					
-					Lib.nmeSetSurfaceOpacity(bitmapData.handle(), 0);
+					Lib.__setSurfaceOpacity (bitmapData.handle (), 0);
 					
 				}
 				
@@ -239,13 +238,13 @@ class Bitmap extends DisplayObject {
 			
 			if (inBitmapData != null) {
 				
-				inBitmapData.nmeReferenceCount++;
+				inBitmapData.__referenceCount++;
 				
 			}
 			
 		}
 		
-		nmeInvalidateBounds();
+		__invalidateBounds ();
 		bitmapData = inBitmapData;
 		return inBitmapData;
 		
@@ -253,6 +252,3 @@ class Bitmap extends DisplayObject {
 	
 	
 }
-
-
-#end

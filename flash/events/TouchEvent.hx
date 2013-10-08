@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 import flash.display.InteractiveObject;
@@ -33,9 +32,9 @@ class TouchEvent extends Event {
 	public var touchPointID:Int;
 	
 	
-	public function new(type:String, bubbles:Bool = true, cancelable:Bool = false, localX:Float = 0, localY:Float = 0, relatedObject:InteractiveObject = null, ctrlKey:Bool = false, altKey:Bool = false, shiftKey:Bool = false, buttonDown:Bool = false, delta:Int = 0, commandKey:Bool = false, clickCount:Int = 0) {
+	public function new (type:String, bubbles:Bool = true, cancelable:Bool = false, localX:Float = 0, localY:Float = 0, relatedObject:InteractiveObject = null, ctrlKey:Bool = false, altKey:Bool = false, shiftKey:Bool = false, buttonDown:Bool = false, delta:Int = 0, commandKey:Bool = false, clickCount:Int = 0) {
 		
-		super(type, bubbles, cancelable);
+		super (type, bubbles, cancelable);
 		
 		this.shiftKey = shiftKey;
 		this.altKey = altKey;
@@ -54,9 +53,9 @@ class TouchEvent extends Event {
 	}
 	
 	
-	public static function nmeCreate(type:String, event:js.html.TouchEvent, touch:js.html.Touch, local:Point, target:InteractiveObject):TouchEvent {
+	public static function __create (type:String, event:js.html.TouchEvent, touch:js.html.Touch, local:Point, target:InteractiveObject):TouchEvent {
 		
-		var evt = new TouchEvent(type, true, false, local.x, local.y, null, event.ctrlKey, event.altKey, event.shiftKey, false /* note: buttonDown not supported on w3c spec */, 0, 0);
+		var evt = new TouchEvent (type, true, false, local.x, local.y, null, event.ctrlKey, event.altKey, event.shiftKey, false /* note: buttonDown not supported on w3c spec */, 0, 0);
 		
 		evt.stageX = Lib.current.stage.mouseX;
 		evt.stageY = Lib.current.stage.mouseY;
@@ -67,9 +66,9 @@ class TouchEvent extends Event {
 	}
 	
 	
-	override public function nmeCreateSimilar(type:String, related:InteractiveObject = null, targ:InteractiveObject = null):Event {
+	override public function __createSimilar (type:String, related:InteractiveObject = null, targ:InteractiveObject = null):Event {
 		
-		var result = new TouchEvent(type, bubbles, cancelable, localX, localY, related == null ? relatedObject : related, ctrlKey, altKey, shiftKey, buttonDown, delta, commandKey);
+		var result = new TouchEvent (type, bubbles, cancelable, localX, localY, related == null ? relatedObject : related, ctrlKey, altKey, shiftKey, buttonDown, delta, commandKey);
 		result.touchPointID = touchPointID;
 		result.isPrimaryTouchPoint = isPrimaryTouchPoint;
 		
@@ -85,6 +84,3 @@ class TouchEvent extends Event {
 	
 	
 }
-
-
-#end

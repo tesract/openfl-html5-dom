@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 /**
@@ -64,6 +63,3 @@ enum NetworkState {
 	NETWORK_NO_SOURCE;	// (numeric value 3)    The element's resource selection algorithm is active, but it has so not yet found a resource to use. 
 	
 }
-
-
-#end

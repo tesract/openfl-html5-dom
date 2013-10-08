@@ -1,11 +1,10 @@
 package flash.xml;
-#if js
 
 
 class XMLList implements ArrayAccess<XML> {
 	
 	
-	function new(?value:Dynamic) {
+	function new (?value:Dynamic) {
 		
 		
 		
@@ -54,6 +53,3 @@ class XMLList implements ArrayAccess<XML> {
 	
 	
 }
-
-
-#end

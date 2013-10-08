@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum JointStyle {
@@ -9,6 +8,3 @@ enum JointStyle {
 	BEVEL;
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.IGraphicsData;
@@ -15,14 +14,15 @@ class GraphicsGradientFill implements IGraphicsData implements IGraphicsFill {
 	public var focalPointRatio:Float;
 	public var interpolationMethod:InterpolationMethod;
 	public var matrix:Matrix;
-	public var nmeGraphicsDataType(default,null):GraphicsDataType;
-	public var nmeGraphicsFillType(default, null):GraphicsFillType;
 	public var ratios:Array<Float>;
 	public var spreadMethod:SpreadMethod;
 	public var type:GradientType;
 	
+	public var __graphicsDataType (default,null):GraphicsDataType;
+	public var __graphicsFillType (default, null):GraphicsFillType;
 	
-	public function new(type:GradientType = null, colors:Array<Int> = null, alphas:Array<Float> = null, ratios:Array<Float> = null, matrix:Matrix = null, spreadMethod:SpreadMethod = null, interpolationMethod:InterpolationMethod = null, focalPointRatio:Float = 0) {
+	
+	public function new (type:GradientType = null, colors:Array<Int> = null, alphas:Array<Float> = null, ratios:Array<Float> = null, matrix:Matrix = null, spreadMethod:SpreadMethod = null, interpolationMethod:InterpolationMethod = null, focalPointRatio:Float = 0) {
 		
 		this.type = type;
 		this.colors = colors;
@@ -32,13 +32,10 @@ class GraphicsGradientFill implements IGraphicsData implements IGraphicsFill {
 		this.spreadMethod = spreadMethod;
 		this.interpolationMethod = interpolationMethod;
 		this.focalPointRatio = focalPointRatio;
-		this.nmeGraphicsDataType = GRADIENT;
-		this.nmeGraphicsFillType = GRADIENT_FILL;
+		this.__graphicsDataType = GRADIENT;
+		this.__graphicsFillType = GRADIENT_FILL;
 		
 	}
 	
 	
 }
-
-
-#end

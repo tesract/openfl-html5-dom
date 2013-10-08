@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.BitmapData;
@@ -62,7 +61,7 @@ class Graphics {
 	private static inline var END_SQUARE = 0x0200;
 	private static inline var LINE = 1;
 	private static inline var MOVE = 0;
-	private static inline var NME_MAX_DIM = 5000;
+	private static inline var __MAX_DIM = 5000;
 	private static inline var PIXEL_HINTING = 0x4000;
 	private static inline var RADIAL = 0x0001;
 	private static inline var SCALE_HORIZONTAL = 2;
@@ -73,13 +72,14 @@ class Graphics {
 	private static inline var SPREAD_REFLECT = 0x0004;
 	
 	public var boundsDirty:Bool;
-	public var nmeExtent(default, null):Rectangle;
-	public var nmeExtentWithFilters(default, null):Rectangle;
-	public var nmeSurface(default, null):CanvasElement;
 	
-	private var mBitmap(default, null):Texture;
+	public var __extent (default, null):Rectangle;
+	public var __extentWithFilters (default, null):Rectangle;
+	public var __surface (default, null):CanvasElement;
+	
+	private var mBitmap (default, null):Texture;
 	private var mCurrentLine:LineJob;
-	private var mDrawList(default, null):DrawList;
+	private var mDrawList (default, null):DrawList;
 	private var mFillColour:Int;
 	private var mFillAlpha:Float;
 	private var mFilling:Bool;
@@ -91,25 +91,25 @@ class Graphics {
 	private var mPoints:GfxPoints;
 	private var mSolidGradient:Grad;
 	private var nextDrawIndex:Int;
-	private var nmeChanged:Bool;
-	private var nmeClearNextCycle:Bool;
 	
+	private var __changed:Bool;
+	private var __clearNextCycle:Bool;
 	private var _padding:Float;
 	
 	
-	public function new(inSurface:Element = null) {
+	public function new (inSurface:Element = null) {
 		
-		Lib.nmeBootstrap(); // sanity check
+		Lib.__bootstrap (); // sanity check
 		
 		if (inSurface == null) {
 			
-			nmeSurface = cast Browser.document.createElement("canvas");
-			nmeSurface.width = 0;
-			nmeSurface.height = 0;
+			__surface = cast Browser.document.createElement ("canvas");
+			__surface.width = 0;
+			__surface.height = 0;
 			
 		} else {
 			
-			nmeSurface = cast inSurface;
+			__surface = cast inSurface;
 			
 		}
 		
@@ -117,7 +117,7 @@ class Graphics {
 		mPenX = 0.0;
 		mPenY = 0.0;
 		
-		mDrawList = new DrawList();
+		mDrawList = new DrawList ();
 		mPoints = [];
 		
 		mSolidGradient = null;
@@ -128,20 +128,20 @@ class Graphics {
 		mLastMoveID = 0;
 		boundsDirty = true;
 		
-		nmeClearLine();
+		__clearLine ();
 		mLineJobs = [];
-		nmeChanged = true;
+		__changed = true;
 		nextDrawIndex = 0;
 		
-		nmeExtent = new Rectangle();
-		nmeExtentWithFilters = new Rectangle();
+		__extent = new Rectangle ();
+		__extentWithFilters = new Rectangle ();
 		_padding = 0.0;
-		nmeClearNextCycle = true;
+		__clearNextCycle = true;
 		
 	}
 	
 	
-	private function addDrawable(inDrawable:Drawable):Void {
+	private function addDrawable (inDrawable:Drawable):Void {
 		
 		if (inDrawable == null) {
 			
@@ -149,16 +149,16 @@ class Graphics {
 			
 		}
 		
-		mDrawList.unshift(inDrawable);
+		mDrawList.unshift (inDrawable);
 		
 	}
 	
 	
-	private function addLineSegment():Void {
+	private function addLineSegment ():Void {
 		
 		if (mCurrentLine.point_idx1 > 0) {
 			
-			mLineJobs.push(new LineJob(mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1, mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting, mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit));
+			mLineJobs.push (new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1, mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting, mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit));
 			
 		}
 		
@@ -167,24 +167,24 @@ class Graphics {
 	}
 	
 	
-	public function beginBitmapFill(bitmap:BitmapData, matrix:Matrix = null, in_repeat:Bool = true, in_smooth:Bool = false):Void {
+	public function beginBitmapFill (bitmap:BitmapData, matrix:Matrix = null, in_repeat:Bool = true, in_smooth:Bool = false):Void {
 		
-		closePolygon(true);
+		closePolygon (true);
 		var repeat:Bool = (in_repeat == null ? true : in_repeat);
 		var smooth:Bool = (in_smooth == null ? false : in_smooth);
 		
 		mFilling = true;
 		mSolidGradient = null;
-		nmeExpandStandardExtent(bitmap.width, bitmap.height);
+		__expandStandardExtent (bitmap.width, bitmap.height);
 		
-		mBitmap = { texture_buffer: bitmap.handle(), matrix: matrix == null ? matrix : matrix.clone(), flags :(repeat ? BMP_REPEAT : 0) |(smooth ? BMP_SMOOTH : 0 ) };
+		mBitmap = { texture_buffer: bitmap.handle (), matrix: matrix == null ? matrix : matrix.clone (), flags :(repeat ? BMP_REPEAT : 0) | (smooth ? BMP_SMOOTH : 0 ) };
 		
 	}
 	
 	
-	public function beginFill(color:Int, alpha:Null<Float> = null):Void {
+	public function beginFill (color:Int, alpha:Null<Float> = null):Void {
 		
-		closePolygon(true);
+		closePolygon (true);
 		mFillColour = color;
 		mFillAlpha = (alpha == null ? 1.0 : alpha);
 		mFilling = true;
@@ -194,39 +194,39 @@ class Graphics {
 	}
 	
 	
-	public function beginGradientFill(type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Matrix = null, spreadMethod:Null<SpreadMethod> = null, interpolationMethod:Null<InterpolationMethod> = null, focalPointRatio:Null<Float> = null):Void {
+	public function beginGradientFill (type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Matrix = null, spreadMethod:Null<SpreadMethod> = null, interpolationMethod:Null<InterpolationMethod> = null, focalPointRatio:Null<Float> = null):Void {
 		
-		closePolygon(true);
+		closePolygon (true);
 		mFilling = true;
 		mBitmap = null;
 		
-		mSolidGradient = createGradient(type, colors, alphas, ratios, matrix, spreadMethod, interpolationMethod, focalPointRatio);
+		mSolidGradient = createGradient (type, colors, alphas, ratios, matrix, spreadMethod, interpolationMethod, focalPointRatio);
 		
 	}
 	
 	
-	public function blit(inTexture:BitmapData):Void {
+	public function blit (inTexture:BitmapData):Void {
 		
-		closePolygon(true);
-		var ctx = getContext();
+		closePolygon (true);
+		var ctx = getContext ();
 		
 		if (ctx != null) {
 			
-			ctx.drawImage(inTexture.handle(), mPenX, mPenY);
+			ctx.drawImage (inTexture.handle (), mPenX, mPenY);
 			
 		}
 		
 	}
 	
 	
-	public function clear():Void {
+	public function clear ():Void {
 		
-		nmeClearLine();
+		__clearLine ();
 		
 		mPenX = 0.0;
 		mPenY = 0.0;
 		
-		mDrawList = new DrawList();
+		mDrawList = new DrawList ();
 		nextDrawIndex = 0;
 		mPoints = [];
 		mSolidGradient = null;
@@ -238,13 +238,13 @@ class Graphics {
 		mLastMoveID = 0;
 		
 		// clear the canvas
-		nmeClearNextCycle = true;
+		__clearNextCycle = true;
 		
 		boundsDirty = true;
-		nmeExtent.x = 0.0;
-		nmeExtent.y = 0.0;
-		nmeExtent.width = 0.0;
-		nmeExtent.height = 0.0;
+		__extent.x = 0.0;
+		__extent.y = 0.0;
+		__extent.width = 0.0;
+		__extent.height = 0.0;
 		_padding = 0.0;
 		
 		mLineJobs = [];
@@ -252,7 +252,7 @@ class Graphics {
 	}
 	
 	
-	private function closePolygon(inCancelFill:Bool):Void {
+	private function closePolygon (inCancelFill:Bool):Void {
 		
 		var l = mPoints.length;
 		
@@ -265,16 +265,16 @@ class Graphics {
 					// Make implicit closing line
 					if (mPoints[mLastMoveID].x != mPoints[l - 1].x || mPoints[mLastMoveID].y != mPoints[l - 1].y) {
 						
-						lineTo(mPoints[mLastMoveID].x, mPoints[mLastMoveID].y);
+						lineTo (mPoints[mLastMoveID].x, mPoints[mLastMoveID].y);
 						
 					}
 					
 				}
 				
-				addLineSegment();
+				addLineSegment ();
 				
-				var drawable = new Drawable(mPoints, mFillColour, mFillAlpha, mSolidGradient, mBitmap, mLineJobs, null);
-				addDrawable(drawable);
+				var drawable = new Drawable (mPoints, mFillColour, mFillAlpha, mSolidGradient, mBitmap, mLineJobs, null);
+				addDrawable (drawable);
 				
 			}
 			
@@ -292,12 +292,12 @@ class Graphics {
 			
 		}
 		
-		nmeChanged = true;
+		__changed = true;
 		
 	}
 	
 	
-	private function createCanvasColor(color:Int, alpha:Float):String {
+	private function createCanvasColor (color:Int, alpha:Float):String {
 		
 		var r = (0xFF0000 & color) >> 16;
 		var g = (0x00FF00 & color) >> 8;
@@ -308,7 +308,7 @@ class Graphics {
 	}
 	
 	
-	private function createCanvasGradient(ctx:CanvasRenderingContext2D, g:Grad):CanvasGradient {
+	private function createCanvasGradient (ctx:CanvasRenderingContext2D, g:Grad):CanvasGradient {
 		
 		//TODO handle spreadMethod flags REPEAT and REFLECT(defaults to PAD behavior)
 		var gradient:CanvasGradient;
@@ -316,24 +316,24 @@ class Graphics {
 		
 		if ((g.flags & RADIAL) == 0) {
 			
-			var p1 = matrix.transformPoint(new Point(-819.2, 0));
-			var p2 = matrix.transformPoint(new Point(819.2, 0));
-			gradient = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+			var p1 = matrix.transformPoint (new Point (-819.2, 0));
+			var p2 = matrix.transformPoint (new Point (819.2, 0));
+			gradient = ctx.createLinearGradient (p1.x, p1.y, p2.x, p2.y);
 			
 		} else {
 			
 			//TODO not quite right(no ellipses when width != height)
-			var p1 = matrix.transformPoint(new Point(g.focal * 819.2, 0));
-			var p2 = matrix.transformPoint(new Point(0, 819.2));
-			gradient = ctx.createRadialGradient(p1.x, p1.y, 0, p2.x, p1.y, p2.y);
+			var p1 = matrix.transformPoint (new Point (g.focal * 819.2, 0));
+			var p2 = matrix.transformPoint (new Point (0, 819.2));
+			gradient = ctx.createRadialGradient (p1.x, p1.y, 0, p2.x, p1.y, p2.y);
 			
 		}
 		
 		for (point in g.points) {
 			
-			var color = createCanvasColor(point.col, point.alpha);
+			var color = createCanvasColor (point.col, point.alpha);
 			var pos = point.ratio / 255;
-			gradient.addColorStop(pos, color);
+			gradient.addColorStop (pos, color);
 			
 		}
 		
@@ -342,13 +342,13 @@ class Graphics {
 	}
 	
 	
-	private function createGradient(type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Null<Matrix>, spreadMethod:Null<SpreadMethod>, interpolationMethod:Null<InterpolationMethod>, focalPointRatio:Null<Float>):Grad {
+	private function createGradient (type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Null<Matrix>, spreadMethod:Null<SpreadMethod>, interpolationMethod:Null<InterpolationMethod>, focalPointRatio:Null<Float>):Grad {
 		
-		var points = new GradPoints();
+		var points = new GradPoints ();
 		
 		for (i in 0...colors.length) {
 			
-			points.push(new GradPoint(colors[i], alphas[i], ratios[i]));
+			points.push (new GradPoint (colors[i], alphas[i], ratios[i]));
 			
 		}
 		
@@ -372,36 +372,36 @@ class Graphics {
 		
 		if (matrix == null) {
 			
-			matrix = new Matrix();
-			matrix.createGradientBox(25, 25);
+			matrix = new Matrix ();
+			matrix.createGradientBox (25, 25);
 			
 		} else {
 			
-			matrix = matrix.clone();
+			matrix = matrix.clone ();
 			
 		}
 		
 		var focal:Float = (focalPointRatio == null ? 0 : focalPointRatio);
-		return new Grad(points, matrix, flags, focal);
+		return new Grad (points, matrix, flags, focal);
 		
 	}
 	
 	
-	public function curveTo(inCX:Float, inCY:Float, inX:Float, inY:Float):Void {
+	public function curveTo (inCX:Float, inCY:Float, inX:Float, inY:Float):Void {
 		
 		var pid = mPoints.length;
 		
 		if (pid == 0) {
 			
-			mPoints.push(new GfxPoint(mPenX, mPenY, 0.0, 0.0, MOVE));
+			mPoints.push (new GfxPoint (mPenX, mPenY, 0.0, 0.0, MOVE));
 			pid++;
 			
 		}
 		
 		mPenX = inX;
 		mPenY = inY;
-		nmeExpandStandardExtent(inX, inY, mCurrentLine.thickness);
-		mPoints.push(new GfxPoint(inX, inY, inCX, inCY, CURVE));
+		__expandStandardExtent (inX, inY, mCurrentLine.thickness);
+		mPoints.push (new GfxPoint(inX, inY, inCX, inCY, CURVE));
 		
 		if (mCurrentLine.grad != null || mCurrentLine.alpha > 0) {
 			
@@ -418,27 +418,27 @@ class Graphics {
 	}
 	
 	
-	public function drawCircle(x:Float, y:Float, rad:Float):Void {
+	public function drawCircle (x:Float, y:Float, rad:Float):Void {
 		
-		closePolygon(false);
-		nmeDrawEllipse(x, y, rad, rad);
-		closePolygon(false);
+		closePolygon (false);
+		__drawEllipse (x, y, rad, rad);
+		closePolygon (false);
 		
 	}
 	
 	
-	public function drawEllipse(x:Float, y:Float, rx:Float, ry:Float):Void {
+	public function drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
 		
-		closePolygon(false);
+		closePolygon (false);
 		rx /= 2;
 		ry /= 2;
-		nmeDrawEllipse(x + rx, y + ry, rx, ry);
-		closePolygon(false);
+		__drawEllipse (x + rx, y + ry, rx, ry);
+		closePolygon (false);
 		
 	}
 	
 	
-	public function drawGraphicsData(points:Vector<IGraphicsData>):Void {
+	public function drawGraphicsData (points:Vector<IGraphicsData>):Void {
 		
 		for (data in points) {
 			
@@ -448,7 +448,7 @@ class Graphics {
 				
 			} else {
 				
-				switch (data.nmeGraphicsDataType) {
+				switch (data.__graphicsDataType) {
 					
 					case STROKE:
 						
@@ -456,21 +456,21 @@ class Graphics {
 						
 						if (stroke.fill == null) {
 							
-							lineStyle(stroke.thickness, 0x000000, 1., stroke.pixelHinting, stroke.scaleMode, stroke.caps, stroke.joints, stroke.miterLimit);
+							lineStyle (stroke.thickness, 0x000000, 1., stroke.pixelHinting, stroke.scaleMode, stroke.caps, stroke.joints, stroke.miterLimit);
 							
 						} else {
 							
-							switch (stroke.fill.nmeGraphicsFillType) {
+							switch (stroke.fill.__graphicsFillType) {
 								
 								case SOLID_FILL:
 									
 									var fill:GraphicsSolidFill = cast stroke.fill;
-									lineStyle(stroke.thickness, fill.color, fill.alpha, stroke.pixelHinting, stroke.scaleMode, stroke.caps, stroke.joints, stroke.miterLimit);
+									lineStyle (stroke.thickness, fill.color, fill.alpha, stroke.pixelHinting, stroke.scaleMode, stroke.caps, stroke.joints, stroke.miterLimit);
 								
 								case GRADIENT_FILL:
 									
 									var fill:GraphicsGradientFill = cast stroke.fill;
-									lineGradientStyle(fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+									lineGradientStyle (fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
 								
 							}
 							
@@ -489,17 +489,17 @@ class Graphics {
 								
 								case GraphicsPathCommand.MOVE_TO: 
 									
-									moveTo(path.data[j], path.data[j + 1]);
+									moveTo (path.data[j], path.data[j + 1]);
 									j = j + 2;
 								
 								case GraphicsPathCommand.LINE_TO:
 									
-									lineTo(path.data[j], path.data[j + 1]);
+									lineTo (path.data[j], path.data[j + 1]);
 									j = j + 2;
 								
 								case GraphicsPathCommand.CURVE_TO:
 									
-									curveTo(path.data[j], path.data[j + 1], path.data[j + 2], path.data[j + 3]);
+									curveTo (path.data[j], path.data[j + 1], path.data[j + 2], path.data[j + 3]);
 									j = j + 4;
 								
 							}
@@ -509,12 +509,12 @@ class Graphics {
 					case SOLID:
 						
 						var fill:GraphicsSolidFill = cast data;
-						beginFill(fill.color, fill.alpha);
+						beginFill (fill.color, fill.alpha);
 					
 					case GRADIENT:
 						
 						var fill:GraphicsGradientFill = cast data;
-						beginGradientFill(fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+						beginGradientFill (fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
 					
 				}
 				
@@ -525,22 +525,22 @@ class Graphics {
 	}
 	
 	
-	public function drawRect(x:Float, y:Float, width:Float, height:Float):Void {
+	public function drawRect (x:Float, y:Float, width:Float, height:Float):Void {
 		
-		closePolygon(false);
+		closePolygon (false);
 		
-		moveTo(x, y);
-		lineTo(x + width, y);
-		lineTo(x + width, y + height);
-		lineTo(x, y + height);
-		lineTo(x, y);
+		moveTo (x, y);
+		lineTo (x + width, y);
+		lineTo (x + width, y + height);
+		lineTo (x, y + height);
+		lineTo (x, y);
 		
-		closePolygon(false);
+		closePolygon (false);
 		
 	}
 	
 	
-	public function drawRoundRect(x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1):Void {
+	public function drawRoundRect (x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1):Void {
 		
 		if (ry == -1) {
 			
@@ -557,8 +557,8 @@ class Graphics {
 		if (rx > w) rx = w;
 		
 		var lw = w - rx;
-		var w_ = lw + rx * Math.sin(Math.PI / 4);
-		var cw_ = lw + rx * Math.tan(Math.PI / 8);
+		var w_ = lw + rx * Math.sin (Math.PI / 4);
+		var cw_ = lw + rx * Math.tan (Math.PI / 8);
 		
 		var h = height * 0.5;
 		y += h;
@@ -566,37 +566,37 @@ class Graphics {
 		if (ry > h) ry = h;
 		
 		var lh = h - ry;
-		var h_ = lh + ry * Math.sin(Math.PI / 4);
-		var ch_ = lh + ry * Math.tan(Math.PI / 8);
+		var h_ = lh + ry * Math.sin (Math.PI / 4);
+		var ch_ = lh + ry * Math.tan (Math.PI / 8);
 		
-		closePolygon(false);
+		closePolygon (false);
 		
-		moveTo(x + w, y + lh);
-		curveTo(x + w, y + ch_, x + w_, y + h_);
-		curveTo(x + cw_, y + h, x + lw, y + h);
-		lineTo(x - lw, y + h);
-		curveTo(x - cw_, y + h, x - w_, y + h_);
-		curveTo(x - w, y + ch_, x - w, y + lh);
-		lineTo(x - w, y - lh);
-		curveTo(x - w, y - ch_, x - w_, y - h_);
-		curveTo(x - cw_, y - h, x - lw, y - h);
-		lineTo(x + lw, y - h);
-		curveTo(x + cw_, y - h, x + w_, y - h_);
-		curveTo(x + w, y - ch_, x + w, y - lh);
-		lineTo(x + w, y + lh);
+		moveTo (x + w, y + lh);
+		curveTo (x + w, y + ch_, x + w_, y + h_);
+		curveTo (x + cw_, y + h, x + lw, y + h);
+		lineTo (x - lw, y + h);
+		curveTo (x - cw_, y + h, x - w_, y + h_);
+		curveTo (x - w, y + ch_, x - w, y + lh);
+		lineTo (x - w, y - lh);
+		curveTo (x - w, y - ch_, x - w_, y - h_);
+		curveTo (x - cw_, y - h, x - lw, y - h);
+		lineTo (x + lw, y - h);
+		curveTo (x + cw_, y - h, x + w_, y - h_);
+		curveTo (x + w, y - ch_, x + w, y - lh);
+		lineTo (x + w, y + lh);
 		
-		closePolygon(false);
+		closePolygon (false);
 		
 	}
 	
 	
 	/** @private */
-	public function drawTiles(sheet:Tilesheet, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
+	public function drawTiles (sheet:Tilesheet, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
 		
 		// Checking each tile for extents did not include rotation or scale, and could overflow the maximum canvas
 		// size of some mobile browsers. Always use the full stage size for drawTiles instead?
 		
-		nmeExpandStandardExtent(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+		__expandStandardExtent (Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 		
 		//var useScale = (flags & TILE_SCALE) > 0;
 		//var useRotation = (flags & TILE_ROTATION) > 0;
@@ -617,38 +617,38 @@ class Graphics {
 		
 		//while (index < tileData.length) {
 			
-			//nmeExpandStandardExtent(tileData[index] + sheet.nmeBitmap.width, tileData[index + 1] + sheet.nmeBitmap.height);
+			//__expandStandardExtent(tileData[index] + sheet.__bitmap.width, tileData[index + 1] + sheet.__bitmap.height);
 			//index += numValues;
 			
 		//}
 		
-		addDrawable(new Drawable(null, null, null, null, null, null, new TileJob(sheet, tileData, flags)));
-		nmeChanged = true;
+		addDrawable (new Drawable (null, null, null, null, null, null, new TileJob (sheet, tileData, flags)));
+		__changed = true;
 		
 	}
 	
 	
-	public function endFill():Void {
+	public function endFill ():Void {
 		
-		closePolygon(true);
-		
-	}
-	
-	
-	public function flush():Void {
-		
-		closePolygon(true);
+		closePolygon (true);
 		
 	}
 	
 	
-	private inline function getContext():CanvasRenderingContext2D {
+	public function flush ():Void {
+		
+		closePolygon (true);
+		
+	}
+	
+	
+	private inline function getContext ():CanvasRenderingContext2D {
 		
 		try {
 			
-			return nmeSurface.getContext("2d");
+			return __surface.getContext ("2d");
 			
-		} catch(e:Dynamic) {
+		} catch (e:Dynamic) {
 			
 			return null;
 			
@@ -657,22 +657,22 @@ class Graphics {
 	}
 	
 	
-	public function lineGradientStyle(type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Matrix = null, spreadMethod:SpreadMethod = null, interpolationMethod:InterpolationMethod = null, focalPointRatio:Null<Float> = null):Void {
+	public function lineGradientStyle (type:GradientType, colors:Array<Dynamic>, alphas:Array<Dynamic>, ratios:Array<Dynamic>, matrix:Matrix = null, spreadMethod:SpreadMethod = null, interpolationMethod:InterpolationMethod = null, focalPointRatio:Null<Float> = null):Void {
 		
-		mCurrentLine.grad = createGradient(type, colors, alphas, ratios, matrix, spreadMethod, interpolationMethod, focalPointRatio);
+		mCurrentLine.grad = createGradient (type, colors, alphas, ratios, matrix, spreadMethod, interpolationMethod, focalPointRatio);
 		
 	}
 	
 	
-	public function lineStyle(thickness:Null<Float> = null, color:Null<Int> = null, alpha:Null<Float> = null, pixelHinting:Null<Bool> = null, scaleMode:LineScaleMode = null, caps:CapsStyle = null, joints:JointStyle = null, miterLimit:Null<Float> = null):Void {
+	public function lineStyle (thickness:Null<Float> = null, color:Null<Int> = null, alpha:Null<Float> = null, pixelHinting:Null<Bool> = null, scaleMode:LineScaleMode = null, caps:CapsStyle = null, joints:JointStyle = null, miterLimit:Null<Float> = null):Void {
 		
 		// Finish off old line before starting a new one
-		addLineSegment();
+		addLineSegment ();
 		
 		if (thickness == null) {
 			
 			//with no parameters it clears the current line(to draw nothing)
-			nmeClearLine();
+			__clearLine ();
 			return;
 			
 		} else {
@@ -732,21 +732,21 @@ class Graphics {
 	}
 	
 	
-	public function lineTo(inX:Float, inY:Float):Void {
+	public function lineTo (inX:Float, inY:Float):Void {
 		
 		var pid = mPoints.length;
 		
 		if (pid == 0) {
 			
-			mPoints.push(new GfxPoint(mPenX, mPenY, 0.0, 0.0, MOVE));
+			mPoints.push (new GfxPoint (mPenX, mPenY, 0.0, 0.0, MOVE));
 			pid++;
 			
 		}
 		
 		mPenX = inX;
 		mPenY = inY;
-		nmeExpandStandardExtent(inX, inY, mCurrentLine.thickness);
-		mPoints.push(new GfxPoint(mPenX, mPenY, 0.0, 0.0, LINE));
+		__expandStandardExtent (inX, inY, mCurrentLine.thickness);
+		mPoints.push (new GfxPoint (mPenX, mPenY, 0.0, 0.0, LINE));
 		
 		if (mCurrentLine.grad != null || mCurrentLine.alpha > 0) {
 			
@@ -760,62 +760,62 @@ class Graphics {
 			
 		}
 		
-		if (!mFilling) closePolygon(false);
+		if (!mFilling) closePolygon (false);
 		
 	}
 	
 	
-	public function moveTo(inX:Float, inY:Float):Void {
+	public function moveTo (inX:Float, inY:Float):Void {
 		
 		mPenX = inX;
 		mPenY = inY;
 		
-		nmeExpandStandardExtent(inX, inY);
+		__expandStandardExtent (inX, inY);
 		
 		if (!mFilling) {
 			
-			closePolygon(false);
+			closePolygon (false);
 			
 		} else {
 			
-			addLineSegment();
+			addLineSegment ();
 			mLastMoveID = mPoints.length;
-			mPoints.push(new GfxPoint(mPenX, mPenY, 0.0, 0.0, MOVE));
+			mPoints.push (new GfxPoint (mPenX, mPenY, 0.0, 0.0, MOVE));
 			
 		}
 		
 	}
 	
 	
-	private function nmeAdjustSurface(sx:Float = 1.0, sy:Float = 1.0):Void {
+	private function __adjustSurface (sx:Float = 1.0, sy:Float = 1.0):Void {
 		
-		if (Reflect.field(nmeSurface, "getContext") != null) {
+		if (Reflect.field (__surface, "getContext") != null) {
 			
-			var width = Math.ceil((nmeExtentWithFilters.width - nmeExtentWithFilters.x) * sx);
-			var height = Math.ceil((nmeExtentWithFilters.height - nmeExtentWithFilters.y) * sy);
+			var width = Math.ceil ((__extentWithFilters.width - __extentWithFilters.x) * sx);
+			var height = Math.ceil ((__extentWithFilters.height - __extentWithFilters.y) * sy);
 			
 			// prevent allocating too large canvas sizes
-			if (width <= NME_MAX_DIM && height <= NME_MAX_DIM) {
+			if (width <= __MAX_DIM && height <= __MAX_DIM) {
 				
 				// re-allocate canvas, copy into larger canvas.
-				var dstCanvas:CanvasElement = cast Browser.document.createElement("canvas");
+				var dstCanvas:CanvasElement = cast Browser.document.createElement ("canvas");
 				dstCanvas.width = width;
 				dstCanvas.height = height;
 				
-				Lib.nmeDrawToSurface(nmeSurface, dstCanvas);
+				Lib.__drawToSurface (__surface, dstCanvas);
 				
-				if (Lib.nmeIsOnStage(nmeSurface)) {
+				if (Lib.__isOnStage (__surface)) {
 					
-					Lib.nmeAppendSurface(dstCanvas);
-					Lib.nmeCopyStyle(nmeSurface, dstCanvas);
-					Lib.nmeSwapSurface(nmeSurface, dstCanvas);
-					Lib.nmeRemoveSurface(nmeSurface);
+					Lib.__appendSurface (dstCanvas);
+					Lib.__copyStyle (__surface, dstCanvas);
+					Lib.__swapSurface (__surface, dstCanvas);
+					Lib.__removeSurface (__surface);
 					
-					if (nmeSurface.id != null) Lib.nmeSetSurfaceId(dstCanvas, nmeSurface.id);
+					if (__surface.id != null) Lib.__setSurfaceId (dstCanvas, __surface.id);
 					
 				}
 				
-				nmeSurface = dstCanvas;
+				__surface = dstCanvas;
 				
 			}
 			
@@ -824,37 +824,37 @@ class Graphics {
 	}
 	
 	
-	public inline function nmeClearCanvas():Void {
+	public inline function __clearCanvas ():Void {
 		
-		if (nmeSurface != null) {
+		if (__surface != null) {
 			
-			var ctx = getContext();
+			var ctx = getContext ();
 			
 			if (ctx != null) {
 				
-				ctx.clearRect(0, 0, nmeSurface.width, nmeSurface.height);
+				ctx.clearRect (0, 0, __surface.width, __surface.height);
 				
 			}
 			
-			//var w = nmeSurface.width;
-			//nmeSurface.width = w;
+			//var w = __surface.width;
+			//__surface.width = w;
 			
 		}
 		
 	}
 	
 	
-	public function nmeClearLine():Void {
+	public function __clearLine ():Void {
 		
-		mCurrentLine = new LineJob(null, -1, -1, 0.0, 0.0, 0x000, 1, CORNER_ROUND, END_ROUND, SCALE_NORMAL, 3.0);
+		mCurrentLine = new LineJob (null, -1, -1, 0.0, 0.0, 0x000, 1, CORNER_ROUND, END_ROUND, SCALE_NORMAL, 3.0);
 		
 	}
 	
 	
-	public static function nmeDetectIsPointInPathMode():PointInPathMode {
+	public static function __detectIsPointInPathMode ():PointInPathMode {
 		
-		var canvas:CanvasElement = cast Browser.document.createElement("canvas");
-		var ctx = canvas.getContext('2d');
+		var canvas:CanvasElement = cast Browser.document.createElement ("canvas");
+		var ctx = canvas.getContext ('2d');
 		
 		if (ctx.isPointInPath == null) {
 			
@@ -862,12 +862,12 @@ class Graphics {
 			
 		}
 		
-		ctx.save();
-		ctx.translate(1, 0);
-		ctx.beginPath();
-		ctx.rect(0, 0, 1, 1);
+		ctx.save ();
+		ctx.translate (1, 0);
+		ctx.beginPath ();
+		ctx.rect (0, 0, 1, 1);
 		
-		var rv = if (ctx.isPointInPath(0.3, 0.3)) {
+		var rv = if (ctx.isPointInPath (0.3, 0.3)) {
 			
 			USER_SPACE;
 			
@@ -877,28 +877,28 @@ class Graphics {
 			
 		}
 		
-		ctx.restore();
+		ctx.restore ();
 		return rv;
 		
 	}
 	
 	
-	private function nmeDrawEllipse(x:Float, y:Float, rx:Float, ry:Float):Void {
+	private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
 		
-		moveTo(x + rx, y);
-		curveTo(rx + x, -0.4142 * ry + y, 0.7071 * rx + x , -0.7071 * ry + y);
-		curveTo(0.4142 * rx + x , -ry + y, x, -ry + y);
-		curveTo( -0.4142 * rx + x, -ry + y, -0.7071 * rx + x, -0.7071 * ry + y);
-		curveTo( -rx + x, -0.4142 * ry + y, -rx + x, y);
-		curveTo( -rx + x, 0.4142 * ry + y, -0.7071 * rx + x, 0.7071 * ry + y);
-		curveTo( -0.4142 * rx + x, ry + y, x, ry + y);
-		curveTo(0.4142 * rx + x, ry + y, 0.7071 * rx + x, 0.7071 * ry + y);
-		curveTo(rx + x, 0.4142 * ry + y, rx + x, y);
+		moveTo (x + rx, y);
+		curveTo (rx + x, -0.4142 * ry + y, 0.7071 * rx + x , -0.7071 * ry + y);
+		curveTo (0.4142 * rx + x , -ry + y, x, -ry + y);
+		curveTo ( -0.4142 * rx + x, -ry + y, -0.7071 * rx + x, -0.7071 * ry + y);
+		curveTo ( -rx + x, -0.4142 * ry + y, -rx + x, y);
+		curveTo ( -rx + x, 0.4142 * ry + y, -0.7071 * rx + x, 0.7071 * ry + y);
+		curveTo ( -0.4142 * rx + x, ry + y, x, ry + y);
+		curveTo (0.4142 * rx + x, ry + y, 0.7071 * rx + x, 0.7071 * ry + y);
+		curveTo (rx + x, 0.4142 * ry + y, rx + x, y);
 		
 	}
 	
 	
-	private function nmeDrawTiles(sheet:Tilesheet, tileData:Array<Float>, flags:Int = 0):Void {
+	private function __drawTiles (sheet:Tilesheet, tileData:Array<Float>, flags:Int = 0):Void {
 		
 		var useScale = (flags & TILE_SCALE) > 0;
 		var useRotation = (flags & TILE_ROTATION) > 0;
@@ -930,19 +930,19 @@ class Graphics {
 		var center = null;
 		var previousTileID = -1;
 		
-		var surface = sheet.nmeBitmap.handle();
-		var ctx = getContext();
+		var surface = sheet.__bitmap.handle ();
+		var ctx = getContext ();
 		
 		if (ctx != null) {
 			
 			while (index < totalCount) {
 				
-				var tileID = Std.int(tileData[index + 2]);
+				var tileID = Std.int (tileData[index + 2]);
 				
 				if (tileID != previousTileID) {
 					
-					rect = sheet.nmeTileRects[tileID];
-					center = sheet.nmeCenterPoints[tileID];
+					rect = sheet.__tileRects[tileID];
+					center = sheet.__centerPoints[tileID];
 					
 					previousTileID = tileID;
 					
@@ -950,12 +950,12 @@ class Graphics {
 				
 				if (rect != null && center != null) {
 					
-					ctx.save();
-					ctx.translate(tileData[index], tileData[index + 1]);
+					ctx.save ();
+					ctx.translate (tileData[index], tileData[index + 1]);
 					
 					if (useRotation) {
 						
-						ctx.rotate(tileData[index + rotationIndex]);
+						ctx.rotate (tileData[index + rotationIndex]);
 						
 					}
 					
@@ -969,7 +969,7 @@ class Graphics {
 					
 					if (useTransform) {
 						
-						ctx.transform(tileData[index + transformIndex], tileData[index + transformIndex + 1], tileData[index + transformIndex + 2], tileData[index + transformIndex + 3], 0, 0);
+						ctx.transform (tileData[index + transformIndex], tileData[index + transformIndex + 1], tileData[index + transformIndex + 2], tileData[index + transformIndex + 3], 0, 0);
 						
 					}
 					
@@ -979,8 +979,8 @@ class Graphics {
 						
 					}
 					
-					ctx.drawImage(surface, rect.x, rect.y, rect.width, rect.height, -center.x * scale, -center.y * scale, rect.width * scale, rect.height * scale);
-					ctx.restore();
+					ctx.drawImage (surface, rect.x, rect.y, rect.width, rect.height, -center.x * scale, -center.y * scale, rect.width * scale, rect.height * scale);
+					ctx.restore ();
 					
 				}
 				
@@ -993,34 +993,34 @@ class Graphics {
 	}
 	
 	
-	private function nmeExpandFilteredExtent(x:Float, y:Float):Void {
+	private function __expandFilteredExtent (x:Float, y:Float):Void {
 		
 		var maxX, minX, maxY, minY;
 		
-		minX = nmeExtent.x;
-		minY = nmeExtent.y;
-		maxX = nmeExtent.width + minX;
-		maxY = nmeExtent.height + minY;
+		minX = __extent.x;
+		minY = __extent.y;
+		maxX = __extent.width + minX;
+		maxY = __extent.height + minY;
 		
 		maxX = x > maxX ? x : maxX;
 		minX = x < minX ? x : minX;
 		maxY = y > maxY ? y : maxY;
 		minY = y < minY ? y : minY;
 		
-		nmeExtentWithFilters.x = minX;
-		nmeExtentWithFilters.y = minY;
-		nmeExtentWithFilters.width = maxX - minX;
-		nmeExtentWithFilters.height = maxY - minY;
+		__extentWithFilters.x = minX;
+		__extentWithFilters.y = minY;
+		__extentWithFilters.width = maxX - minX;
+		__extentWithFilters.height = maxY - minY;
 		
 	}
 	
 	
-	private function nmeExpandStandardExtent(x:Float, y:Float, thickness:Float = 0):Void {
+	private function __expandStandardExtent (x:Float, y:Float, thickness:Float = 0):Void {
 		
 		if (_padding > 0) {
 			
-			nmeExtent.width -= _padding;
-			nmeExtent.height -= _padding;
+			__extent.width -= _padding;
+			__extent.height -= _padding;
 			
 		}
 		
@@ -1028,36 +1028,36 @@ class Graphics {
 		
 		var maxX, minX, maxY, minY;
 		
-		minX = nmeExtent.x;
-		minY = nmeExtent.y;
-		maxX = nmeExtent.width + minX;
-		maxY = nmeExtent.height + minY;
+		minX = __extent.x;
+		minY = __extent.y;
+		maxX = __extent.width + minX;
+		maxY = __extent.height + minY;
 		
 		maxX = x > maxX ? x : maxX;
 		minX = x < minX ? x : minX;
 		maxY = y > maxY ? y : maxY;
 		minY = y < minY ? y : minY;
 		
-		nmeExtent.x = minX;
-		nmeExtent.y = minY;
-		nmeExtent.width = maxX - minX + _padding;
-		nmeExtent.height = maxY - minY + _padding;
+		__extent.x = minX;
+		__extent.y = minY;
+		__extent.width = maxX - minX + _padding;
+		__extent.height = maxY - minY + _padding;
 		
 		boundsDirty = true;
 		
 	}
 	
 	
-	public function nmeHitTest(inX:Float, inY:Float):Bool {
+	public function __hitTest (inX:Float, inY:Float):Bool {
 		
-		var ctx:CanvasRenderingContext2D = getContext();
+		var ctx:CanvasRenderingContext2D = getContext ();
 		if (ctx == null) return false;
 		
-		if (ctx.isPointInPath(inX, inY)) {
+		if (ctx.isPointInPath (inX, inY)) {
 			
 			return true;
 			
-		} else if (mDrawList.length == 0 && nmeExtent.width > 0 && nmeExtent.height > 0) {
+		} else if (mDrawList.length == 0 && __extent.width > 0 && __extent.height > 0) {
 			
 			return true;
 			
@@ -1068,35 +1068,35 @@ class Graphics {
 	}
 	
 	
-	public inline function nmeInvalidate():Void {
+	public inline function __invalidate ():Void {
 		
-		nmeChanged = true;
-		nmeClearNextCycle = true;
-		
-	}
-	
-	
-	public function nmeMediaSurface(surface:MediaElement):Void {
-		
-		this.nmeSurface = cast surface;
+		__changed = true;
+		__clearNextCycle = true;
 		
 	}
 	
 	
-	public function nmeRender(maskHandle:CanvasElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
+	public function __mediaSurface (surface:MediaElement):Void {
 		
-		if (!nmeChanged) return false;
+		this.__surface = cast surface;
 		
-		closePolygon(true);
+	}
+	
+	
+	public function __render (maskHandle:CanvasElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
+		
+		if (!__changed) return false;
+		
+		closePolygon (true);
 		var padding = _padding;
 		
 		if (filters != null) {
 			
 			for (filter in filters) {
 				
-				if (Reflect.hasField(filter, "blurX")) {
+				if (Reflect.hasField (filter, "blurX")) {
 					
-					padding += (Math.max(Reflect.field(filter, "blurX"), Reflect.field(filter, "blurY")) * 4);
+					padding += (Math.max (Reflect.field (filter, "blurX"), Reflect.field (filter, "blurY")) * 4);
 					
 				}
 				
@@ -1104,34 +1104,34 @@ class Graphics {
 			
 		}
 		
-		nmeExpandFilteredExtent( - (padding * sx) / 2, - (padding * sy) / 2);
+		__expandFilteredExtent ( - (padding * sx) / 2, - (padding * sy) / 2);
 		
-		if (nmeClearNextCycle) {
+		if (__clearNextCycle) {
 			
 			nextDrawIndex = 0;
-			nmeClearCanvas();
-			nmeClearNextCycle = false;
+			__clearCanvas ();
+			__clearNextCycle = false;
 			
 		} 
 		
-		if (nmeExtentWithFilters.width - nmeExtentWithFilters.x > nmeSurface.width || nmeExtentWithFilters.height - nmeExtentWithFilters.y > nmeSurface.height) {
+		if (__extentWithFilters.width - __extentWithFilters.x > __surface.width || __extentWithFilters.height - __extentWithFilters.y > __surface.height) {
 			
-			nmeAdjustSurface(sx, sy);
+			__adjustSurface (sx, sy);
 			
 		}
 		
-		var ctx = getContext();
+		var ctx = getContext ();
 		if (ctx == null) return false;
 		
 		if (clip0 != null) {
 			
-			ctx.beginPath();
-			ctx.moveTo(clip0.x * sx, clip0.y * sy);
-			ctx.lineTo(clip1.x * sx, clip1.y * sy);
-			ctx.lineTo(clip2.x * sx, clip2.y * sy);
-			ctx.lineTo(clip3.x * sx, clip3.y * sy);
-			ctx.closePath();
-			ctx.clip();
+			ctx.beginPath ();
+			ctx.moveTo (clip0.x * sx, clip0.y * sy);
+			ctx.lineTo (clip1.x * sx, clip1.y * sy);
+			ctx.lineTo (clip2.x * sx, clip2.y * sy);
+			ctx.lineTo (clip3.x * sx, clip3.y * sy);
+			ctx.closePath ();
+			ctx.clip ();
 			
 		}
 		
@@ -1139,10 +1139,10 @@ class Graphics {
 			
 			for (filter in filters) {
 				
-				if (Std.is(filter, DropShadowFilter)) {
+				if (Std.is (filter, DropShadowFilter)) {
 					
 					// shadow must be applied before we draw to the context
-					filter.nmeApplyFilter(nmeSurface, null, true);
+					filter.__applyFilter (__surface, null, true);
 					
 				}
 				
@@ -1151,17 +1151,17 @@ class Graphics {
 		}
 		
 		var len:Int = mDrawList.length;
-		ctx.save();
+		ctx.save ();
 		
-		if (nmeExtentWithFilters.x != 0 || nmeExtentWithFilters.y != 0) {
+		if (__extentWithFilters.x != 0 || __extentWithFilters.y != 0) {
 			
-			ctx.translate( -nmeExtentWithFilters.x * sx, -nmeExtentWithFilters.y * sy);
+			ctx.translate ( -__extentWithFilters.x * sx, -__extentWithFilters.y * sy);
 			
 		}
 		
 		if (sx != 1 || sy != 0) {
 			
-			ctx.scale(sx, sy);
+			ctx.scale (sx, sy);
 			
 		}
 		
@@ -1173,7 +1173,7 @@ class Graphics {
 			
 			if (d.tileJob != null) {
 				
-				nmeDrawTiles(d.tileJob.sheet, d.tileJob.drawList, d.tileJob.flags);
+				__drawTiles (d.tileJob.sheet, d.tileJob.drawList, d.tileJob.flags);
 				
 			} else {
 				
@@ -1203,11 +1203,11 @@ class Graphics {
 						
 						if (lj.grad != null) {
 							
-							ctx.strokeStyle = createCanvasGradient(ctx, lj.grad);
+							ctx.strokeStyle = createCanvasGradient (ctx, lj.grad);
 							
 						} else {
 							
-							ctx.strokeStyle = createCanvasColor(lj.colour, lj.alpha);
+							ctx.strokeStyle = createCanvasColor (lj.colour, lj.alpha);
 							
 						}
 						
@@ -1219,36 +1219,36 @@ class Graphics {
 							
 							switch (p.type) {
 								
-								case MOVE: ctx.moveTo(p.x, p.y);
-								case CURVE: ctx.quadraticCurveTo(p.cx, p.cy, p.x, p.y);
-								default: ctx.lineTo(p.x, p.y);
+								case MOVE: ctx.moveTo (p.x, p.y);
+								case CURVE: ctx.quadraticCurveTo (p.cx, p.cy, p.x, p.y);
+								default: ctx.lineTo (p.x, p.y);
 								
 							}
 							
 						}
 						
-						ctx.closePath();
+						ctx.closePath ();
 						doStroke = true;
 						
 					}
 					
 				} else {
 					
-					ctx.beginPath();
+					ctx.beginPath ();
 					
 					for (p in d.points) {
 						
 						switch (p.type) {
 							
-							case MOVE: ctx.moveTo(p.x, p.y);
-							case CURVE: ctx.quadraticCurveTo(p.cx, p.cy, p.x, p.y);
-							default: ctx.lineTo(p.x, p.y);
+							case MOVE: ctx.moveTo (p.x, p.y);
+							case CURVE: ctx.quadraticCurveTo (p.cx, p.cy, p.x, p.y);
+							default: ctx.lineTo (p.x, p.y);
 							
 						}
 						
 					}
 					
-					ctx.closePath();
+					ctx.closePath ();
 					
 				}
 				
@@ -1259,7 +1259,7 @@ class Graphics {
 				
 				if (g != null) {
 					
-					ctx.fillStyle = createCanvasGradient(ctx, g);
+					ctx.fillStyle = createCanvasGradient (ctx, g);
 					
 				} else if (bitmap != null && ((bitmap.flags & BMP_REPEAT) > 0)) {
 					
@@ -1267,7 +1267,7 @@ class Graphics {
 					
 					if (m != null) {
 						
-						ctx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+						ctx.transform (m.a, m.b, m.c, m.d, m.tx, m.ty);
 						
 					}
 					
@@ -1278,28 +1278,28 @@ class Graphics {
 						
 					}
 					
-					ctx.fillStyle = ctx.createPattern(bitmap.texture_buffer, "repeat");
+					ctx.fillStyle = ctx.createPattern (bitmap.texture_buffer, "repeat");
 					
 				} else {
 					
 					// Alpha value gets clamped in [0;1] range.
-					ctx.fillStyle = createCanvasColor(fillColour, Math.min(1.0, Math.max(0.0, fillAlpha)));
+					ctx.fillStyle = createCanvasColor (fillColour, Math.min (1.0, Math.max (0.0, fillAlpha)));
 					
 				}
 				
-				ctx.fill();
-				if (doStroke) ctx.stroke();
-				ctx.save();
+				ctx.fill ();
+				if (doStroke) ctx.stroke ();
+				ctx.save ();
 				
 				if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
 					
-					ctx.clip();
+					ctx.clip ();
 					var img = bitmap.texture_buffer;
 					var m = bitmap.matrix;
 					
 					if (m != null) {
 						
-						ctx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+						ctx.transform (m.a, m.b, m.c, m.d, m.tx, m.ty);
 						
 					}
 					
@@ -1310,19 +1310,19 @@ class Graphics {
 						//
 					//}
 					
-					ctx.drawImage(img, 0, 0);
+					ctx.drawImage (img, 0, 0);
 					
 				}
 				
-				ctx.restore();
+				ctx.restore ();
 				
 			}
 			
 		}
 		
-		ctx.restore();
+		ctx.restore ();
 		
-		nmeChanged = false;
+		__changed = false;
 		nextDrawIndex = len > 0 ? len - 1 : 0;
 		mDrawList = [];
 		
@@ -1346,7 +1346,7 @@ class Drawable {
 	public var tileJob:TileJob;
 	
 	
-	public function new(inPoints:GfxPoints, inFillColour:Int, inFillAlpha:Float, inSolidGradient:Grad, inBitmap:Texture, inLineJobs:LineJobs, inTileJob:TileJob) {
+	public function new (inPoints:GfxPoints, inFillColour:Int, inFillAlpha:Float, inSolidGradient:Grad, inBitmap:Texture, inLineJobs:LineJobs, inTileJob:TileJob) {
 		
 		points = inPoints;
 		fillColour = inFillColour;
@@ -1375,7 +1375,7 @@ class GfxPoint {
 	public var y:Float;
 	
 	
-	public function new(inX:Float, inY:Float, inCX:Float, inCY:Float, inType:Int) {
+	public function new (inX:Float, inY:Float, inCX:Float, inCY:Float, inType:Int) {
 		
 		x = inX;
 		y = inY;
@@ -1401,7 +1401,7 @@ class Grad {
 	public var points:GradPoints;
 	
 	
-	public function new(inPoints:GradPoints, inMatrix:Matrix, inFlags:Int, inFocal:Float) {
+	public function new (inPoints:GradPoints, inMatrix:Matrix, inFlags:Int, inFocal:Float) {
 		
 		points = inPoints;
 		matrix = inMatrix;
@@ -1422,7 +1422,7 @@ class GradPoint {
 	public var ratio:Int;
 	
 	
-	public function new(inCol:Int, inAlpha:Float, inRatio:Int) {
+	public function new (inCol:Int, inAlpha:Float, inRatio:Int) {
 		
 		col = inCol;
 		alpha = inAlpha;
@@ -1453,7 +1453,7 @@ class LineJob {
 	public var thickness:Float;
 	
 	
-	public function new(inGrad:Grad, inPoint_idx0:Int, inPoint_idx1:Int, inThickness:Float, inAlpha:Float, inColour:Int, inPixel_hinting:Int, inJoints:Int, inCaps:Int, inScale_mode:Int, inMiter_limit:Float) {
+	public function new (inGrad:Grad, inPoint_idx0:Int, inPoint_idx1:Int, inThickness:Float, inAlpha:Float, inColour:Int, inPixel_hinting:Int, inJoints:Int, inCaps:Int, inScale_mode:Int, inMiter_limit:Float) {
 		
 		grad = inGrad;
 		point_idx0 = inPoint_idx0;
@@ -1501,7 +1501,7 @@ class TileJob {
 	public var sheet:Tilesheet;
 	
 	
-	public function new(sheet:Tilesheet, drawList:Array<Float>, flags:Int) {
+	public function new (sheet:Tilesheet, drawList:Array<Float>, flags:Int) {
 		
 		this.sheet = sheet;
 		this.drawList = drawList;
@@ -1511,6 +1511,3 @@ class TileJob {
 	
 	
 }
-
-
-#end

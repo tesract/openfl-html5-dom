@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 enum DisplacementMapFilterMode {
@@ -10,6 +9,3 @@ enum DisplacementMapFilterMode {
 	WRAP;
 	
 }
-
-
-#end

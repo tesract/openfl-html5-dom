@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 @:fakeEnum(String) enum SharedObjectFlushStatus {
@@ -8,6 +7,3 @@ package flash.net;
 	PENDING;
 	
 }
-
-
-#end

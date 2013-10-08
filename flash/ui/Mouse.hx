@@ -1,5 +1,4 @@
 package flash.ui;
-#if js
 
 
 class Mouse {
@@ -12,14 +11,14 @@ class Mouse {
 	}
 	
 	
-	public static function hide():Void {
+	public static function hide ():Void {
 		
 		
 		
 	}
 	
 	
-	public static function show():Void {
+	public static function show ():Void {
 		
 		
 		
@@ -27,6 +26,3 @@ class Mouse {
 	
 	
 }
-
-
-#end

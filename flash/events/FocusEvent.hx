@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 import flash.display.InteractiveObject;
@@ -18,9 +17,9 @@ class FocusEvent extends Event {
 	public var shiftKey:Bool;
 	
 	
-	public function new(type:String, bubbles:Bool = false, cancelable:Bool = false, inObject:InteractiveObject = null, inShiftKey:Bool = false, inKeyCode:Int = 0) {
+	public function new (type:String, bubbles:Bool = false, cancelable:Bool = false, inObject:InteractiveObject = null, inShiftKey:Bool = false, inKeyCode:Int = 0) {
 		
-		super(type, bubbles, cancelable);
+		super (type, bubbles, cancelable);
 		
 		keyCode = inKeyCode;
 		shiftKey = (inShiftKey == null ? false : inShiftKey);
@@ -30,6 +29,3 @@ class FocusEvent extends Event {
 	
 	
 }
-
-
-#end

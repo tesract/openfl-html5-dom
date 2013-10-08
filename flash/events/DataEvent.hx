@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 class DataEvent extends TextEvent {
@@ -11,9 +10,9 @@ class DataEvent extends TextEvent {
 	public var data:String;
 	
 	
-	public function new(type:String, bubbles:Bool = false, cancelable:Bool = false, data:String = "") {
+	public function new (type:String, bubbles:Bool = false, cancelable:Bool = false, data:String = "") {
 		
-		super(type, bubbles, cancelable);
+		super (type, bubbles, cancelable);
 		
 		this.data = data;
 		
@@ -21,6 +20,3 @@ class DataEvent extends TextEvent {
 	
 	
 }
-
-
-#end

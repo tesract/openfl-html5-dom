@@ -1,5 +1,4 @@
 package flash.geom;
-#if js
 
 
 class ColorTransform {
@@ -16,7 +15,7 @@ class ColorTransform {
 	public var redOffset:Float;
 	
 	
-	public function new(inRedMultiplier:Float = 1, inGreenMultiplier:Float = 1, inBlueMultiplier:Float = 1, inAlphaMultiplier:Float = 1, inRedOffset:Float = 0, inGreenOffset:Float = 0, inBlueOffset:Float = 0, inAlphaOffset:Float = 0):Void {
+	public function new (inRedMultiplier:Float = 1, inGreenMultiplier:Float = 1, inBlueMultiplier:Float = 1, inAlphaMultiplier:Float = 1, inRedOffset:Float = 0, inGreenOffset:Float = 0, inBlueOffset:Float = 0, inAlphaOffset:Float = 0):Void {
 		
 		redMultiplier = (inRedMultiplier == null ? 1.0:inRedMultiplier);
 		greenMultiplier = (inGreenMultiplier == null ? 1.0:inGreenMultiplier);
@@ -30,7 +29,7 @@ class ColorTransform {
 	}
 	
 	
-	public function concat(second:ColorTransform):Void {
+	public function concat (second:ColorTransform):Void {
 		
 		redMultiplier += second.redMultiplier;
 		greenMultiplier += second.greenMultiplier;
@@ -47,14 +46,14 @@ class ColorTransform {
 	
 	
 
-	private function get_color():Int {
+	private function get_color ():Int {
 		
-		return ((Std.int(redOffset) << 16) |(Std.int(greenOffset) << 8) | Std.int(blueOffset));
+		return ((Std.int (redOffset) << 16) | (Std.int (greenOffset) << 8) | Std.int (blueOffset));
 		
 	}
 	
 	
-	private function set_color(value:Int):Int {
+	private function set_color (value:Int):Int {
 		
 		redOffset = (value >> 16) & 0xFF;
 		greenOffset = (value >> 8) & 0xFF;
@@ -70,6 +69,3 @@ class ColorTransform {
 	
 	
 }
-
-
-#end

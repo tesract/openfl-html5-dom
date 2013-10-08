@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 class URLRequestHeader {
@@ -9,7 +8,7 @@ class URLRequestHeader {
 	public var value : String;
 	
 	
-	public function new(name:String = "", value:String = "") {
+	public function new (name:String = "", value:String = "") {
 		
 		this.name = name;
 		this.value = value;
@@ -18,6 +17,3 @@ class URLRequestHeader {
 	
 	
 }
-
-
-#end

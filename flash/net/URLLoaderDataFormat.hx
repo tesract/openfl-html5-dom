@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 enum URLLoaderDataFormat {
@@ -9,6 +8,3 @@ enum URLLoaderDataFormat {
 	VARIABLES;
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 import flash.events.Event;
@@ -22,23 +21,12 @@ class URLLoader extends EventDispatcher {
 	public var bytesLoaded:Int;
 	public var bytesTotal:Int;
 	public var data:Dynamic;
-	public var dataFormat(default, set):URLLoaderDataFormat;
-	private function set_dataFormat(inputVal:URLLoaderDataFormat):URLLoaderDataFormat {
-		// prevent inadvertently using typed arrays when they are unsupported
-		// @todo move these sorts of tests somewhere common in the vein of Modernizr
-		if (inputVal == URLLoaderDataFormat.BINARY
-				&& !Reflect.hasField(Browser.window, "ArrayBuffer")) {
-			dataFormat = URLLoaderDataFormat.TEXT;
-		} else {
-			dataFormat = inputVal;
-		}
-		return dataFormat;
-	}
+	public var dataFormat (default, set):URLLoaderDataFormat;
 	
 	
-	public function new(request:URLRequest = null) {
+	public function new (request:URLRequest = null) {
 		
-		super();
+		super ();
 		
 		bytesLoaded = 0;
 		bytesTotal = 0;
@@ -46,48 +34,48 @@ class URLLoader extends EventDispatcher {
 		
 		if (request != null) {
 			
-			load(request);
+			load (request);
 			
 		}
 		
 	}
 	
 	
-	public function close():Void {
+	public function close ():Void {
 		
 		
 		
 	}
 	
 	
-	private dynamic function getData():Dynamic {
+	private dynamic function getData ():Dynamic {
 		
 		return null;
 		
 	}
 	
 	
-	public function load(request:URLRequest):Void {
+	public function load (request:URLRequest):Void {
 		
-		requestUrl(request.url, request.method, request.data, request.formatRequestHeaders());
+		requestUrl (request.url, request.method, request.data, request.formatRequestHeaders ());
 		
 	}
 	
 	
-	private function registerEvents(subject:EventTarget):Void {
+	private function registerEvents (subject:EventTarget):Void {
 		
 		var self = this;
 		if (untyped __js__("typeof XMLHttpRequestProgressEvent") != __js__('"undefined"')) {
 			
-			subject.addEventListener("progress", onProgress, false);
+			subject.addEventListener ("progress", onProgress, false);
 			
 		}
 		
-		untyped subject.onreadystatechange = function() {
+		untyped subject.onreadystatechange = function () {
 			
 			if (subject.readyState != 4) return;
 			
-			var s = try subject.status catch( e : Dynamic ) null;
+			var s = try subject.status catch (e:Dynamic) null;
 			
 			if (s == untyped __js__("undefined")) {
 				
@@ -97,7 +85,7 @@ class URLLoader extends EventDispatcher {
 			
 			if (s != null) {
 				
-				self.onStatus(s);
+				self.onStatus (s);
 				
 			}
 			
@@ -105,30 +93,30 @@ class URLLoader extends EventDispatcher {
 			
 			if (s != null && s >= 200 && s < 400) {
 				
-				self.onData(subject.response);
+				self.onData (subject.response);
 				
 			} else {
 				
 				if (s == null) {
 					
-					self.onError("Failed to connect or resolve host");
+					self.onError ("Failed to connect or resolve host");
 					
 				} else if (s == 12029) {
 					
-					self.onError("Failed to connect to host");
+					self.onError ("Failed to connect to host");
 					
 				} else if (s == 12007) {
 					
-					self.onError("Unknown host");
+					self.onError ("Unknown host");
 					
 				} else if (s == 0) {
 					
-					self.onError("Unable to make request (may be blocked due to cross-domain permissions)");
-					self.onSecurityError("Unable to make request (may be blocked due to cross-domain permissions)");
+					self.onError ("Unable to make request (may be blocked due to cross-domain permissions)");
+					self.onSecurityError ("Unable to make request (may be blocked due to cross-domain permissions)");
 					
 				} else {
 					
-					self.onError("Http Error #" + subject.status);
+					self.onError ("Http Error #" + subject.status);
 					
 				}
 				
@@ -139,31 +127,31 @@ class URLLoader extends EventDispatcher {
 	}
 	
 	
-	private function requestUrl(url:String, method:String, data:Dynamic, requestHeaders:Array<URLRequestHeader>):Void {
+	private function requestUrl (url:String, method:String, data:Dynamic, requestHeaders:Array<URLRequestHeader>):Void {
 		
 		var xmlHttpRequest:XMLHttpRequest = untyped __new__("XMLHttpRequest");
-		registerEvents(cast xmlHttpRequest);
+		registerEvents (cast xmlHttpRequest);
 		var uri:Dynamic = "";
 		
-		if (Std.is(data, ByteArray)) {
+		if (Std.is (data, ByteArray)) {
 			
 			var data:ByteArray = cast data;
 			
 			switch (dataFormat) {
 				
-				case BINARY: uri = data.nmeGetBuffer();
-				default: uri = data.readUTFBytes(data.length);
+				case BINARY: uri = data.__getBuffer ();
+				default: uri = data.readUTFBytes (data.length);
 				
 			}
 			
-		} else if (Std.is(data, URLVariables)) {
+		} else if (Std.is (data, URLVariables)) {
 			
 			var data:URLVariables = cast data;
 			
-			for (p in Reflect.fields(data)) {
+			for (p in Reflect.fields (data)) {
 				
 				if (uri.length != 0) uri += "&";
-				uri += StringTools.urlEncode(p) + "=" + StringTools.urlEncode(Reflect.field(data, p));
+				uri += StringTools.urlEncode (p) + "=" + StringTools.urlEncode (Reflect.field (data, p));
 				
 			}
 			
@@ -171,7 +159,7 @@ class URLLoader extends EventDispatcher {
 			
 			if (data != null) {
 				
-				uri = data.toString();
+				uri = data.toString ();
 				
 			}
 			
@@ -181,20 +169,20 @@ class URLLoader extends EventDispatcher {
 			
 			if (method == "GET" && uri != null && uri != "") {
 				
-				var question = url.split("?").length <= 1;
-				xmlHttpRequest.open(method, url + (if (question) "?" else "&") + uri, true);
+				var question = url.split ("?").length <= 1;
+				xmlHttpRequest.open (method, url + (if (question) "?" else "&") + uri, true);
 				uri = "";
 				
 			} else {
 				
 				//js.Lib.alert ("open: " + method + ", " + url + ", true");
-				xmlHttpRequest.open(method, url, true);
+				xmlHttpRequest.open (method, url, true);
 				
 			}
 			
-		} catch(e:Dynamic) {
+		} catch (e:Dynamic) {
 			
-			onError(e.toString());
+			onError (e.toString ());
 			return;
 			
 		}
@@ -211,16 +199,16 @@ class URLLoader extends EventDispatcher {
 		for (header in requestHeaders) {
 			
 			//js.Lib.alert ("setRequestHeader: " + header.name + ", " + header.value);
-			xmlHttpRequest.setRequestHeader(header.name, header.value);
+			xmlHttpRequest.setRequestHeader (header.name, header.value);
 			
 		}
 		
 		//js.Lib.alert ("uri: " + uri);
 		
-		xmlHttpRequest.send(uri);
-		onOpen();
+		xmlHttpRequest.send (uri);
+		onOpen ();
 		
-		getData = function() {
+		getData = function () {
 			
 			if (xmlHttpRequest.response != null) {
 				
@@ -244,69 +232,96 @@ class URLLoader extends EventDispatcher {
 	
 	
 	
-	private function onData(_):Void {
+	private function onData (_):Void {
 		
-		var content:Dynamic = getData();
+		var content:Dynamic = getData ();
 		
 		switch (dataFormat) {
 			
-			case BINARY: this.data = ByteArray.nmeOfBuffer(content);
-			default: this.data = Std.string(content);
+			case BINARY: this.data = ByteArray.__ofBuffer (content);
+			default: this.data = Std.string (content);
 			
 		}
 		
-		var evt = new Event(Event.COMPLETE);
+		var evt = new Event (Event.COMPLETE);
 		evt.currentTarget = this;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function onError(msg:String):Void {
+	private function onError (msg:String):Void {
 		
-		var evt = new IOErrorEvent(IOErrorEvent.IO_ERROR);
+		var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 		evt.text = msg;
 		evt.currentTarget = this;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function onOpen():Void {
+	private function onOpen ():Void {
 		
-		var evt = new Event(Event.OPEN);
+		var evt = new Event (Event.OPEN);
 		evt.currentTarget = this;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function onProgress(event:XMLHttpRequestProgressEvent):Void {
+	private function onProgress (event:XMLHttpRequestProgressEvent):Void {
 		
-		var evt = new ProgressEvent(ProgressEvent.PROGRESS);
+		var evt = new ProgressEvent (ProgressEvent.PROGRESS);
 		evt.currentTarget = this;
 		evt.bytesLoaded = event.loaded;
 		evt.bytesTotal = event.total;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function onSecurityError(msg:String):Void {
+	private function onSecurityError (msg:String):Void {
 		
-		var evt = new SecurityErrorEvent(SecurityErrorEvent.SECURITY_ERROR);
+		var evt = new SecurityErrorEvent (SecurityErrorEvent.SECURITY_ERROR);
 		evt.text = msg;
 		evt.currentTarget = this;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function onStatus(status:Int):Void {
+	private function onStatus (status:Int):Void {
 		
-		var evt = new HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false, false, status);
+		var evt = new HTTPStatusEvent (HTTPStatusEvent.HTTP_STATUS, false, false, status);
 		evt.currentTarget = this;
-		dispatchEvent(evt);
+		dispatchEvent (evt);
+		
+	}
+	
+	
+	
+	
+	// Get & Set Methods
+	
+	
+	
+	
+	private function set_dataFormat (inputVal:URLLoaderDataFormat):URLLoaderDataFormat {
+		
+		// prevent inadvertently using typed arrays when they are unsupported
+		// @todo move these sorts of tests somewhere common in the vein of Modernizr
+		
+		if (inputVal == URLLoaderDataFormat.BINARY && !Reflect.hasField (Browser.window, "ArrayBuffer")) {
+			
+			dataFormat = URLLoaderDataFormat.TEXT;
+			
+		} else {
+			
+			dataFormat = inputVal;
+			
+		}
+		
+		return dataFormat;
 		
 	}
 	
@@ -315,6 +330,3 @@ class URLLoader extends EventDispatcher {
 
 
 typedef XMLHttpRequestProgressEvent = Dynamic;
-
-
-#end

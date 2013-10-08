@@ -1,5 +1,4 @@
 package flash.xml;
-#if js
 
 
 class XMLNode {
@@ -32,6 +31,3 @@ class XMLNode {
 	
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 import flash.events.EventDispatcher;
@@ -14,9 +13,9 @@ class NetConnection extends EventDispatcher {
 	public var connect:Dynamic;
 	
 	
-	public function new():Void {
+	public function new ():Void {
 		
-		super();
+		super ();
 		
 		connect = Reflect.makeVarArgs(js_connect);
 		//should set up bidirection connection with Flash Media Server or Flash Remoting
@@ -25,14 +24,14 @@ class NetConnection extends EventDispatcher {
 	}
 	
 	
-	private function js_connect(val:Array<Dynamic>):Void {
+	private function js_connect (val:Array<Dynamic>):Void {
 		
 		if (val.length > 1 || val[0] != null)
-			throw "nme can only connect in 'http streaming' mode";
+			throw "openfl can only connect in 'http streaming' mode";
 		
 		var info:Dynamic = { code:NetConnection.CONNECT_SUCCESS };
-		var ev:NetStatusEvent = new NetStatusEvent(NetStatusEvent.NET_STATUS, false, true, info);
-		this.dispatchEvent(ev);
+		var ev:NetStatusEvent = new NetStatusEvent (NetStatusEvent.NET_STATUS, false, true, info);
+		this.dispatchEvent (ev);
 		
 		//connection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 		
@@ -40,6 +39,3 @@ class NetConnection extends EventDispatcher {
 	
 	
 }
-
-
-#end

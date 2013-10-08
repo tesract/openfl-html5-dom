@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 import flash.display.BitmapData;
@@ -26,30 +25,30 @@ class TextField extends InteractiveObject {
 	public static var mDefaultFont = Font.DEFAULT_FONT_NAME;
 	
 	public var antiAliasType:String;
-	public var autoSize(default, set_autoSize):String;
-	public var background(default,set_background):Bool;
-	public var backgroundColor(default, set_backgroundColor):Int;
-	public var border(default, set_border):Bool;
-	public var borderColor(default, set_borderColor):Int;
-	public var bottomScrollV(get_bottomScrollV, null):Int;
+	public var autoSize (default, set_autoSize):String;
+	public var background (default,set_background):Bool;
+	public var backgroundColor (default, set_backgroundColor):Int;
+	public var border (default, set_border):Bool;
+	public var borderColor (default, set_borderColor):Int;
+	public var bottomScrollV (get_bottomScrollV, null):Int;
 	public var caretIndex:Int;
-	public var caretPos(get_caretPos, null):Int;
-	public var defaultTextFormat(get_defaultTextFormat, set_defaultTextFormat):TextFormat;
+	public var caretPos (get_caretPos, null):Int;
+	public var defaultTextFormat (get_defaultTextFormat, set_defaultTextFormat):TextFormat;
 	public var displayAsPassword:Bool;
 	public var embedFonts:Bool;
 	public var gridFitType:GridFitType;
-	public var htmlText(get_htmlText, set_htmlText):String;
-	public var length(default, null):Int;
+	public var htmlText (get_htmlText, set_htmlText):String;
+	public var length (default, null):Int;
 	public var maxChars:Int;
-	public var maxScrollH(get_maxScrollH, null):Int;
-	public var maxScrollV(get_maxScrollV, null):Int;
+	public var maxScrollH (get_maxScrollH, null):Int;
+	public var maxScrollV (get_maxScrollV, null):Int;
 	public var mDownChar:Int;
 	public var mFace:String;
 	public var mParagraphs:Paragraphs;
 	public var mTextHeight:Int;
 	public var mTryFreeType:Bool;
-	@:isVar public var multiline(default, default):Bool;
-	public var numLines(get_numLines, null):Int;
+	@:isVar public var multiline (default, default):Bool;
+	public var numLines (get_numLines, null):Int;
 	public var restrict:String;
 	public var scrollH:Int;
 	public var scrollV:Int;
@@ -57,12 +56,12 @@ class TextField extends InteractiveObject {
 	public var selectionBeginIndex:Int;
 	public var selectionEndIndex:Int;
 	public var sharpness:Float;
-	public var text(get_text, set_text):String;
-	public var textColor(get_textColor, set_textColor):Int;
-	public var textHeight(get_textHeight, null):Float;
-	public var textWidth(get_textWidth, null):Float;
-	public var type(get_type, set_type):String;
-	@:isVar public var wordWrap(get_wordWrap, set_wordWrap):Bool;
+	public var text (get_text, set_text):String;
+	public var textColor (get_textColor, set_textColor):Int;
+	public var textHeight (get_textHeight, null):Float;
+	public var textWidth (get_textWidth, null):Float;
+	public var type (get_type, set_type):String;
+	@:isVar public var wordWrap (get_wordWrap, set_wordWrap):Bool;
 	
 	private static var sSelectionOwner:TextField = null;
 	
@@ -84,23 +83,23 @@ class TextField extends InteractiveObject {
 	private var mTextColour:Int;
 	private var mType:String;
 	private var mWidth:Float;
-	private var nmeGraphics:Graphics;
-	private var nmeInputEnabled:Bool;
+	private var __graphics:Graphics;
+	private var __inputEnabled:Bool;
 	private var _defaultTextFormat:TextFormat;
 	
 	
-	public function new() {
+	public function new () {
 		
-		super();
+		super ();
 		
 		mWidth = 100;
 		mHeight = 20;
 		mHTMLMode = false;
 		multiline = false;
-		nmeGraphics = new Graphics();
+		__graphics = new Graphics ();
 		mFace = mDefaultFont;
 		mAlign = TextFormatAlign.LEFT;
-		mParagraphs = new Paragraphs();
+		mParagraphs = new Paragraphs ();
 		mSelStart = -1;
 		mSelEnd = -1;
 		scrollH = 0;
@@ -117,12 +116,12 @@ class TextField extends InteractiveObject {
 		mTryFreeType = true;
 		selectable = true;
 		mInsertPos = 0;
-		nmeInputEnabled = false;
+		__inputEnabled = false;
 		mDownChar = 0;
 		mSelectDrag = -1;
 		
 		mLineInfo = [];
-		defaultTextFormat = new TextFormat();
+		defaultTextFormat = new TextFormat ();
 		
 		borderColor = 0x000000;
 		border = false;
@@ -134,14 +133,14 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function appendText(newText:String):Void {
+	public function appendText (newText:String):Void {
 		
 		this.text += newText;
 		
 	}
 	
 	
-	public function ConvertHTMLToText(inUnSetHTML:Bool):Void {
+	public function ConvertHTMLToText (inUnSetHTML:Bool):Void {
 		
 		mText = "";
 		
@@ -160,21 +159,21 @@ class TextField extends InteractiveObject {
 		if (inUnSetHTML) {
 			
 			mHTMLMode = false;
-			RebuildText();
+			RebuildText ();
 			
 		}
 		
 	}
 	
 	
-	private function DecodeColour(col:String):Int {
+	private function DecodeColour (col:String):Int {
 		
-		return Std.parseInt("0x" + col.substr(1));
+		return Std.parseInt ("0x" + col.substr(1));
 		
 	}
 	
 	
-	public function getCharBoundaries(a:Int):Rectangle {
+	public function getCharBoundaries (a:Int):Rectangle {
 		
 		// TODO
 		return null;
@@ -182,9 +181,9 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function getCharIndexAtPoint(inX:Float, inY:Float):Int {
+	public function getCharIndexAtPoint (inX:Float, inY:Float):Int {
 		
-		var li = getLineIndexAtPoint(inX, inY);
+		var li = getLineIndexAtPoint (inX, inY);
 		
 		if (li < 0) {
 			
@@ -207,7 +206,7 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function getLineIndexAtPoint(inX:Float, inY:Float):Int {
+	public function getLineIndexAtPoint (inX:Float, inY:Float):Int {
 		
 		if (mLineInfo.length < 1) return -1;
 		if (inY <= 0) return 0;
@@ -227,116 +226,34 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function getTextFormat(beginIndex:Int = 0, endIndex:Int = 0):TextFormat {
+	public function getTextFormat (beginIndex:Int = 0, endIndex:Int = 0):TextFormat {
 		
 		return new TextFormat (mFace, mTextHeight, mTextColour);
 		
 	}
 	
 	
-	private override function nmeGetGraphics():Graphics {
-		
-		return nmeGraphics;
-		
-	}
-	
-	
-	override public function nmeGetObjectUnderPoint(point:Point):DisplayObject {
-		
-		if (!visible) {
-			
-			return null; 
-			
-		} else if (this.mText.length > 1) {
-			
-			var local = globalToLocal(point);
-			
-			if (local.x < 0 || local.y < 0 || local.x > mMaxWidth || local.y > mMaxHeight) {
-				
-				return null;
-				
-			} else {
-				
-				return cast this;
-				
-			}
-			
-		} else {
-			
-			return super.nmeGetObjectUnderPoint(point);
-			
-		}
-		
-	}
-	
-	
-	override public function nmeRender(inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
-		
-		if (!nmeCombinedVisible) return;
-		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
-		
-		//if (nmeGraphics.nmeSurface != null) {
-			//
-			//Lib.nmeSetImageSmoothing (nmeGraphics.nmeSurface.getContext("2d"), (gridFitType != GridFitType.PIXEL));
-			//
-		//}
-		
-		if (nmeGraphics.nmeRender(inMask, nmeFilters, 1, 1)) {
-			
-			handleGraphicsUpdated(nmeGraphics);
-			
-		}
-		
-		if (!mHTMLMode && inMask != null) {
-			
-			var m = getSurfaceTransform(nmeGraphics);
-			Lib.nmeDrawToSurface(nmeGraphics.nmeSurface, inMask, m, (parent != null ? parent.nmeCombinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
-			
-		} else {
-			
-			if (nmeTestFlag(DisplayObject.TRANSFORM_INVALID)) {
-				
-				var m = getSurfaceTransform(nmeGraphics);
-				Lib.nmeSetSurfaceTransform(nmeGraphics.nmeSurface, m);
-				nmeClearFlag(DisplayObject.TRANSFORM_INVALID);
-				
-			}
-			
-			Lib.nmeSetSurfaceOpacity(nmeGraphics.nmeSurface,(parent != null ? parent.nmeCombinedAlpha : 1) * alpha);
-			
-			/*if (clipRect != null) {
-				var rect = new Rectangle();
-				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
-				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-				Lib.nmeSetSurfaceClipping(nmeGraphics.nmeSurface, rect);
-			}*/
-			
-		}
-		
-	}
-	
-	
-	private function Rebuild() {
+	private function Rebuild () {
 		
 		if (mHTMLMode) return;
 		
 		mLineInfo = [];
-		nmeGraphics.clear();
+		__graphics.clear ();
 		
 		if (background) {
 			
-			nmeGraphics.beginFill(backgroundColor);
-			nmeGraphics.drawRect( 0, 0, width, height );
-			nmeGraphics.endFill();
+			__graphics.beginFill (backgroundColor);
+			__graphics.drawRect (0, 0, width, height );
+			__graphics.endFill ();
 			
 		}
 
-		nmeGraphics.lineStyle(mTextColour);
+		__graphics.lineStyle (mTextColour);
 		var insert_x:Null<Int> = null;
 		mMaxWidth = 0;
 		
 		//mLimitRenderX = (autoSize == flash.text.TextFieldAutoSize.NONE) ? Std.int(width) : 999999;
-		var wrap = mLimitRenderX = (wordWrap && !nmeInputEnabled) ? Std.int(mWidth) : 999999;
+		var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
 		var char_idx = 0;
 		var h:Int = 0;
 		
@@ -365,8 +282,8 @@ class TextField extends InteractiveObject {
 				
 				for (ch in 0...text.length) {
 					
-					var g = text.charCodeAt(ch);
-					var adv = font.nmeGetAdvance(g);
+					var g = text.charCodeAt (ch);
+					var adv = font.__getAdvance (g);
 					
 					if (g == 32) {
 						
@@ -376,12 +293,12 @@ class TextField extends InteractiveObject {
 						
 					}
 					
-					if ((tx + adv) > wrap ) {
+					if ((tx + adv) > wrap) {
 						
 						if (last_word_break > 0) {
 							
-							var row_end = row.splice(last_word_break, row.length - last_word_break);
-							h += RenderRow(row, h, start_idx, paragraph.align);
+							var row_end = row.splice (last_word_break, row.length - last_word_break);
+							h += RenderRow (row, h, start_idx, paragraph.align);
 							row = row_end;
 							tx -= last_word_break_width;
 							start_idx = last_word_char_idx;
@@ -392,14 +309,14 @@ class TextField extends InteractiveObject {
 							
 							if (row_end.length > 0 && row_end[0].chr == 32) {
 								
-								row_end.shift();
+								row_end.shift ();
 								start_idx ++;
 								
 							}
 							
 						} else {
 							
-							h += RenderRow(row, h, char_idx, paragraph.align);
+							h += RenderRow (row, h, char_idx, paragraph.align);
 							row = [];
 							tx = 0;
 							start_idx = char_idx;
@@ -408,7 +325,7 @@ class TextField extends InteractiveObject {
 						
 					}
 					
-					row.push( { font: font, chr: g, x: tx, fh: fh, sel:(char_idx >= s0 && char_idx < s1), adv: adv } );
+					row.push ( { font: font, chr: g, x: tx, fh: fh, sel:(char_idx >= s0 && char_idx < s1), adv: adv } );
 					tx += adv;
 					char_idx++;
 					
@@ -418,7 +335,7 @@ class TextField extends InteractiveObject {
 			
 			if (row.length > 0) {
 				
-				h += RenderRow(row, h, start_idx, paragraph.align, insert_x);
+				h += RenderRow (row, h, start_idx, paragraph.align, insert_x);
 				insert_x = null;
 				
 			}
@@ -457,27 +374,27 @@ class TextField extends InteractiveObject {
 		
 		if (border) {
 			
-			nmeGraphics.endFill();
-			nmeGraphics.lineStyle(1, borderColor, 1, true);
-			nmeGraphics.drawRect(.5, .5, width-.5, height-.5);
+			__graphics.endFill ();
+			__graphics.lineStyle (1, borderColor, 1, true);
+			__graphics.drawRect (.5, .5, width-.5, height-.5);
 			
 		}
 		
 	}
 	
 	
-	public function RebuildText() {
+	public function RebuildText () {
 		
 		mParagraphs = [];
 		
 		if (!mHTMLMode) {
 			
-			var font = FontInstance.CreateSolid(mFace, mTextHeight, mTextColour, 1.0);
-			var paras = mText.split("\n");
+			var font = FontInstance.CreateSolid (mFace, mTextHeight, mTextColour, 1.0);
+			var paras = mText.split ("\n");
 			
 			for (paragraph in paras) {
 				
-				mParagraphs.push( { align: mAlign, spans: [ { font : font, text: paragraph + "\n" } ] } );
+				mParagraphs.push ( { align: mAlign, spans: [ { font : font, text: paragraph + "\n" } ] } );
 				
 			}
 			
@@ -488,7 +405,7 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	private function RenderRow(inRow:Array<RowChar>, inY:Int, inCharIdx:Int, inAlign:TextFormatAlign, inInsert:Int = 0):Int {
+	private function RenderRow (inRow:Array<RowChar>, inY:Int, inCharIdx:Int, inAlign:TextFormatAlign, inInsert:Int = 0):Int {
 		
 		var h = 0;
 		var w = 0;
@@ -511,7 +428,7 @@ class TextField extends InteractiveObject {
 			
 		}
 		
-		var full_height = Std.int(h * 1.2);
+		var full_height = Std.int (h * 1.2);
 		var align_x = 0;
 		var insert_x = 0;
 		
@@ -551,18 +468,18 @@ class TextField extends InteractiveObject {
 			
 			if (inAlign == TextFormatAlign.CENTER) {
 			
-				align_x = (Math.round(mWidth)-w)>>1;
+				align_x = (Math.round (mWidth)-w)>>1;
 			
 			} else if (inAlign == TextFormatAlign.RIGHT) {
 				
-				align_x = Math.round(mWidth)-w;
+				align_x = Math.round (mWidth)-w;
 				
 			}
 			
 		}
 		
-		var x_list = new Array<Int>();
-		mLineInfo.push( { mY0: inY, mIndex: inCharIdx - 1, mX: x_list } );
+		var x_list = new Array<Int> ();
+		mLineInfo.push ( { mY0: inY, mIndex: inCharIdx - 1, mX: x_list } );
 		
 		var cache_sel_font:FontInstance = null;
 		var cache_normal_font:FontInstance = null;
@@ -579,7 +496,7 @@ class TextField extends InteractiveObject {
 				
 			}
 			
-			x_list.push(x);
+			x_list.push (x);
 			
 			if (x >= 0) {
 				
@@ -587,10 +504,10 @@ class TextField extends InteractiveObject {
 				
 				if (chr.sel) {
 					
-					nmeGraphics.lineStyle();
-					nmeGraphics.beginFill(0x202060);
-					nmeGraphics.drawRect(x, inY, adv, full_height);
-					nmeGraphics.endFill();
+					__graphics.lineStyle ();
+					__graphics.beginFill (0x202060);
+					__graphics.drawRect (x, inY, adv, full_height);
+					__graphics.endFill ();
 					
 					if (cache_normal_font == chr.font) {
 						
@@ -598,7 +515,7 @@ class TextField extends InteractiveObject {
 						
 					} else {
 						
-						font = FontInstance.CreateSolid(chr.font.GetFace(), chr.fh, 0xffffff, 1.0);
+						font = FontInstance.CreateSolid (chr.font.GetFace (), chr.fh, 0xffffff, 1.0);
 						cache_sel_font = font;
 						cache_normal_font = chr.font;
 						
@@ -606,7 +523,7 @@ class TextField extends InteractiveObject {
 					
 				}
 				
-				font.RenderChar(nmeGraphics, chr.chr, x, Std.int(inY + (h - chr.fh)));
+				font.RenderChar (__graphics, chr.chr, x, Std.int(inY + (h - chr.fh)));
 				
 			}
 			
@@ -620,14 +537,14 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function setSelection(beginIndex:Int, endIndex:Int) {
+	public function setSelection (beginIndex:Int, endIndex:Int) {
 		
 		// TODO:
 		
 	}
 	
 	
-	public function setTextFormat(inFmt:TextFormat, beginIndex:Int = 0, endIndex:Int = 0) {
+	public function setTextFormat (inFmt:TextFormat, beginIndex:Int = 0, endIndex:Int = 0) {
 		
 		if (inFmt.font != null) {
 			
@@ -637,7 +554,7 @@ class TextField extends InteractiveObject {
 		
 		if (inFmt.size != null) {
 			
-			mTextHeight = Std.int(inFmt.size);
+			mTextHeight = Std.int (inFmt.size);
 			
 		}
 		
@@ -653,17 +570,99 @@ class TextField extends InteractiveObject {
 			
 		}
 		
-		RebuildText();
-		nmeInvalidateBounds();
+		RebuildText ();
+		__invalidateBounds ();
 		
-		return getTextFormat();
+		return getTextFormat ();
 		
 	}
 	
 	
-	override public function toString():String {
+	override public function toString ():String {
 		
-		return "[TextField name=" + this.name + " id=" + _nmeId + "]";
+		return "[TextField name=" + this.name + " id=" + ___id + "]";
+		
+	}
+	
+	
+	private override function __getGraphics ():Graphics {
+		
+		return __graphics;
+		
+	}
+	
+	
+	override public function __getObjectUnderPoint (point:Point):DisplayObject {
+		
+		if (!visible) {
+			
+			return null; 
+			
+		} else if (this.mText.length > 1) {
+			
+			var local = globalToLocal (point);
+			
+			if (local.x < 0 || local.y < 0 || local.x > mMaxWidth || local.y > mMaxHeight) {
+				
+				return null;
+				
+			} else {
+				
+				return cast this;
+				
+			}
+			
+		} else {
+			
+			return super.__getObjectUnderPoint (point);
+			
+		}
+		
+	}
+	
+	
+	override public function __render (inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
+		
+		if (!__combinedVisible) return;
+		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
+		
+		//if (__graphics.__surface != null) {
+			//
+			//Lib.__setImageSmoothing (__graphics.__surface.getContext ("2d"), (gridFitType != GridFitType.PIXEL));
+			//
+		//}
+		
+		if (__graphics.__render (inMask, __filters, 1, 1)) {
+			
+			handleGraphicsUpdated (__graphics);
+			
+		}
+		
+		if (!mHTMLMode && inMask != null) {
+			
+			var m = getSurfaceTransform (__graphics);
+			Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
+			
+		} else {
+			
+			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
+				
+				var m = getSurfaceTransform (__graphics);
+				Lib.__setSurfaceTransform (__graphics.__surface, m);
+				__clearFlag (DisplayObject.TRANSFORM_INVALID);
+				
+			}
+			
+			Lib.__setSurfaceOpacity (__graphics.__surface, (parent != null ? parent.__combinedAlpha : 1) * alpha);
+			
+			/*if (clipRect != null) {
+				var rect = new Rectangle();
+				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
+				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
+				Lib.__setSurfaceClipping(__graphics.__surface, rect);
+			}*/
+			
+		}
 		
 	}
 	
@@ -675,105 +674,109 @@ class TextField extends InteractiveObject {
 	
 	
 	
-	private function get_autoSize():String {
+	private function get_autoSize ():String {
 		
 		return autoSize;
+		
 	}
-	private function set_autoSize(inAutoSize:String):String {
+	
+	
+	private function set_autoSize (inAutoSize:String):String {
 		
 		autoSize = inAutoSize;
-		Rebuild();
+		Rebuild ();
 		return inAutoSize;
 		
 	}
 	
 	
-	private function set_background(inBack:Bool):Bool {
+	private function set_background (inBack:Bool):Bool {
+		
 		background = inBack;
-		Rebuild();
+		Rebuild ();
 		return inBack;
 		
 	}
 	
 	
-	private function set_backgroundColor(inCol:Int):Int {
+	private function set_backgroundColor (inCol:Int):Int {
 		
 		backgroundColor = inCol;
-		Rebuild();
+		Rebuild ();
 		return inCol;
 		
 	}
 	
 	
-	private function set_border(inBorder:Bool):Bool {
+	private function set_border (inBorder:Bool):Bool {
 		
 		border = inBorder;
-		Rebuild();
+		Rebuild ();
 		return inBorder;
 		
 	}
 	
 	
-	private function set_borderColor(inBorderCol:Int):Int {
+	private function set_borderColor (inBorderCol:Int):Int {
 		
 		borderColor = inBorderCol;
-		Rebuild();
+		Rebuild ();
 		return inBorderCol;
 		
 	}
 	
 	
-	private function get_bottomScrollV():Int { return 0; }
+	private function get_bottomScrollV ():Int { return 0; }
 	
 	
-	private function get_caretPos():Int {
+	private function get_caretPos ():Int {
 		
 		return mInsertPos;
 		
 	}
 	
 	
-	private function get_defaultTextFormat():TextFormat {
+	private function get_defaultTextFormat ():TextFormat {
 		
 		return _defaultTextFormat;
 		
 	}
 	
 	
-	private function set_defaultTextFormat(inFmt:TextFormat):TextFormat {
+	private function set_defaultTextFormat (inFmt:TextFormat):TextFormat {
 		
-		setTextFormat(inFmt);
+		setTextFormat (inFmt);
 		_defaultTextFormat = inFmt;
 		return inFmt;
 		
 	}
 	
 	
-	private override function get_height():Float {
+	private override function get_height ():Float {
 		
-		return Math.max(mHeight,getBounds(this.stage).height);
+		return Math.max (mHeight,getBounds (this.stage).height);
 		
 	}
 	
 	
-	override private function set_height(inValue:Float):Float {
+	override private function set_height (inValue:Float):Float {
 		
 		if (parent != null) {
 			
-			parent.nmeInvalidateBounds();
+			parent.__invalidateBounds ();
 			
 		}
 		
 		if (_boundsInvalid) {
 			
-			validateBounds();
+			validateBounds ();
 			
 		}
 		
 		if (inValue != mHeight) {
 			
 			mHeight = inValue;
-			Rebuild();
+			Rebuild ();
 			
 		}
 		
@@ -782,37 +785,38 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function get_htmlText():String {
+	public function get_htmlText ():String {
 		
 		return mHTMLText;
 		
 	}
 	
 	
-	public function set_htmlText(inHTMLText:String):String {
+	public function set_htmlText (inHTMLText:String):String {
 		
-		mParagraphs = new Paragraphs();
+		mParagraphs = new Paragraphs ();
 		mHTMLText = inHTMLText;
 		
 		if (!mHTMLMode) {
-			var domElement:Dynamic = Browser.document.createElement("div");
+			
+			var domElement:Dynamic = Browser.document.createElement ("div");
 			
 			if (background || border) {
 				
-				domElement.style.width=mWidth+"px";
-				domElement.style.height=mHeight+"px";
+				domElement.style.width = mWidth + "px";
+				domElement.style.height = mHeight + "px";
 				
 			}
 			
 			if (background) {
 				
-				domElement.style.backgroundColor="#"+StringTools.hex(backgroundColor,6);
+				domElement.style.backgroundColor = "#" + StringTools.hex (backgroundColor,6);
 				
 			}
 			
 			if (border) {
 				
-				domElement.style.border="1px solid #"+StringTools.hex(borderColor,6);
+				domElement.style.border = "1px solid #" + StringTools.hex (borderColor,6);
 				
 			}
 			
@@ -832,7 +836,7 @@ class TextField extends InteractiveObject {
 			// TODO HAXE: compiler needs to be fixed to link .css files into html header.
 			//
 			
-			domElement.style.color = "#" + StringTools.hex(mTextColour, 6);
+			domElement.style.color = "#" + StringTools.hex (mTextColour, 6);
 			domElement.style.fontFamily = mFace;
 			domElement.style.fontSize = mTextHeight + "px";
 			domElement.style.textAlign = Std.string (mAlign);
@@ -840,52 +844,53 @@ class TextField extends InteractiveObject {
 			var wrapper:CanvasElement = cast domElement;
 			wrapper.innerHTML = inHTMLText;
 			
-			var destination = new Graphics(wrapper);
-			var nmeSurface = nmeGraphics.nmeSurface;
+			var destination = new Graphics (wrapper);
+			var __surface = __graphics.__surface;
 			
-			if (Lib.nmeIsOnStage(nmeSurface)) {
+			if (Lib.__isOnStage (__surface)) {
 				
-				Lib.nmeAppendSurface(wrapper);
-				Lib.nmeCopyStyle(nmeSurface, wrapper);
-				Lib.nmeSwapSurface(nmeSurface, wrapper);
-				Lib.nmeRemoveSurface(nmeSurface);
+				Lib.__appendSurface (wrapper);
+				Lib.__copyStyle (__surface, wrapper);
+				Lib.__swapSurface (__surface, wrapper);
+				Lib.__removeSurface (__surface);
 				
 			}
 			
-			nmeGraphics = destination;
-			nmeGraphics.nmeExtent.width = wrapper.width;
-			nmeGraphics.nmeExtent.height = wrapper.height;
+			__graphics = destination;
+			__graphics.__extent.width = wrapper.width;
+			__graphics.__extent.height = wrapper.height;
 			
 		} else {
-			nmeGraphics.nmeSurface.innerHTML = inHTMLText;
+			
+			__graphics.__surface.innerHTML = inHTMLText;
 			
 		}
 		
 		mHTMLMode = true;
-		RebuildText();
-		nmeInvalidateBounds();
+		RebuildText ();
+		__invalidateBounds ();
 		
 		return mHTMLText;
 		
 	}
 	
 	
-	private function get_maxScrollH():Int { return 0; }
-	private function get_maxScrollV():Int { return 0; }
-	private function get_multiline():Bool { return multiline; }
-	private function set_multiline(value:Bool):Bool { return multiline = value; }
-	private function get_numLines():Int { return 0; }
-	private function get_scrollH():Int { return scrollH; }
-	private function set_scrollH(value:Int):Int { return scrollH = value; }
-	private function get_scrollV():Int { return scrollV; }
-	private function set_scrollV(value:Int):Int { return scrollV = value; }
+	private function get_maxScrollH ():Int { return 0; }
+	private function get_maxScrollV ():Int { return 0; }
+	private function get_multiline ():Bool { return multiline; }
+	private function set_multiline (value:Bool):Bool { return multiline = value; }
+	private function get_numLines ():Int { return 0; }
+	private function get_scrollH ():Int { return scrollH; }
+	private function set_scrollH (value:Int):Int { return scrollH = value; }
+	private function get_scrollV ():Int { return scrollV; }
+	private function set_scrollV (value:Int):Int { return scrollV = value; }
 	
 	
-	public function get_text():String {
+	public function get_text ():String {
 		
 		if (mHTMLMode) {
 			
-			ConvertHTMLToText(false);
+			ConvertHTMLToText (false);
 			
 		}
 		
@@ -894,93 +899,93 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function set_text(inText:String):String {
+	public function set_text (inText:String):String {
 		
-		mText = Std.string(inText);
+		mText = Std.string (inText);
 		//mHTMLText = inText;
 		mHTMLMode = false;
-		RebuildText();
-		nmeInvalidateBounds();
+		RebuildText ();
+		__invalidateBounds ();
 		
 		return mText;
 		
 	}
 	
 	
-	public function get_textColor():Int { return mTextColour; }
-	public function set_textColor(inCol:Int):Int {
+	public function get_textColor ():Int { return mTextColour; }
+	public function set_textColor (inCol:Int):Int {
 		
 		mTextColour = inCol;
-		RebuildText();
+		RebuildText ();
 		return inCol;
 		
 	}
 	
 	
-	public function get_textWidth():Float { return mMaxWidth; }
-	public function get_textHeight():Float { return mMaxHeight; }
+	public function get_textWidth ():Float { return mMaxWidth; }
+	public function get_textHeight ():Float { return mMaxHeight; }
 	
 	
-	public function get_type():String { return mType; }
-	public function set_type(inType:String):String {
+	public function get_type ():String { return mType; }
+	public function set_type (inType:String):String {
 		
 		mType = inType;
-		nmeInputEnabled = (mType == TextFieldType.INPUT);
+		__inputEnabled = (mType == TextFieldType.INPUT);
 		
 		if (mHTMLMode) {
 			
-			if (nmeInputEnabled) {
+			if (__inputEnabled) {
 				
-				Lib.nmeSetContentEditable(nmeGraphics.nmeSurface, true);
+				Lib.__setContentEditable(__graphics.__surface, true);
 				
 			} else {
 				
-				Lib.nmeSetContentEditable(nmeGraphics.nmeSurface, false);
+				Lib.__setContentEditable(__graphics.__surface, false);
 				
 			}
 			
-		} else if (nmeInputEnabled) {
+		} else if (__inputEnabled) {
 			
 			// implicitly convert text to a HTML field, and set contenteditable
-			set_htmlText(StringTools.replace(mText, "\n", "<BR />"));
-			Lib.nmeSetContentEditable(nmeGraphics.nmeSurface, true);
+			set_htmlText (StringTools.replace (mText, "\n", "<BR />"));
+			Lib.__setContentEditable (__graphics.__surface, true);
 			
 		}
 		
 		tabEnabled = (type == TextFieldType.INPUT);
 		
-		Rebuild();
+		Rebuild ();
 		
 		return inType;
 		
 	}
 	
 	
-	override public function get_width():Float {
+	override public function get_width ():Float {
 		
-		return Math.max(mWidth,getBounds(this.stage).width);
+		return Math.max (mWidth, getBounds (this.stage).width);
 		
 	}
 	
 	
-	override public function set_width(inValue:Float):Float {
+	override public function set_width (inValue:Float):Float {
 		
 		if (parent != null) {
 			
-			parent.nmeInvalidateBounds();
+			parent.__invalidateBounds ();
 			
 		}
 		
 		if (_boundsInvalid) {
 			
-			validateBounds();
+			validateBounds ();
 			
 		}
 		
 		if (inValue != mWidth) {
 			
 			mWidth = inValue;
-			Rebuild();
+			Rebuild ();
 			
 		}
 		
@@ -989,15 +994,15 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	public function get_wordWrap():Bool {
+	public function get_wordWrap ():Bool {
 		
 		return wordWrap;
 		
 	}
-	public function set_wordWrap(inWordWrap:Bool):Bool {
+	public function set_wordWrap (inWordWrap:Bool):Bool {
 		
 		wordWrap = inWordWrap;
-		Rebuild();
+		Rebuild ();
 		return wordWrap;
 		
 	}
@@ -1016,10 +1021,10 @@ enum FontInstanceMode {
 class FontInstance {
 	
 	
-	public var height(get_height, null):Int;
+	public var height (get_height, null):Int;
 	public var mTryFreeType:Bool;
 	
-	private static var mSolidFonts = new Map<String, FontInstance>();
+	private static var mSolidFonts = new Map<String, FontInstance> ();
 	
 	private var mMode:FontInstanceMode;
 	private var mColour:Int;
@@ -1030,7 +1035,7 @@ class FontInstance {
 	private var mCacheAsBitmap:Bool;
 	
 	
-	private function new(inFont:Font, inHeight:Int) {
+	private function new (inFont:Font, inHeight:Int) {
 		
 		mFont = inFont;
 		mHeight = inHeight;
@@ -1041,10 +1046,10 @@ class FontInstance {
 	}
 	
 	
-	static public function CreateSolid(inFace:String, inHeight:Int, inColour:Int, inAlpha:Float):FontInstance {
+	static public function CreateSolid (inFace:String, inHeight:Int, inColour:Int, inAlpha:Float):FontInstance {
 		
 		var id = "SOLID:" + inFace+ ":" + inHeight + ":" + inColour + ":" + inAlpha;
-		var f:FontInstance =  mSolidFonts.get(id);
+		var f:FontInstance =  mSolidFonts.get (id);
 		
 		if (f != null) {
 			
@@ -1052,8 +1057,8 @@ class FontInstance {
 			
 		}
 		
-		var font:Font = new Font();
-		font.nmeSetScale(inHeight);
+		var font:Font = new Font ();
+		font.__setScale (inHeight);
 		font.fontName = inFace;
 		
 		if (font == null) {
@@ -1062,31 +1067,23 @@ class FontInstance {
 			
 		}
 		
-		f = new FontInstance(font, inHeight);
-		f.SetSolid(inColour, inAlpha);
-		mSolidFonts.set(id, f);
+		f = new FontInstance (font, inHeight);
+		f.SetSolid (inColour, inAlpha);
+		mSolidFonts.set (id, f);
 		
 		return f;
 		
 	}
 	
 	
-	public function GetFace():String {
+	public function GetFace ():String {
 		
 		return mFont.fontName;
 		
 	}
 	
 	
-	public function nmeGetAdvance(inChar:Int):Int {
-		
-		if (mFont == null) return 0;
-		return mFont.nmeGetAdvance(inChar, mHeight);
-		
-	}
-	
-	
-	private function SetSolid(inCol:Int, inAlpha:Float):Void {
+	private function SetSolid (inCol:Int, inAlpha:Float):Void {
 		
 		mColour = inCol;
 		mAlpha = inAlpha;
@@ -1095,19 +1092,27 @@ class FontInstance {
 	}
 	
 	
-	public function RenderChar(inGraphics:Graphics, inGlyph:Int, inX:Int, inY:Int):Void {
+	public function RenderChar (inGraphics:Graphics, inGlyph:Int, inX:Int, inY:Int):Void {
 		
-		inGraphics.nmeClearLine();
-		inGraphics.beginFill(mColour, mAlpha);
-		mFont.nmeRender(inGraphics, inGlyph, inX, inY, mTryFreeType);
-		inGraphics.endFill();
+		inGraphics.__clearLine ();
+		inGraphics.beginFill (mColour, mAlpha);
+		mFont.__render (inGraphics, inGlyph, inX, inY, mTryFreeType);
+		inGraphics.endFill ();
 		
 	}
 	
 	
-	public function toString():String {
+	public function toString ():String {
 		
 		return "FontInstance:" + mFont + ":" + mColour + "(" + mGlyphs.length + ")";
+		
+	}
+	
+	
+	public function __getAdvance (inChar:Int):Int {
+		
+		if (mFont == null) return 0;
+		return mFont.__getAdvance (inChar, mHeight);
 		
 	}
 	
@@ -1119,7 +1124,7 @@ class FontInstance {
 	
 	
 	
-	private function get_height():Int {
+	private function get_height ():Int {
 		
 		return mHeight;
 		
@@ -1180,6 +1185,3 @@ typedef RowChar = {
 
 
 typedef RowChars = Array<RowChar>;
-
-
-#end

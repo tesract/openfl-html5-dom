@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 class BitmapFilterQuality {
@@ -9,6 +8,3 @@ class BitmapFilterQuality {
 	public static var LOW = 1;
 	
 }
-
-
-#end

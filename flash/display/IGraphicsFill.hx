@@ -1,10 +1,9 @@
 package flash.display;
-#if js
 
 
 interface IGraphicsFill {
 	
-	var nmeGraphicsFillType(default, null):GraphicsFillType;
+	var __graphicsFillType (default, null):GraphicsFillType;
 	
 }
 
@@ -15,6 +14,3 @@ interface IGraphicsFill {
 	GRADIENT_FILL;
 	
 }
-
-
-#end

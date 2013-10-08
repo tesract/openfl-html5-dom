@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.IGraphicsData;
@@ -12,13 +11,14 @@ class GraphicsStroke implements IGraphicsData implements IGraphicsStroke {
 	public var fill:IGraphicsFill;
 	public var joints:JointStyle;
 	public var miterLimit:Float;
-	public var nmeGraphicsDataType(default,null):GraphicsDataType;
 	public var pixelHinting:Bool;
 	public var scaleMode:LineScaleMode;
 	public var thickness:Float;
 	
+	public var __graphicsDataType (default, null):GraphicsDataType;
 	
-	public function new(thickness:Float = 0.0, pixelHinting:Bool = false, scaleMode:LineScaleMode = null, caps:CapsStyle = null, joints:JointStyle = null, miterLimit:Float = 3, fill:IGraphicsFill = null) {
+	
+	public function new (thickness:Float = 0.0, pixelHinting:Bool = false, scaleMode:LineScaleMode = null, caps:CapsStyle = null, joints:JointStyle = null, miterLimit:Float = 3, fill:IGraphicsFill = null) {
 		
 		this.caps = caps != null ? caps : null;
 		this.fill = fill;
@@ -27,12 +27,9 @@ class GraphicsStroke implements IGraphicsData implements IGraphicsStroke {
 		this.pixelHinting = pixelHinting;
 		this.scaleMode = scaleMode != null ? scaleMode : null;
 		this.thickness = thickness;
-		this.nmeGraphicsDataType = STROKE;
+		this.__graphicsDataType = STROKE;
 		
 	}
 	
 	
 }
-
-
-#end

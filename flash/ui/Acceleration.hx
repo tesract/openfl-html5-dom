@@ -1,5 +1,4 @@
 package flash.ui;
-#if js
 
 
 typedef Acceleration = {
@@ -9,6 +8,3 @@ typedef Acceleration = {
 	z:Float 
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.accessibility.AccessibilityProperties;
@@ -43,92 +42,90 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	public var alpha:Float;
 	public var blendMode:BlendMode;
 	public var cacheAsBitmap:Bool;
-	public var filters(get_filters, set_filters):Array<Dynamic>;
-	public var height(get_height, set_height):Float;
+	public var filters (get_filters, set_filters):Array<Dynamic>;
+	public var height (get_height, set_height):Float;
 	public var loaderInfo:LoaderInfo;
-	public var mask(get_mask, set_mask):DisplayObject;
-	public var mouseX(get_mouseX, never):Float;
-	public var mouseY(get_mouseY, never):Float;
+	public var mask (get_mask, set_mask):DisplayObject;
+	public var mouseX (get_mouseX, never):Float;
+	public var mouseY (get_mouseY, never):Float;
 	public var name:String;
-	public var nmeCombinedVisible(default, set_nmeCombinedVisible):Bool;
-	public var parent(default, set_parent):DisplayObjectContainer;
-	public var rotation(get_rotation, set_rotation):Float;
+	public var parent (default, set_parent):DisplayObjectContainer;
+	public var rotation (get_rotation, set_rotation):Float;
 	public var scale9Grid:Rectangle;
-	public var scaleX(get_scaleX, set_scaleX):Float;
-	public var scaleY(get_scaleY, set_scaleY):Float;
-	public var scrollRect(get_scrollRect, set_scrollRect):Rectangle;
-	public var stage(get_stage, never):Stage;
-	public var transform(default, set_transform):Transform;
-	public var visible(get_visible, set_visible):Bool;
-	public var width(get_width, set_width):Float;
-	public var x(get_x, set_x):Float;
-	public var y(get_y, set_y):Float;
+	public var scaleX (get_scaleX, set_scaleX):Float;
+	public var scaleY (get_scaleY, set_scaleY):Float;
+	public var scrollRect (get_scrollRect, set_scrollRect):Rectangle;
+	public var stage (get_stage, never):Stage;
+	public var transform (default, set_transform):Transform;
+	public var visible (get_visible, set_visible):Bool;
+	public var width (get_width, set_width):Float;
+	public var x (get_x, set_x):Float;
+	public var y (get_y, set_y):Float;
 	
-	private var nmeBoundsRect:Rectangle;
-	private var nmeFilters:Array<BitmapFilter>;
-	private var nmeHeight:Float;
-	private var nmeMask:DisplayObject;
-	private var nmeMaskingObj:DisplayObject;
-	private var nmeRotation:Float;
-	private var nmeScaleX:Float;
-	private var nmeScaleY:Float;
-	private var nmeScrollRect:Rectangle;
-	private var nmeVisible:Bool;
-	private var nmeWidth:Float;
-	private var nmeX:Float;
-	private var nmeY:Float;
+	public var __combinedVisible (default, set___combinedVisible):Bool;
 	
-	private var _bottommostSurface(get__bottommostSurface, null):Element;
-	private var _boundsInvalid(get__boundsInvalid, never):Bool;
+	private var __boundsRect:Rectangle;
+	private var __filters:Array<BitmapFilter>;
+	private var __height:Float;
+	private var __mask:DisplayObject;
+	private var __maskingObj:DisplayObject;
+	private var __rotation:Float;
+	private var __scaleX:Float;
+	private var __scaleY:Float;
+	private var __scrollRect:Rectangle;
+	private var __visible:Bool;
+	private var __width:Float;
+	private var __x:Float;
+	private var __y:Float;
+	private var _bottommostSurface (get__bottommostSurface, null):Element;
+	private var _boundsInvalid (get__boundsInvalid, never):Bool;
 	private var _fullScaleX:Float;
 	private var _fullScaleY:Float;
-	private var _matrixChainInvalid(get__matrixChainInvalid, never):Bool;
-	private var _matrixInvalid(get__matrixInvalid, never):Bool;
-	private var _nmeId:String;
-	private var _nmeRenderFlags:Int;
-	private var _topmostSurface(get__topmostSurface, null):Element;
-		
-	//scrollRect divs
+	private var _matrixChainInvalid (get__matrixChainInvalid, never):Bool;
+	private var _matrixInvalid (get__matrixInvalid, never):Bool;
+	private var ___id:String;
+	private var ___renderFlags:Int;
+	private var _topmostSurface (get__topmostSurface, null):Element;
 	private var _srWindow : DivElement;
 	private var _srAxes   : DivElement;
 
 	
-	public function new() {
+	public function new () {
 		
-		super(null);
+		super (null);
 		
-		_nmeId = Uuid.uuid();
+		___id = Uuid.uuid ();
 		parent = null;
 		
 		// initialize transform
-		this.transform = new Transform(this);
-		nmeX =  0.0;
-		nmeY = 0.0;
-		nmeScaleX = 1.0;
-		nmeScaleY = 1.0;
-		nmeRotation = 0.0;
-		nmeWidth = 0.0;
-		nmeHeight = 0.0;
+		this.transform = new Transform (this);
+		__x =  0.0;
+		__y = 0.0;
+		__scaleX = 1.0;
+		__scaleY = 1.0;
+		__rotation = 0.0;
+		__width = 0.0;
+		__height = 0.0;
 		
 		// initialize graphics metadata
 		visible = true;
 		alpha = 1.0;
-		nmeFilters = new Array<BitmapFilter>();
-		nmeBoundsRect = new Rectangle();
+		__filters = new Array<BitmapFilter> ();
+		__boundsRect = new Rectangle ();
 		
-		nmeScrollRect = null;
-		nmeMask = null;
-		nmeMaskingObj = null;
-		nmeCombinedVisible = visible;
+		__scrollRect = null;
+		__mask = null;
+		__maskingObj = null;
+		__combinedVisible = visible;
 		
 	}
 	
 	
-	public override function dispatchEvent(event:Event):Bool {
+	public override function dispatchEvent (event:Event):Bool {
 		
-		var result = nmeDispatchEvent(event);
+		var result = __dispatchEvent (event);
 		
-		if (event.nmeGetIsCancelled()) {
+		if (event.__getIsCancelled ()) {
 			
 			return true;
 			
@@ -136,7 +133,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (event.bubbles && parent != null) {
 			
-			parent.dispatchEvent(event);
+			parent.dispatchEvent (event);
 			
 		}
 		
@@ -145,57 +142,57 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	public function drawToSurface(inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
+	public function drawToSurface (inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
 		
 		var oldAlpha = alpha;
 		alpha = 1;
-		nmeRender(inSurface, clipRect);
+		__render (inSurface, clipRect);
 		alpha = oldAlpha;
 		
 	}
 	
 	
-	public function getBounds(targetCoordinateSpace:DisplayObject):Rectangle {
+	public function getBounds (targetCoordinateSpace:DisplayObject):Rectangle {
 		
-		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
-		if (_boundsInvalid) validateBounds();
+		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
+		if (_boundsInvalid) validateBounds ();
 		
-		var m = nmeGetFullMatrix();
+		var m = __getFullMatrix ();
 		
 		// perhaps inverse should be stored and updated lazily?
 		if (targetCoordinateSpace != null) {
 			
 			// will be null when target space is stage and this is not on stage
-			m.concat(targetCoordinateSpace.nmeGetFullMatrix().invert());
+			m.concat(targetCoordinateSpace.__getFullMatrix ().invert ());
 			
 		}
 		
-		var rect = nmeBoundsRect.transform(m);	// transform does cloning
+		var rect = __boundsRect.transform (m);	// transform does cloning
 		return rect;
 		
 	}
 	
 	
-	public function getRect(targetCoordinateSpace:DisplayObject):Rectangle {
+	public function getRect (targetCoordinateSpace:DisplayObject):Rectangle {
 		
 		// should not account for stroke widths, but is that possible?
-		return getBounds(targetCoordinateSpace);
+		return getBounds (targetCoordinateSpace);
 		
 	}
 	
 	
-	private function getScreenBounds():Rectangle {
+	private function getScreenBounds ():Rectangle {
 		
-		if (_boundsInvalid) validateBounds();
-		return nmeBoundsRect.clone();
+		if (_boundsInvalid) validateBounds ();
+		return __boundsRect.clone ();
 		
 	}
 	
 	
-	private inline function getSurfaceTransform(gfx:Graphics):Matrix {
+	private inline function getSurfaceTransform (gfx:Graphics):Matrix {
 		
-		var extent = gfx.nmeExtentWithFilters;
-		var fm = nmeGetFullMatrix();
+		var extent = gfx.__extentWithFilters;
+		var fm = __getFullMatrix ();
 		
 		/*
 		var tx = fm.tx;
@@ -207,37 +204,37 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		fm.ty = ty;
 		*/
 		
-		fm.nmeTranslateTransformed(extent.topLeft);
+		fm.__translateTransformed (extent.topLeft);
 		return fm;
 		
 	}
 	
 	
-	public function globalToLocal(inPos:Point):Point {
+	public function globalToLocal (inPos:Point):Point {
 		
-		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
-		return nmeGetFullMatrix().invert().transformPoint(inPos);
-		
-	}
-	
-	
-	private inline function handleGraphicsUpdated(gfx:Graphics):Void {
-		
-		nmeInvalidateBounds();
-		nmeApplyFilters(gfx.nmeSurface);
-		nmeSetFlag(TRANSFORM_INVALID);
+		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
+		return __getFullMatrix ().invert ().transformPoint (inPos);
 		
 	}
 	
 	
-	public function hitTestObject(obj:DisplayObject):Bool {
+	private inline function handleGraphicsUpdated (gfx:Graphics):Void {
+		
+		__invalidateBounds ();
+		__applyFilters (gfx.__surface);
+		__setFlag (TRANSFORM_INVALID);
+		
+	}
+	
+	
+	public function hitTestObject (obj:DisplayObject):Bool {
 		
 		if (obj != null && obj.parent != null && parent != null) {
 			
-			var currentBounds = getBounds(this);
-			var targetBounds = obj.getBounds(this);
+			var currentBounds = getBounds (this);
+			var targetBounds = obj.getBounds (this);
 			
-			return currentBounds.intersects(targetBounds);
+			return currentBounds.intersects (targetBounds);
 			
 		}
 		
@@ -246,23 +243,23 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	public function hitTestPoint(x:Float, y:Float, shapeFlag:Bool = false):Bool {
+	public function hitTestPoint (x:Float, y:Float, shapeFlag:Bool = false):Bool {
 		
 		var boundingBox = (shapeFlag == null ? true : !shapeFlag);
 		
 		if (!boundingBox) {
 			
-			return nmeGetObjectUnderPoint(new Point(x, y)) != null;
+			return __getObjectUnderPoint (new Point (x, y)) != null;
 			
 		} else {
 			
-			var gfx = nmeGetGraphics();
+			var gfx = __getGraphics ();
 			
 			if (gfx != null) {
 				
-				var extX = gfx.nmeExtent.x;
-				var extY = gfx.nmeExtent.y;
-				var local = globalToLocal(new Point(x, y));
+				var extX = gfx.__extent.x;
+				var extY = gfx.__extent.y;
+				var local = globalToLocal (new Point (x, y));
 				
 				if (local.x - extX < 0 || local.y - extY < 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) {
 					
@@ -283,44 +280,92 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private inline function invalidateGraphics():Void {
+	private inline function invalidateGraphics ():Void {
 		
-		var gfx = nmeGetGraphics();
-		if (gfx != null) gfx.nmeInvalidate();
-		
-	}
-	
-	
-	public function localToGlobal(point:Point):Point {
-		
-		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
-		return nmeGetFullMatrix().transformPoint(point);
+		var gfx = __getGraphics ();
+		if (gfx != null) gfx.__invalidate ();
 		
 	}
 	
 	
-	private function nmeAddToStage(newParent:DisplayObjectContainer, beforeSibling:DisplayObject = null):Void {
+	public function localToGlobal (point:Point):Point {
 		
-		var gfx = nmeGetGraphics();
+		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
+		return __getFullMatrix ().transformPoint (point);
+		
+	}
+	
+	
+	private function setSurfaceVisible (inValue:Bool):Void {
+		
+		var gfx = __getGraphics ();
+		
+		if (gfx != null && gfx.__surface != null) {
+			
+			Lib.__setSurfaceVisible (gfx.__surface, inValue);
+			
+		}
+		
+	}
+	
+	
+	override public function toString ():String {
+		
+		return "[DisplayObject name=" + this.name + " id=" + ___id + "]";
+		
+	}
+	
+	
+	private function validateBounds ():Void {
+		
+		if (_boundsInvalid) {
+			
+			var gfx = __getGraphics ();
+			
+			if (gfx == null) {
+				
+				__boundsRect.x = x;
+				__boundsRect.y = y;
+				__boundsRect.width = 0;
+				__boundsRect.height = 0;
+				
+			} else {
+				
+				__boundsRect = gfx.__extent.clone ();
+				__setDimensions ();
+				gfx.boundsDirty = false;
+				
+			}
+			
+			__clearFlag (BOUNDS_INVALID);
+			
+		}
+		
+	}
+	
+	
+	private function __addToStage (newParent:DisplayObjectContainer, beforeSibling:DisplayObject = null):Void {
+		
+		var gfx = __getGraphics ();
 		if (gfx == null) return;
 		
-		if (newParent.nmeGetGraphics() != null) {
+		if (newParent.__getGraphics () != null) {
 			
-			Lib.nmeSetSurfaceId(gfx.nmeSurface, _nmeId);
+			Lib.__setSurfaceId (gfx.__surface, ___id);
 			
-			if (beforeSibling != null && beforeSibling.nmeGetGraphics() != null) {
+			if (beforeSibling != null && beforeSibling.__getGraphics () != null) {
 				
-				Lib.nmeAppendSurface(gfx.nmeSurface, beforeSibling._bottommostSurface);
+				Lib.__appendSurface (gfx.__surface, beforeSibling._bottommostSurface);
 				
 			} else {
 				
 				var stageChildren = [];
 				
-				for (child in newParent.nmeChildren) {
+				for (child in newParent.__children) {
 					
 					if (child.stage != null) {
 						
-						stageChildren.push(child);
+						stageChildren.push (child);
 						
 					}
 					
@@ -328,20 +373,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				
 				if (stageChildren.length < 1) {
 					
-					Lib.nmeAppendSurface(gfx.nmeSurface, null, newParent._topmostSurface);
+					Lib.__appendSurface (gfx.__surface, null, newParent._topmostSurface);
 					
 				} else {
 					
 					var nextSibling = stageChildren[stageChildren.length - 1];
 					var container;
 					
-					while (Std.is(nextSibling, DisplayObjectContainer)) {
+					while (Std.is (nextSibling, DisplayObjectContainer)) {
 						
-						container = cast(nextSibling, DisplayObjectContainer);
+						container = cast (nextSibling, DisplayObjectContainer);
 						
 						if (container.numChildren > 0) {
 							
-							nextSibling = container.nmeChildren[container.numChildren - 1];
+							nextSibling = container.__children[container.numChildren - 1];
 							
 						} else {
 							
@@ -351,13 +396,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 						
 					}
 					
-					if (nextSibling.nmeGetGraphics() != gfx) {
+					if (nextSibling.__getGraphics () != gfx) {
 						
-						Lib.nmeAppendSurface(gfx.nmeSurface, null, nextSibling._topmostSurface);
+						Lib.__appendSurface (gfx.__surface, null, nextSibling._topmostSurface);
 						
 					} else {
 						
-						Lib.nmeAppendSurface(gfx.nmeSurface);
+						Lib.__appendSurface (gfx.__surface);
 						
 					}
 					
@@ -365,34 +410,34 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				
 			}
 			
-			Lib.nmeSetSurfaceTransform(gfx.nmeSurface, getSurfaceTransform(gfx));
+			Lib.__setSurfaceTransform (gfx.__surface, getSurfaceTransform(gfx));
 			
 		} else {
 			
 			if (newParent.name == Stage.NAME) { // only stage is allowed to add to a parent with no context
 				
-				Lib.nmeAppendSurface(gfx.nmeSurface);
+				Lib.__appendSurface (gfx.__surface);
 				
 			}
 			
 		}
 		
-		if (nmeIsOnStage()) {
-			this.nmeSrUpdateDivs();			
-			var evt = new Event(Event.ADDED_TO_STAGE, false, false);
-			dispatchEvent(evt);
+		if (__isOnStage ()) {
+			this.__srUpdateDivs ();			
+			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
+			dispatchEvent (evt);
 			
 		}
 	}
 	
 	
-	private inline function nmeApplyFilters(surface:CanvasElement):Void {
+	private inline function __applyFilters (surface:CanvasElement):Void {
 		
-		if (nmeFilters != null) {
+		if (__filters != null) {
 			
-			for (filter in nmeFilters) {
+			for (filter in __filters) {
 				
-				filter.nmeApplyFilter(surface);
+				filter.__applyFilter (surface);
 				
 			}
 			
@@ -401,21 +446,28 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function nmeBroadcast(event:Event):Void {
+	private function __broadcast (event:Event):Void {
 		
-		nmeDispatchEvent(event);
-		
-	}
-	
-	
-	private inline function nmeClearFlag(mask:Int):Void {
-		
-		_nmeRenderFlags &= ~mask;
+		__dispatchEvent (event);
 		
 	}
 	
 	
-	private function nmeDispatchEvent(event:Event):Bool {
+	private inline function __clearFlag (mask:Int):Void {
+		
+		___renderFlags &= ~mask;
+		
+	}
+	
+	
+	@:noCompletion public function __contains (child:DisplayObject):Bool {
+		
+		return false;
+		
+	}
+	
+	
+	private function __dispatchEvent (event:Event):Bool {
 		
 		if (event.target == null) {
 			
@@ -424,18 +476,18 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 		event.currentTarget = this;
-		return super.dispatchEvent(event);
+		return super.dispatchEvent (event);
 		
 	}
 	
 	
-	private function nmeFireEvent(event:Event):Void {
+	private function __fireEvent (event:Event):Void {
 		
 		var stack:Array<InteractiveObject> = [];
 		
 		if (this.parent != null) {
 			
-			this.parent.nmeGetInteractiveObjectStack(stack);
+			this.parent.__getInteractiveObjectStack (stack);
 			
 		}
 		
@@ -444,15 +496,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		if (l > 0) {
 			
 			// First, the "capture" phase ...
-			event.nmeSetPhase(EventPhase.CAPTURING_PHASE);
-			stack.reverse();
+			event.__setPhase (EventPhase.CAPTURING_PHASE);
+			stack.reverse ();
 			
 			for (obj in stack) {
 				
 				event.currentTarget = obj;
-				obj.nmeDispatchEvent(event);
+				obj.__dispatchEvent (event);
 				
-				if (event.nmeGetIsCancelled()) {
+				if (event.__getIsCancelled ()) {
 					
 					return;
 					
@@ -463,11 +515,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 		// Next, the "target"
-		event.nmeSetPhase(EventPhase.AT_TARGET);
+		event.__setPhase (EventPhase.AT_TARGET);
 		event.currentTarget = this;
-		nmeDispatchEvent(event);
+		__dispatchEvent (event);
 		
-		if (event.nmeGetIsCancelled()) {
+		if (event.__getIsCancelled ()) {
 			
 			return;
 			
@@ -476,15 +528,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		// Last, the "bubbles" phase
 		if (event.bubbles) {
 			
-			event.nmeSetPhase(EventPhase.BUBBLING_PHASE);
-			stack.reverse();
+			event.__setPhase (EventPhase.BUBBLING_PHASE);
+			stack.reverse ();
 			
 			for (obj in stack) {
 				
 				event.currentTarget = obj;
-				obj.nmeDispatchEvent(event);
+				obj.__dispatchEvent (event);
 				
-				if (event.nmeGetIsCancelled()) {
+				if (event.__getIsCancelled ()) {
 					
 					return;
 					
@@ -497,66 +549,66 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	public inline function nmeGetFullMatrix(localMatrix:Matrix = null):Matrix {
+	public inline function __getFullMatrix (localMatrix:Matrix = null):Matrix {
 		
-		return transform.nmeGetFullMatrix(localMatrix);
+		return transform.__getFullMatrix (localMatrix);
 		
 	}
 	
 	
-	private function nmeGetGraphics():Graphics {
+	private function __getGraphics ():Graphics {
 		
 		return null;
 		
 	}
 	
 	
-	private function nmeGetInteractiveObjectStack(outStack:Array<InteractiveObject>):Void {
+	private function __getInteractiveObjectStack (outStack:Array<InteractiveObject>):Void {
 		
 		var io:InteractiveObject = cast this;
 		
 		if (io != null) {
 			
-			outStack.push(io);
+			outStack.push (io);
 			
 		}
 		
 		if (this.parent != null) {
 			
-			this.parent.nmeGetInteractiveObjectStack(outStack);
+			this.parent.__getInteractiveObjectStack (outStack);
 			
 		}
 		
 	}
 	
 	
-	private inline function nmeGetMatrix():Matrix {
+	private inline function __getMatrix ():Matrix {
 		
 		return transform.matrix;
 		
 	}
 	
 	
-	private function nmeGetObjectUnderPoint(point:Point):DisplayObject {
+	private function __getObjectUnderPoint (point:Point):DisplayObject {
 		
 		if (!visible) return null;
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		
 		if (gfx != null) {
 			
-			gfx.nmeRender ();
+			gfx.__render ();
 			
-			var extX = gfx.nmeExtent.x;
-			var extY = gfx.nmeExtent.y;
-			var local = globalToLocal(point);
+			var extX = gfx.__extent.x;
+			var extY = gfx.__extent.y;
+			var local = globalToLocal (point);
 			
 			if (local.x - extX <= 0 || local.y - extY <= 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) return null;
 			
-			//switch (stage.nmePointInPathMode) {
+			//switch (stage.__pointInPathMode) {
 				//
 				//case USER_SPACE:
 					
-					if (gfx.nmeHitTest(local.x, local.y)) {
+					if (gfx.__hitTest (local.x, local.y)) {
 						
 						return cast this;
 						
@@ -564,8 +616,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				
 				//case DEVICE_SPACE:
 					//
-					//if (gfx.nmeHitTest(local.x * scaleX, local.y * scaleY)) {
-					//if (gfx.nmeHitTest(local.x, local.y)) {
+					//if (gfx.__hitTest(local.x * scaleX, local.y * scaleY)) {
+					//if (gfx.__hitTest(local.x, local.y)) {
 						//
 						//return cast this;
 						//
@@ -580,14 +632,14 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private inline function nmeGetSurface():CanvasElement {
+	private inline function __getSurface ():CanvasElement {
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		var surface = null;
 		
 		if (gfx != null) {
 			
-			surface = gfx.nmeSurface;
+			surface = gfx.__surface;
 			
 		}
 		
@@ -596,7 +648,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private inline function nmeInvalidateBounds():Void {
+	private inline function __invalidateBounds ():Void {
 		
 		/**
 		 * Bounds are invalidated when:
@@ -612,18 +664,18 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		//TODO :: adjust so that parent is only invalidated if it's bounds are changed by this change
 		
-		nmeSetFlag(BOUNDS_INVALID);
+		__setFlag (BOUNDS_INVALID);
 		
 		if (parent != null) {
 			
-			parent.nmeSetFlag(BOUNDS_INVALID);
+			parent.__setFlag (BOUNDS_INVALID);
 			
 		}
 		
 	}
 	
 	
-	public function nmeInvalidateMatrix(local:Bool = false):Void {
+	public function __invalidateMatrix (local:Bool = false):Void {
 		
 		/**
 		 * Matrices are invalidated when:
@@ -634,22 +686,22 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (local) {
 			
-			nmeSetFlag(MATRIX_INVALID); // invalidate the local matrix
+			__setFlag (MATRIX_INVALID); // invalidate the local matrix
 			
 		} else {
 			
-			nmeSetFlag(MATRIX_CHAIN_INVALID); // a parent has an invalid matrix
+			__setFlag (MATRIX_CHAIN_INVALID); // a parent has an invalid matrix
 			
 		}
 		
 	}
 	
 	
-	private function nmeIsOnStage():Bool {
+	private function __isOnStage ():Bool {
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		
-		if (gfx != null && Lib.nmeIsOnStage(gfx.nmeSurface)) {
+		if (gfx != null && Lib.__isOnStage (gfx.__surface)) {
 			
 			return true;
 			
@@ -660,41 +712,41 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	public function nmeMatrixOverridden():Void {
+	public function __matrixOverridden ():Void {
 		
-		nmeX = transform.matrix.tx;
-		nmeY = transform.matrix.ty;
+		__x = transform.matrix.tx;
+		__y = transform.matrix.ty;
 		
-		nmeSetFlag(MATRIX_OVERRIDDEN);
-		nmeSetFlag(MATRIX_INVALID);
-		nmeInvalidateBounds();
+		__setFlag (MATRIX_OVERRIDDEN);
+		__setFlag (MATRIX_INVALID);
+		__invalidateBounds ();
 		
 	}
 	
 	
-	private function nmeRemoveFromStage():Void {
+	private function __removeFromStage ():Void {
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		
-		if (gfx != null && Lib.nmeIsOnStage(gfx.nmeSurface)) {
+		if (gfx != null && Lib.__isOnStage (gfx.__surface)) {
 			
-			Lib.nmeRemoveSurface(gfx.nmeSurface);
-			var evt = new Event(Event.REMOVED_FROM_STAGE, false, false);
-			dispatchEvent(evt);
+			Lib.__removeSurface (gfx.__surface);
+			var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
+			dispatchEvent (evt);
 			
 		}
 		
 	}
 	
 	
-	private function nmeRender(inMask:CanvasElement = null, clipRect:Rectangle = null) {
+	private function __render (inMask:CanvasElement = null, clipRect:Rectangle = null) {
 		
-		if (!nmeCombinedVisible) return;
+		if (!__combinedVisible) return;
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		if (gfx == null) return;
 		
-		if (_matrixInvalid || _matrixChainInvalid) nmeValidateMatrix();
+		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
 		
 		/*
 		var clip0:Point = null;
@@ -715,133 +767,133 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		*/
 		
-		if (gfx.nmeRender(inMask, nmeFilters, 1, 1)) {
+		if (gfx.__render (inMask, __filters, 1, 1)) {
 			
-			handleGraphicsUpdated(gfx);
+			handleGraphicsUpdated (gfx);
 			
 		}
 		
-		var fullAlpha:Float = (parent != null ? parent.nmeCombinedAlpha : 1) * alpha;
+		var fullAlpha:Float = (parent != null ? parent.__combinedAlpha : 1) * alpha;
 		
 		if (inMask != null) {
 			
-			var m = getSurfaceTransform(gfx);
-			Lib.nmeDrawToSurface(gfx.nmeSurface, inMask, m, fullAlpha, clipRect);
+			var m = getSurfaceTransform (gfx);
+			Lib.__drawToSurface (gfx.__surface, inMask, m, fullAlpha, clipRect);
 			
 		} else {
 			
-			if (nmeTestFlag(TRANSFORM_INVALID)) {
+			if (__testFlag (TRANSFORM_INVALID)) {
 				
-				var m = getSurfaceTransform(gfx);
-				Lib.nmeSetSurfaceTransform(gfx.nmeSurface, m);
-				nmeClearFlag(TRANSFORM_INVALID);
+				var m = getSurfaceTransform (gfx);
+				Lib.__setSurfaceTransform (gfx.__surface, m);
+				__clearFlag (TRANSFORM_INVALID);
 				
 
-				this.nmeSrUpdateDivs();
-				// this.nmeUpdateParentNode();
+				this.__srUpdateDivs ();
+				// this.__updateParentNode();
 			}
 			
-			Lib.nmeSetSurfaceOpacity(gfx.nmeSurface, fullAlpha);
+			Lib.__setSurfaceOpacity (gfx.__surface, fullAlpha);
 			
 			/*if (clipRect != null) {
 				var rect = new Rectangle();
 				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
 				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-				Lib.nmeSetSurfaceClipping(gfx.nmeSurface, rect);
+				Lib.__setSurfaceClipping(gfx.__surface, rect);
 			}*/
 			
 		}
 
-		// this.nmeUpdateParentNode();
-		// if (this.nmeScrollRect == null) {
-		// 	var pgfx = this.parent.nmeGetGraphics();
-		// 	if (pgfx != null && pgfx.nmeSurface.parentNode != gfx.nmeSurface.parentNode) {
-		// 		pgfx.nmeSurface.parentNode.appendChild(gfx.nmeSurface);
+		// this.__updateParentNode();
+		// if (this.__scrollRect == null) {
+		// 	var pgfx = this.parent.__getGraphics();
+		// 	if (pgfx != null && pgfx.__surface.parentNode != gfx.__surface.parentNode) {
+		// 		pgfx.__surface.parentNode.appendChild(gfx.__surface);
 		// 	}
 		// }
 		
 	}
 	
 	
-	private inline function nmeSetDimensions():Void {
+	private inline function __setDimensions ():Void {
 		
 		if (scale9Grid != null) {
 			
-			nmeBoundsRect.width *= nmeScaleX;
-			nmeBoundsRect.height *= nmeScaleY;
-			nmeWidth = nmeBoundsRect.width;
-			nmeHeight = nmeBoundsRect.height;
+			__boundsRect.width *= __scaleX;
+			__boundsRect.height *= __scaleY;
+			__width = __boundsRect.width;
+			__height = __boundsRect.height;
 			
 		} else {
 			
-			nmeWidth = nmeBoundsRect.width * nmeScaleX;
-			nmeHeight = nmeBoundsRect.height * nmeScaleY;
+			__width = __boundsRect.width * __scaleX;
+			__height = __boundsRect.height * __scaleY;
 			
 		}
 		
 	}
 	
 	
-	private inline function nmeSetFlag(mask:Int):Void {
+	private inline function __setFlag (mask:Int):Void {
 		
-		_nmeRenderFlags |= mask;
+		___renderFlags |= mask;
 		
 	}
 	
 	
-	private inline function nmeSetFlagToValue(mask:Int, value:Bool):Void {
+	private inline function __setFlagToValue (mask:Int, value:Bool):Void {
 		
 		if (value) {
 			
-			_nmeRenderFlags |= mask;
+			___renderFlags |= mask;
 			
 		} else {
 			
-			_nmeRenderFlags &= ~mask;
+			___renderFlags &= ~mask;
 			
 		}
 		
 	}
 	
 	
-	public inline function nmeSetFullMatrix(inValue:Matrix):Matrix {
+	public inline function __setFullMatrix (inValue:Matrix):Matrix {
 		
-		return transform.nmeSetFullMatrix(inValue);
+		return transform.__setFullMatrix (inValue);
 		
 	}
 	
 	
-	private inline function nmeSetMatrix(inValue:Matrix):Matrix {
+	private inline function __setMatrix (inValue:Matrix):Matrix {
 		
-		transform.nmeSetMatrix(inValue);
+		transform.__setMatrix (inValue);
 		return inValue;
 		
 	}
 	
 	
-	private inline function nmeTestFlag(mask:Int):Bool {
+	private inline function __testFlag (mask:Int):Bool {
 		
-		return (_nmeRenderFlags & mask) != 0;
+		return (___renderFlags & mask) != 0;
 		
 	}
 	
 	
-	private function nmeUnifyChildrenWithDOM(lastMoveObj:DisplayObject = null) {
+	private function __unifyChildrenWithDOM (lastMoveObj:DisplayObject = null) {
 		
-		var gfx = nmeGetGraphics();		
+		var gfx = __getGraphics ();		
 
 		if (gfx != null && lastMoveObj != null && this != lastMoveObj) {
 
-			var ogfx = lastMoveObj.nmeGetGraphics();
+			var ogfx = lastMoveObj.__getGraphics ();
 			if (ogfx != null) {
-				Lib.nmeSetSurfaceZIndexAfter(
-					(this.nmeScrollRect == null ? gfx.nmeSurface : this._srWindow), 
+				Lib.__setSurfaceZIndexAfter (
+					(this.__scrollRect == null ? gfx.__surface : this._srWindow), 
 					(
-						lastMoveObj.nmeScrollRect == null
-							? ogfx.nmeSurface 
+						lastMoveObj.__scrollRect == null
+							? ogfx.__surface 
 							: (
 								lastMoveObj == this.parent
-									? ogfx.nmeSurface
+									? ogfx.__surface
 									: lastMoveObj._srWindow
 							)
 					)
@@ -862,110 +914,55 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function nmeValidateMatrix():Void {
+	private function __validateMatrix ():Void {
 		
 		var parentMatrixInvalid = (_matrixChainInvalid && parent != null);
 		
 		if (_matrixInvalid || parentMatrixInvalid) {
 			
-			if (parentMatrixInvalid) parent.nmeValidateMatrix(); // validate parent matrix
-			var m = nmeGetMatrix(); // validate local matrix
+			if (parentMatrixInvalid) parent.__validateMatrix (); // validate parent matrix
+			var m = __getMatrix(); // validate local matrix
 			
-			if (nmeTestFlag(MATRIX_OVERRIDDEN)) {
+			if (__testFlag (MATRIX_OVERRIDDEN)) {
 				
-				nmeClearFlag(MATRIX_INVALID);
+				__clearFlag (MATRIX_INVALID);
 				
 			}
 			
 			if (_matrixInvalid) {
 				
-				m.identity(); // update matrix if necessary
-				m.scale(nmeScaleX, nmeScaleY); // set scale
+				m.identity (); // update matrix if necessary
+				m.scale (__scaleX, __scaleY); // set scale
 			
 				// set rotation if necessary
-				var rad = nmeRotation * Transform.DEG_TO_RAD;
+				var rad = __rotation * Transform.DEG_TO_RAD;
 				if (rad != 0.0) {
 					
-					m.rotate(rad);
+					m.rotate (rad);
 					
 				}
 				
-				m.translate(nmeX, nmeY); // set translation
-				nmeSetMatrix(m);
+				m.translate (__x, __y); // set translation
+				__setMatrix (m);
 				
 			}
 			
-			var cm = nmeGetFullMatrix();
-			var fm = (parent == null ? m : parent.nmeGetFullMatrix(m));
+			var cm = __getFullMatrix ();
+			var fm = (parent == null ? m : parent.__getFullMatrix (m));
 			
 			_fullScaleX = fm._sx;
 			_fullScaleY = fm._sy;
 			
 			if (cm.a != fm.a || cm.b != fm.b || cm.c != fm.c || cm.d != fm.d || cm.tx != fm.tx || cm.ty != fm.ty) {
 				
-				nmeSetFullMatrix(fm);
-				nmeSetFlag(TRANSFORM_INVALID);
+				__setFullMatrix (fm);
+				__setFlag (TRANSFORM_INVALID);
 				
 			}
 			
-			nmeClearFlag(MATRIX_INVALID | MATRIX_CHAIN_INVALID | MATRIX_OVERRIDDEN);
+			__clearFlag (MATRIX_INVALID | MATRIX_CHAIN_INVALID | MATRIX_OVERRIDDEN);
 			
 		}
-		
-	}
-	
-	
-	private function setSurfaceVisible(inValue:Bool):Void {
-		
-		var gfx = nmeGetGraphics();
-		
-		if (gfx != null && gfx.nmeSurface != null) {
-			
-			Lib.nmeSetSurfaceVisible(gfx.nmeSurface, inValue);
-			
-		}
-		
-	}
-	
-	
-	override public function toString():String {
-		
-		return "[DisplayObject name=" + this.name + " id=" + _nmeId + "]";
-		
-	}
-	
-	
-	private function validateBounds():Void {
-		
-		if (_boundsInvalid) {
-			
-			var gfx = nmeGetGraphics();
-			
-			if (gfx == null) {
-				
-				nmeBoundsRect.x = x;
-				nmeBoundsRect.y = y;
-				nmeBoundsRect.width = 0;
-				nmeBoundsRect.height = 0;
-				
-			} else {
-				
-				nmeBoundsRect = gfx.nmeExtent.clone();
-				nmeSetDimensions();
-				gfx.boundsDirty = false;
-				
-			}
-			
-			nmeClearFlag(BOUNDS_INVALID);
-			
-		}
-		
-	}
-	
-	
-	@:noCompletion public function __contains (child:DisplayObject):Bool {
-		
-		return false;
 		
 	}
 	
@@ -977,24 +974,24 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	
-	private function get__bottommostSurface():Element {
+	private function get__bottommostSurface ():Element {
 		
-		var gfx = nmeGetGraphics();
-		if (gfx != null) return gfx.nmeSurface;
+		var gfx = __getGraphics ();
+		if (gfx != null) return gfx.__surface;
 		
 		return null;
 		
 	}
 	
 	
-	private function get_filters():Array<BitmapFilter> {
+	private function get_filters ():Array<BitmapFilter> {
 		
-		if (nmeFilters == null) return [];
-		var result = new Array<BitmapFilter>();
+		if (__filters == null) return [];
+		var result = new Array<BitmapFilter> ();
 		
-		for (filter in nmeFilters) {
+		for (filter in __filters) {
 			
-			result.push(filter.clone());
+			result.push (filter.clone ());
 			
 		}
 		
@@ -1003,37 +1000,37 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private inline function get__boundsInvalid():Bool {
+	private inline function get__boundsInvalid ():Bool {
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		
 		if (gfx == null) {
 			
-			return nmeTestFlag(BOUNDS_INVALID);
+			return __testFlag (BOUNDS_INVALID);
 			
 		} else {
 			
-			return nmeTestFlag(BOUNDS_INVALID) || gfx.boundsDirty;
+			return __testFlag (BOUNDS_INVALID) || gfx.boundsDirty;
 			
 		}
 		
 	}
 	
 	
-	private function set_filters(filters:Array<Dynamic>):Array<Dynamic> {
+	private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
 		
-		var oldFilterCount = (nmeFilters == null) ? 0 : nmeFilters.length;
+		var oldFilterCount = (__filters == null) ? 0 : __filters.length;
 		
 		if (filters == null) {
 			
-			nmeFilters = null;
-			if (oldFilterCount > 0) invalidateGraphics();
+			__filters = null;
+			if (oldFilterCount > 0) invalidateGraphics ();
 			
 		} else {
 			
-			nmeFilters = new Array<BitmapFilter>();
-			for (filter in filters) nmeFilters.push(filter.clone());
-			invalidateGraphics();
+			__filters = new Array<BitmapFilter> ();
+			for (filter in filters) __filters.push (filter.clone ());
+			invalidateGraphics ();
 			
 		}
 		
@@ -1042,41 +1039,41 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_height():Float {
+	private function get_height ():Float {
 		
 		if (_boundsInvalid) {
 			
-			validateBounds();
+			validateBounds ();
 			
 		}
 		
-		return nmeHeight;
+		return __height;
 		
 	}
 	
 	
-	private function set_height(inValue:Float):Float {
+	private function set_height (inValue:Float):Float {
 		
-		if (_boundsInvalid) validateBounds();
-		var h = nmeBoundsRect.height;
+		if (_boundsInvalid) validateBounds ();
+		var h = __boundsRect.height;
 		
-		if (nmeScaleY * h != inValue) {
+		if (__scaleY * h != inValue) {
 			
 			if (h == 0) {
 				
 				// patch to fix recovery from a height of zero
 				
-				nmeScaleY = 1;
-				nmeInvalidateMatrix(true);
-				nmeInvalidateBounds();
-				h = nmeBoundsRect.height;
+				__scaleY = 1;
+				__invalidateMatrix (true);
+				__invalidateBounds ();
+				h = __boundsRect.height;
 				
 			}
 			
 			if (h <= 0) return 0;
-			nmeScaleY = inValue / h;
-			nmeInvalidateMatrix(true);
-			nmeInvalidateBounds();
+			__scaleY = inValue / h;
+			__invalidateMatrix (true);
+			__invalidateBounds ();
 			
 		}
 		
@@ -1085,105 +1082,105 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_mask():DisplayObject {
+	private function get_mask ():DisplayObject {
 		
-		return nmeMask;
-		
-	}
-	
-	
-	private function set_mask(inValue:DisplayObject):DisplayObject {
-		
-		if (nmeMask != null) {
-			
-			nmeMask.nmeMaskingObj = null;
-			
-		}
-		
-		nmeMask = inValue;
-		
-		if (nmeMask != null) {
-			
-			nmeMask.nmeMaskingObj = this;
-			
-		}
-		
-		return nmeMask;
+		return __mask;
 		
 	}
 	
 	
-	private inline function get__matrixChainInvalid():Bool {
+	private function set_mask (inValue:DisplayObject):DisplayObject {
 		
-		return nmeTestFlag(MATRIX_CHAIN_INVALID);
+		if (__mask != null) {
+			
+			__mask.__maskingObj = null;
+			
+		}
+		
+		__mask = inValue;
+		
+		if (__mask != null) {
+			
+			__mask.__maskingObj = this;
+			
+		}
+		
+		return __mask;
+		
+	}
+	
+	
+	private inline function get__matrixChainInvalid ():Bool {
+		
+		return __testFlag (MATRIX_CHAIN_INVALID);
 		
 	}
 	
 	
 	private inline function get__matrixInvalid():Bool {
 		
-		return nmeTestFlag(MATRIX_INVALID);
+		return __testFlag (MATRIX_INVALID);
 		
 	}
 	
 	
-	private function get_mouseX():Float {
+	private function get_mouseX ():Float {
 		
-		return globalToLocal(new Point(stage.mouseX, 0)).x;
-		
-	}
-	
-	
-	private function get_mouseY():Float {
-		
-		return globalToLocal(new Point(0, stage.mouseY)).y;
+		return globalToLocal (new Point (stage.mouseX, 0)).x;
 		
 	}
 	
 	
-	private function set_nmeCombinedVisible(inValue:Bool):Bool {
+	private function get_mouseY ():Float {
 		
-		if (nmeCombinedVisible != inValue) {
+		return globalToLocal (new Point (0, stage.mouseY)).y;
+		
+	}
+	
+	
+	private function set___combinedVisible (inValue:Bool):Bool {
+		
+		if (__combinedVisible != inValue) {
 			
-			nmeCombinedVisible = inValue;
-			setSurfaceVisible(inValue);
+			__combinedVisible = inValue;
+			setSurfaceVisible (inValue);
 			
 		}
 		
-		return nmeCombinedVisible;
+		return __combinedVisible;
 		
 	}
 	
 	
-	private function set_parent(inValue:DisplayObjectContainer):DisplayObjectContainer {
+	private function set_parent (inValue:DisplayObjectContainer):DisplayObjectContainer {
 		
 		if (inValue == this.parent) return inValue;
-		nmeInvalidateMatrix();
+		__invalidateMatrix ();
 		
 		if (this.parent != null) {
 			
-			this.parent.__removeChild(this);
-			this.parent.nmeInvalidateBounds();
+			this.parent.__children.remove (this);
+			this.parent.__invalidateBounds ();
 			
 		}
 		
 		if (inValue != null) {
 			
-			inValue.nmeInvalidateBounds();
+			inValue.__invalidateBounds ();
 			
 		}
 		
 		if (this.parent == null && inValue != null) {
 			
 			this.parent = inValue;
-			var evt = new Event(Event.ADDED, true, false);
+			var evt = new Event (Event.ADDED, true, false);
 			dispatchEvent(evt);
 			
 		} else if (this.parent != null && inValue == null) {
 			
 			this.parent = inValue;
-			var evt = new Event(Event.REMOVED, true, false);
-			dispatchEvent(evt);
+			var evt = new Event (Event.REMOVED, true, false);
+			dispatchEvent (evt);
 			
 		} else {
 			
@@ -1196,42 +1193,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_rotation():Float {
+	private function get_rotation ():Float {
 		
-		return nmeRotation;
-		
-	}
-	
-	
-	private function set_rotation(inValue:Float):Float {
-		
-		if (nmeRotation != inValue) {
-			
-			nmeRotation = inValue;
-			nmeInvalidateMatrix(true);
-			nmeInvalidateBounds();
-			
-		}
-		
-		return inValue;
+		return __rotation;
 		
 	}
 	
 	
-	private function get_scaleX():Float {
+	private function set_rotation (inValue:Float):Float {
 		
-		return nmeScaleX;
-		
-	}
-	
-	
-	private function set_scaleX(inValue:Float):Float {
-		
-		if (nmeScaleX != inValue) {
+		if (__rotation != inValue) {
 			
-			nmeScaleX = inValue;
-			nmeInvalidateMatrix(true);
-			nmeInvalidateBounds();
+			__rotation = inValue;
+			__invalidateMatrix (true);
+			__invalidateBounds ();
 			
 		}
 		
@@ -1240,20 +1215,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_scaleY():Float {
+	private function get_scaleX ():Float {
 		
-		return nmeScaleY;
+		return __scaleX;
 		
 	}
 	
 	
-	private function set_scaleY(inValue:Float):Float {
+	private function set_scaleX (inValue:Float):Float {
 		
-		if (nmeScaleY != inValue) {
+		if (__scaleX != inValue) {
 			
-			nmeScaleY = inValue;
-			nmeInvalidateMatrix(true);
-			nmeInvalidateBounds();
+			__scaleX = inValue;
+			__invalidateMatrix (true);
+			__invalidateBounds ();
 			
 		}
 		
@@ -1262,30 +1237,52 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_scrollRect():Rectangle {
+	private function get_scaleY ():Float {
 		
-		if (nmeScrollRect == null) return null;
-		return nmeScrollRect.clone();
+		return __scaleY;
 		
 	}
 	
 	
-	private function set_scrollRect(inValue:Rectangle):Rectangle {
+	private function set_scaleY (inValue:Float):Float {
 		
-		nmeScrollRect = inValue;
-		this.nmeSrUpdateDivs();
+		if (__scaleY != inValue) {
+			
+			__scaleY = inValue;
+			__invalidateMatrix (true);
+			__invalidateBounds ();
+			
+		}
+		
 		return inValue;
 		
 	}
 	
 	
-	private function get_stage():Stage {
+	private function get_scrollRect ():Rectangle {
 		
-		var gfx = nmeGetGraphics();
+		if (__scrollRect == null) return null;
+		return __scrollRect.clone ();
+		
+	}
+	
+	
+	private function set_scrollRect (inValue:Rectangle):Rectangle {
+		
+		__scrollRect = inValue;
+		this.__srUpdateDivs ();
+		return inValue;
+		
+	}
+	
+	
+	private function get_stage ():Stage {
+		
+		var gfx = __getGraphics ();
 		
 		if (gfx != null) {
 			
-			return Lib.nmeGetStage();
+			return Lib.__getStage ();
 			
 		}
 		
@@ -1294,13 +1291,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get__topmostSurface():Element {
+	private function get__topmostSurface ():Element {
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics ();
 		
 		if (gfx != null) {
 			
-			return gfx.nmeSurface;
+			return gfx.__surface;
 			
 		}
 		
@@ -1309,55 +1306,55 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function set_transform(inValue:Transform):Transform {
+	private function set_transform (inValue:Transform):Transform {
 		
 		this.transform = inValue;
-		nmeX = transform.matrix.tx;
-		nmeY = transform.matrix.ty;
-		nmeInvalidateMatrix(true);
+		__x = transform.matrix.tx;
+		__y = transform.matrix.ty;
+		__invalidateMatrix (true);
 		return inValue;
 		
 	}
 	
 	
-	private function get_visible():Bool {
+	private function get_visible ():Bool {
 		
-		return nmeVisible;
+		return __visible;
 		
 	}
 	
 	
-	private function set_visible(inValue:Bool):Bool {
+	private function set_visible (inValue:Bool):Bool {
 		
-		if (nmeVisible != inValue) {
+		if (__visible != inValue) {
 			
-			nmeVisible = inValue;
-			setSurfaceVisible(inValue);
+			__visible = inValue;
+			setSurfaceVisible (inValue);
 			
 		}
 		
-		return nmeVisible;
+		return __visible;
 		
 	}
 	
 	
-	private function get_x():Float {
+	private function get_x ():Float {
 		
-		return nmeX;
+		return __x;
 		
 	}
 	
 	
-	private function set_x(inValue:Float):Float {
+	private function set_x (inValue:Float):Float {
 		
-		if (nmeX != inValue) {
+		if (__x != inValue) {
 			
-			nmeX = inValue;
-			nmeInvalidateMatrix(true);
+			__x = inValue;
+			__invalidateMatrix (true);
 			
 			if (parent != null) {
 				
-				parent.nmeInvalidateBounds();
+				parent.__invalidateBounds ();
 				
 			}
 			
@@ -1368,23 +1365,23 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_y():Float {
+	private function get_y ():Float {
 		
-		return nmeY;
+		return __y;
 		
 	}
 	
 	
-	private function set_y(inValue:Float):Float {
+	private function set_y (inValue:Float):Float {
 		
-		if (nmeY != inValue) {
+		if (__y != inValue) {
 			
-			nmeY = inValue;
-			nmeInvalidateMatrix(true);
+			__y = inValue;
+			__invalidateMatrix (true);
 			
 			if (parent != null) {
 				
-				parent.nmeInvalidateBounds();
+				parent.__invalidateBounds ();
 				
 			}
 			
@@ -1395,41 +1392,41 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function get_width():Float {
+	private function get_width ():Float {
 		
 		if (_boundsInvalid) {
 			
-			validateBounds();
+			validateBounds ();
 			
 		}
 		
-		return nmeWidth;
+		return __width;
 		
 	}
 	
 	
-	private function set_width(inValue:Float):Float {
+	private function set_width (inValue:Float):Float {
 		
-		if (_boundsInvalid) validateBounds();
-		var w = nmeBoundsRect.width;
+		if (_boundsInvalid) validateBounds ();
+		var w = __boundsRect.width;
 		
-		if (nmeScaleX * w != inValue) {
+		if (__scaleX * w != inValue) {
 			
 			if (w == 0) {
 				
 				// patch to fix recovery from a width of zero
 				
-				nmeScaleX = 1;
-				nmeInvalidateMatrix(true);
-				nmeInvalidateBounds();
-				w = nmeBoundsRect.width;
+				__scaleX = 1;
+				__invalidateMatrix (true);
+				__invalidateBounds ();
+				w = __boundsRect.width;
 				
 			}
 			
 			if (w <= 0) return 0;
-			nmeScaleX = inValue / w;
-			nmeInvalidateMatrix(true);
-			nmeInvalidateBounds();
+			__scaleX = inValue / w;
+			__invalidateMatrix (true);
+			__invalidateBounds ();
 			
 		}
 		
@@ -1437,70 +1434,69 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 	}
 	
-	/**
-	* Get this._srWindow
-	*
-	*/
-	public function nmeGetSrWindow () : DivElement {
-	    return this._srWindow;
-	}//function nmeGetSrWindow()
-
-
-	/**
-	* Update scrollRect divs
-	*
-	*/
-	private function nmeSrUpdateDivs () : Void {
-	    var gfx = nmeGetGraphics();
-	    if ( gfx == null || parent == null ) return;
-
-	    if (nmeScrollRect == null){
-	    	if ( this._srAxes != null && gfx.nmeSurface.parentNode == this._srAxes && this._srWindow.parentNode != null  ) {
-	    		this._srWindow.parentNode.replaceChild(gfx.nmeSurface, this._srWindow);
-	    	}
-	    	return;
-    	}
-
-		//create divs
-		if ( this._srWindow == null ) {
-			this._srWindow = cast Browser.document.createElement('div');
-			this._srAxes   = cast Browser.document.createElement('div');
-
-			this._srWindow.style.setProperty("position", "absolute", "");
-			this._srWindow.style.setProperty("left", "0px", "");
-			this._srWindow.style.setProperty("top", "0px", "");
-			this._srWindow.style.setProperty("width", "0px", "");
-			this._srWindow.style.setProperty("height", "0px", "");
-			this._srWindow.style.setProperty("overflow", "hidden", "");
-
-			this._srAxes.style.setProperty("position", "absolute", "");
-			this._srAxes.style.setProperty("left", "0px", "");
-			this._srAxes.style.setProperty("top", "0px", "");
-
-			this._srWindow.appendChild(this._srAxes);
-		}//if ( divs does not exist )
-
-		var pnt = this.parent.localToGlobal(new Point(this.x, this.y));
-
-		//update div positions
-		this._srWindow.style.left   = pnt.x + "px";
-		this._srWindow.style.top    = pnt.y + "px";
-		this._srWindow.style.width  = nmeScrollRect.width + "px";
-		this._srWindow.style.height = nmeScrollRect.height + "px";
-
-		//scroll axes div
-		this._srAxes.style.left = (-pnt.x - nmeScrollRect.x) + "px";
-		this._srAxes.style.top  = (-pnt.y - nmeScrollRect.y) + "px";
-
-		//add surface to axes div
-		if( gfx.nmeSurface.parentNode != this._srAxes && gfx.nmeSurface.parentNode != null ){
-			gfx.nmeSurface.parentNode.insertBefore(this._srWindow, gfx.nmeSurface);
-			Lib.nmeRemoveSurface(gfx.nmeSurface);
-			this._srAxes.appendChild(gfx.nmeSurface);
+	
+	public function __getSrWindow ():DivElement {
+		
+		return this._srWindow;
+		
+	}
+	
+	
+	private function __srUpdateDivs ():Void {
+		
+		var gfx = __getGraphics ();
+		if (gfx == null || parent == null) return;
+		
+		if (__scrollRect == null) {
+			
+			if (this._srAxes != null && gfx.__surface.parentNode == this._srAxes && this._srWindow.parentNode != null) {
+				
+				this._srWindow.parentNode.replaceChild (gfx.__surface, this._srWindow);
+				
+			}
+			return;
+			
 		}
-	}//function nmeSrUpdateDivs()	
+		
+		if (this._srWindow == null) {
+			
+			this._srWindow = cast Browser.document.createElement ('div');
+			this._srAxes = cast Browser.document.createElement ('div');
+			
+			this._srWindow.style.setProperty ("position", "absolute", "");
+			this._srWindow.style.setProperty ("left", "0px", "");
+			this._srWindow.style.setProperty ("top", "0px", "");
+			this._srWindow.style.setProperty ("width", "0px", "");
+			this._srWindow.style.setProperty ("height", "0px", "");
+			this._srWindow.style.setProperty ("overflow", "hidden", "");
+			
+			this._srAxes.style.setProperty ("position", "absolute", "");
+			this._srAxes.style.setProperty ("left", "0px", "");
+			this._srAxes.style.setProperty ("top", "0px", "");
+			
+			this._srWindow.appendChild (this._srAxes);
+			
+		}
 
+		var pnt = this.parent.localToGlobal (new Point (this.x, this.y));
+		
+		this._srWindow.style.left = pnt.x + "px";
+		this._srWindow.style.top = pnt.y + "px";
+		this._srWindow.style.width = __scrollRect.width + "px";
+		this._srWindow.style.height = __scrollRect.height + "px";
+		
+		this._srAxes.style.left = (-pnt.x - __scrollRect.x) + "px";
+		this._srAxes.style.top = (-pnt.y - __scrollRect.y) + "px";
+		
+		if (gfx.__surface.parentNode != this._srAxes && gfx.__surface.parentNode != null) {
+			
+			gfx.__surface.parentNode.insertBefore (this._srWindow, gfx.__surface);
+			Lib.__removeSurface (gfx.__surface);
+			this._srAxes.appendChild (gfx.__surface);
+			
+		}
+		
+	}
+	
+	
 }
-
-
-#end

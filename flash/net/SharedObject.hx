@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 import flash.errors.Error;
@@ -16,42 +15,42 @@ import js.Browser;
 class SharedObject extends EventDispatcher {
 	
 	
-	public var data(default, null):Dynamic;
-	public var size(get_size, never):Int;
+	public var data (default, null):Dynamic;
+	public var size (get_size, never):Int;
 	
-	private var nmeKey:String;
+	private var __key:String;
 	
 
-	private function new() {
+	private function new () {
 		
-		super();
+		super ();
 		
 	}
 	
 	
-	public function clear():Void {
+	public function clear ():Void {
 		
 		data = { };
 		
 		try {
 			
-			nmeGetLocalStorage().removeItem(nmeKey);
+			__getLocalStorage ().removeItem (__key);
 			
 		} catch (e:Dynamic) {}
 		
-		flush();
+		flush ();
 		
 	}
 	
 	
-	public function flush():SharedObjectFlushStatus {
+	public function flush ():SharedObjectFlushStatus {
 		
-		var data = Serializer.run(data);
+		var data = Serializer.run (data);
 		
 		try {
 			
-			nmeGetLocalStorage().removeItem(nmeKey);
-			nmeGetLocalStorage().setItem(nmeKey, data);
+			__getLocalStorage ().removeItem (__key);
+			__getLocalStorage ().setItem (__key, data);
 			
 		} catch (e:Dynamic) {
 			
@@ -65,7 +64,7 @@ class SharedObject extends EventDispatcher {
 	}
 	
 	
-	public static function getLocal(name:String, localPath:String = null, secure:Bool = false /* note: unsupported */) {
+	public static function getLocal (name:String, localPath:String = null, secure:Bool = false /* note: unsupported */) {
 		
 		if (localPath == null) {
 			
@@ -73,14 +72,14 @@ class SharedObject extends EventDispatcher {
 			
 		}
 		
-		var so = new SharedObject();
-		so.nmeKey = localPath + ":" + name;
+		var so = new SharedObject ();
+		so.__key = localPath + ":" + name;
 		var rawData = null;
 		
 		try {
 			
 			// user may have privacy settings which prevent reading
-			rawData = nmeGetLocalStorage().getItem(so.nmeKey);
+			rawData = __getLocalStorage ().getItem (so.__key);
 			
 		} catch (e:Dynamic) {}
 		
@@ -88,9 +87,9 @@ class SharedObject extends EventDispatcher {
 		
 		if (rawData != null && rawData != "") {
 			
-			var unserializer = new Unserializer(rawData);
-			unserializer.setResolver(cast { resolveEnum: Type.resolveEnum, resolveClass: resolveClass } );
-			so.data = unserializer.unserialize();
+			var unserializer = new Unserializer (rawData);
+			unserializer.setResolver (cast { resolveEnum: Type.resolveEnum, resolveClass: resolveClass } );
+			so.data = unserializer.unserialize ();
 			
 		}
 		
@@ -105,20 +104,20 @@ class SharedObject extends EventDispatcher {
 	}
 	
 	
-	private static function nmeGetLocalStorage():Storage {
+	private static function __getLocalStorage ():Storage {
 		
-		var res = Browser.getLocalStorage();
-		if (res == null) throw new Error("SharedObject not supported");
+		var res = Browser.getLocalStorage ();
+		if (res == null) throw new Error ("SharedObject not supported");
 		return res;
 		
 	}
 	
 	
-	private static function resolveClass(name:String):Class <Dynamic> {
+	private static function resolveClass (name:String):Class <Dynamic> {
 		
 		if (name != null) {
 			
-			return Type.resolveClass(StringTools.replace (StringTools.replace(name, "jeash.", "flash."), "browser.", "flash."));
+			return Type.resolveClass (StringTools.replace (StringTools.replace (name, "jeash.", "flash."), "browser.", "flash."));
 			
 		}
 		
@@ -127,7 +126,7 @@ class SharedObject extends EventDispatcher {
 	}
 	
 	
-	public function setProperty(propertyName:String, ?value:Dynamic):Void {
+	public function setProperty (propertyName:String, ?value:Dynamic):Void {
 		
 		if (data != null) {
 			
@@ -144,15 +143,12 @@ class SharedObject extends EventDispatcher {
 	
 	
 	
-	private function get_size():Int {
+	private function get_size ():Int {
 		
-		var d = Serializer.run(data);
-		return Bytes.ofString(d).length;
+		var d = Serializer.run (data);
+		return Bytes.ofString (d).length;
 		
 	}
 	
 	
 }
-
-
-#end

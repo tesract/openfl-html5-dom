@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 class SoundLoaderContext {
@@ -9,7 +8,7 @@ class SoundLoaderContext {
 	public var checkPolicyFile:Bool;
 	
 	
-	public function new(bufferTime:Float = 0, checkPolicyFile:Bool = false) {
+	public function new (bufferTime:Float = 0, checkPolicyFile:Bool = false) {
 		
 		this.bufferTime = bufferTime;
 		this.checkPolicyFile = checkPolicyFile;
@@ -18,6 +17,3 @@ class SoundLoaderContext {
 	
 	
 }
-
-
-#end

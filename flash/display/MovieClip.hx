@@ -1,40 +1,39 @@
 package flash.display;
-#if js
 
 
 class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	
 	
-	public var currentFrame(get_currentFrame, null):Int;
+	public var currentFrame (get_currentFrame, null):Int;
 	public var enabled:Bool;
-	public var framesLoaded(get_framesLoaded, null):Int;
-	public var totalFrames(get_totalFrames, null):Int;
+	public var framesLoaded (get_framesLoaded, null):Int;
+	public var totalFrames (get_totalFrames, null):Int;
 	
 	private var __currentFrame:Int;
 	private var __totalFrames:Int;
 	
 	
-	public function new() {
+	public function new () {
 		
-		super();
+		super ();
 		
 		enabled = true;
 		__currentFrame = 0;
 		__totalFrames = 0;
 		
-		this.loaderInfo = LoaderInfo.create(null);
+		this.loaderInfo = LoaderInfo.create (null);
 		
 	}
 	
 	
-	public function gotoAndPlay(frame:Dynamic, scene:String = ""):Void {
+	public function gotoAndPlay (frame:Dynamic, scene:String = ""):Void {
 		
 		
 		
 	}
 	
 	
-	public function gotoAndStop(frame:Dynamic, scene:String = ""):Void {
+	public function gotoAndStop (frame:Dynamic, scene:String = ""):Void {
 		
 		
 		
@@ -48,7 +47,7 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	}
 	
 	
-	public function play():Void {
+	public function play ():Void {
 		
 		
 		
@@ -62,16 +61,16 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	}
 	
 	
-	public function stop():Void {
+	public function stop ():Void {
 		
 		
 		
 	}
 	
 	
-	override public function toString():String {
+	override public function toString ():String {
 		
-		return "[MovieClip name=" + this.name + " id=" + _nmeId + "]";
+		return "[MovieClip name=" + this.name + " id=" + ___id + "]";
 		
 	}
 	
@@ -83,12 +82,9 @@ class MovieClip extends Sprite implements Dynamic<Dynamic> {
 	
 	
 	
-	private function get_currentFrame():Int { return __currentFrame; }
-	private function get_framesLoaded():Int { return __totalFrames; }
-	private function get_totalFrames():Int { return __totalFrames; }
+	private function get_currentFrame ():Int { return __currentFrame; }
+	private function get_framesLoaded ():Int { return __totalFrames; }
+	private function get_totalFrames ():Int { return __totalFrames; }
 	
 	
 }
-
-
-#end

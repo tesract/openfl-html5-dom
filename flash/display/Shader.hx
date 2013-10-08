@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.utils.ByteArray;
@@ -8,12 +7,12 @@ import flash.utils.ByteArray;
 class Shader {
 	
 	
-	public var byteCode(null, default):ByteArray;
+	public var byteCode (null, default):ByteArray;
 	public var data:ShaderData;
 	public var precisionHint:ShaderPrecision;
 	
 	
-	public function new(code:ByteArray = null) {
+	public function new (code:ByteArray = null) {
 		
 		
 		
@@ -21,6 +20,3 @@ class Shader {
 	
 	
 }
-
-
-#end

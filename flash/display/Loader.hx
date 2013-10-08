@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.Bitmap;
@@ -19,30 +18,30 @@ import flash.utils.ByteArray;
 class Loader extends Sprite {
 	
 	
-	public var content(default, null):DisplayObject;
-	public var contentLoaderInfo(default, null):LoaderInfo;
+	public var content (default, null):DisplayObject;
+	public var contentLoaderInfo (default, null):LoaderInfo;
 	
 	private var mImage:BitmapData;
 	private var mShape:Shape;
 	
 	
-	public function new() {
+	public function new () {
 		
-		super();
+		super ();
 		
-		contentLoaderInfo = LoaderInfo.create(this);
+		contentLoaderInfo = LoaderInfo.create (this);
 		
 	}
 	
 	
-	public function load(request:URLRequest, context:LoaderContext = null):Void {
+	public function load (request:URLRequest, context:LoaderContext = null):Void {
 		
 		var extension = "";
-		var parts = request.url.split(".");
+		var parts = request.url.split (".");
 		
 		if (parts.length > 0) {
 			
-			extension = parts[parts.length - 1].toLowerCase();
+			extension = parts[parts.length - 1].toLowerCase ();
 			
 		}
 		
@@ -72,91 +71,91 @@ class Loader extends Sprite {
 			
 		}
 		
-		mImage = new BitmapData(0, 0, transparent);
+		mImage = new BitmapData (0, 0, transparent);
 		
 		try {
 			
-			contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoad, false, 2147483647);
-			mImage.nmeLoadFromFile(request.url, contentLoaderInfo);
-			content = new Bitmap(mImage);
-			Reflect.setField(contentLoaderInfo, "content", this.content);
-			addChild(content);
+			contentLoaderInfo.addEventListener (Event.COMPLETE, handleLoad, false, 2147483647);
+			mImage.__loadFromFile (request.url, contentLoaderInfo);
+			content = new Bitmap (mImage);
+			Reflect.setField (contentLoaderInfo, "content", this.content);
+			addChild (content);
 			
-		} catch(e:Dynamic) {
+		} catch (e:Dynamic) {
 			
-			trace("Error " + e);
-			var evt = new IOErrorEvent(IOErrorEvent.IO_ERROR);
+			trace ("Error " + e);
+			var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 			evt.currentTarget = this;
-			contentLoaderInfo.dispatchEvent(evt);
+			contentLoaderInfo.dispatchEvent (evt);
 			return;
 			
 		}
 		
 		if (mShape == null) {
 			
-			mShape = new Shape();
-			addChild(mShape);
+			mShape = new Shape ();
+			addChild (mShape);
 			
 		}
 		
 	}
 	
 	
-	public function loadBytes(buffer:ByteArray):Void {
+	public function loadBytes (buffer:ByteArray):Void {
 		
 		try {
 			
-			contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoad, false, 2147483647);
+			contentLoaderInfo.addEventListener (Event.COMPLETE, handleLoad, false, 2147483647);
 			
-			BitmapData.loadFromBytes(buffer, null, function(bmd:BitmapData):Void {
+			BitmapData.loadFromBytes (buffer, null, function(bmd:BitmapData):Void {
 				
-				content = new Bitmap(bmd);
-				Reflect.setField(contentLoaderInfo, "content", this.content);
-				addChild(content);
-				var evt = new Event(Event.COMPLETE);
+				content = new Bitmap (bmd);
+				Reflect.setField (contentLoaderInfo, "content", this.content);
+				addChild (content);
+				var evt = new Event (Event.COMPLETE);
 				evt.currentTarget = this;
-				contentLoaderInfo.dispatchEvent(evt);
+				contentLoaderInfo.dispatchEvent (evt);
 				
 			});
 			
-		} catch(e:Dynamic) {
+		} catch (e:Dynamic) {
 			
-			trace("Error " + e);
-			var evt = new IOErrorEvent(IOErrorEvent.IO_ERROR);
+			trace ("Error " + e);
+			var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 			evt.currentTarget = this;
-			contentLoaderInfo.dispatchEvent(evt);
+			contentLoaderInfo.dispatchEvent (evt);
 			
 		}
 		
 	}
 	
 	
-	override public function toString():String {
+	override public function toString ():String {
 		
-		return "[Loader name=" + this.name + " id=" + _nmeId + "]";
+		return "[Loader name=" + this.name + " id=" + ___id + "]";
 		
 	}
 	
 	
-	override function validateBounds():Void {
+	override function validateBounds ():Void {
 		
 		if (_boundsInvalid) {
 			
-			super.validateBounds();
+			super.validateBounds ();
 			
 			if (mImage != null) {
 				
-				var r = new Rectangle(0, 0, mImage.width, mImage.height);
+				var r = new Rectangle (0, 0, mImage.width, mImage.height);
 				
 				if (r.width != 0 || r.height != 0) {
 					
-					if (nmeBoundsRect.width == 0 && nmeBoundsRect.height == 0) {
+					if (__boundsRect.width == 0 && __boundsRect.height == 0) {
 						
-						nmeBoundsRect = r.clone();
+						__boundsRect = r.clone ();
 						
 					} else {
 						
-						nmeBoundsRect.extendBounds(r);
+						__boundsRect.extendBounds (r);
 						
 					}
 					
@@ -164,7 +163,7 @@ class Loader extends Sprite {
 				
 			}
 			
-			nmeSetDimensions();
+			__setDimensions ();
 			
 		}
 		
@@ -178,17 +177,14 @@ class Loader extends Sprite {
 	
 	
 	
-	private function handleLoad(e:Event):Void {
+	private function handleLoad (e:Event):Void {
 		
 		e.currentTarget = this;
-		content.nmeInvalidateBounds();
-		content.nmeRender(null, null);
-		contentLoaderInfo.removeEventListener(Event.COMPLETE, handleLoad);
+		content.__invalidateBounds ();
+		content.__render (null, null);
+		contentLoaderInfo.removeEventListener (Event.COMPLETE, handleLoad);
 		
 	}
 	
 	
 }
-
-
-#end

@@ -76,7 +76,7 @@ class ApplicationMain {
 		::end::
 		::end::::end::
 		
-		var resourcePrefix = "NME_:bitmap_";
+		var resourcePrefix = "__ASSET__:bitmap_";
 		for (resourceName in Resource.listNames()) {
 			if (StringTools.startsWith (resourceName, resourcePrefix)) {
 				var type = Type.resolveClass(StringTools.replace (resourceName.substring(resourcePrefix.length), "_", "."));

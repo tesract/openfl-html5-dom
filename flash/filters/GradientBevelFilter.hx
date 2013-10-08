@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 class GradientBevelFilter extends BitmapFilter {
@@ -18,9 +17,9 @@ class GradientBevelFilter extends BitmapFilter {
 	public var type:String;
 	
 	
-	public function new(?distance:Float, ?angle:Float, ?colors:Array<Dynamic>, ?alphas:Array<Dynamic>, ?ratios:Array<Dynamic>, ?blurX:Float, ?blurY:Float, ?strength:Float, ?quality:Int, ?type:String, ?knockout:Bool) {
+	public function new (?distance:Float, ?angle:Float, ?colors:Array<Dynamic>, ?alphas:Array<Dynamic>, ?ratios:Array<Dynamic>, ?blurX:Float, ?blurY:Float, ?strength:Float, ?quality:Int, ?type:String, ?knockout:Bool) {
 		
-		super("GradientBevelFilter");
+		super ("GradientBevelFilter");
 		
 		this.distance = distance;
 		this.angle = angle;
@@ -38,6 +37,3 @@ class GradientBevelFilter extends BitmapFilter {
 	
 	
 }
-
-
-#end

@@ -21,25 +21,25 @@ class Tilesheet {
 	public static inline var TILE_BLEND_MULTIPLY = 0x00020000;
 	public static inline var TILE_BLEND_SCREEN = 0x00040000;
 	
-	/** @private */ public var nmeBitmap:BitmapData;
-	/** @private */ public var nmeCenterPoints:Array <Point>;
-	/** @private */ public var nmeTileRects:Array <Rectangle>;
-	/** @private */ public var nmeTileUVs:Array <Rectangle>;
+	/** @private */ public var __bitmap:BitmapData;
+	/** @private */ public var __centerPoints:Array <Point>;
+	/** @private */ public var __tileRects:Array <Rectangle>;
+	/** @private */ public var __tileUVs:Array <Rectangle>;
 	
 	
 	public function new(image:BitmapData) {
 		
-		nmeBitmap = image;
-		nmeCenterPoints = new Array <Point>();
-		nmeTileRects = new Array <Rectangle>();
-		nmeTileUVs = new Array <Rectangle>();
+		__bitmap = image;
+		__centerPoints = new Array <Point>();
+		__tileRects = new Array <Rectangle>();
+		__tileUVs = new Array <Rectangle>();
 		
 	}
 	
 	
 	public function addTileRect(rectangle:Rectangle, centerPoint:Point = null):Int {
 		
-		nmeTileRects.push(rectangle);
+		__tileRects.push(rectangle);
 		
 		if (centerPoint == null) {
 			
@@ -47,10 +47,10 @@ class Tilesheet {
 			
 		}
 		
-		nmeCenterPoints.push(centerPoint);
-		nmeTileUVs.push(new Rectangle(rectangle.left / nmeBitmap.width, rectangle.top / nmeBitmap.height, rectangle.right / nmeBitmap.width, rectangle.bottom / nmeBitmap.height));
+		__centerPoints.push(centerPoint);
+		__tileUVs.push(new Rectangle(rectangle.left / __bitmap.width, rectangle.top / __bitmap.height, rectangle.right / __bitmap.width, rectangle.bottom / __bitmap.height));
 		
-		return nmeTileRects.length - 1;
+		return __tileRects.length - 1;
 		
 	}
 	
@@ -62,15 +62,15 @@ class Tilesheet {
 	}
 	
 	public inline function getTileCenter(index:Int):Point {
-		return nmeCenterPoints[index];
+		return __centerPoints[index];
 	}
 	
 	public inline function getTileRect(index:Int):Rectangle {
-		return nmeTileRects[index];
+		return __tileRects[index];
 	}
 	
 	public inline function getTileUVs(index:Int):Rectangle {
-		return nmeTileUVs[index];
+		return __tileUVs[index];
 	}
 	
 	

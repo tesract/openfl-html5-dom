@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum LineScaleMode {
@@ -10,6 +9,3 @@ enum LineScaleMode {
 	VERTICAL;
 	
 }
-
-
-#end

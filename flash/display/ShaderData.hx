@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.utils.ByteArray;
@@ -8,7 +7,7 @@ import flash.utils.ByteArray;
 class ShaderData implements Dynamic {
 	
 	
-	public function new(byteCode:ByteArray) {
+	public function new (byteCode:ByteArray) {
 		
 		
 		
@@ -16,6 +15,3 @@ class ShaderData implements Dynamic {
 	
 	
 }
-
-
-#end

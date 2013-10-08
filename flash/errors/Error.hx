@@ -1,5 +1,4 @@
 package flash.errors;
-#if js
 
 
 import haxe.CallStack;
@@ -15,7 +14,7 @@ class Error {
 	public var name:String;
 	
 	
-	public function new(message:String = "", id:Int = 0) {
+	public function new (message:String = "", id:Int = 0) {
 		
 		this.message = message;
 		this.errorID = id;
@@ -23,14 +22,14 @@ class Error {
 	}
 	
 	
-	public function getStackTrace():String {
+	public function getStackTrace ():String {
 		
-		return CallStack.toString(CallStack.exceptionStack());
+		return CallStack.toString (CallStack.exceptionStack ());
 		
 	}
 	
 	
-	public function toString():String {
+	public function toString ():String {
 		
 		if (message != null) {
 			
@@ -46,6 +45,3 @@ class Error {
 	
 	
 }
-
-
-#end

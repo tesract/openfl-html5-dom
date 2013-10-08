@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 class EventPhase {
@@ -9,6 +8,3 @@ class EventPhase {
 	public static var BUBBLING_PHASE = 2;
 	
 }
-
-
-#end

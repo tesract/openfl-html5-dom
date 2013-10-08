@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 class TextFieldType {
@@ -9,14 +8,4 @@ class TextFieldType {
 	public static var INPUT = "INPUT";
 	
 	
-	public function new() {
-		
-		
-		
-	}
-	
-	
 }
-
-
-#end

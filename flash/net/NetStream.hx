@@ -1,5 +1,4 @@
 package flash.net;
-#if js
 
 
 //import haxe.remoting.Connection;
@@ -46,31 +45,33 @@ class NetStream extends EventDispatcher {
 	
 	public var bufferTime:Float;
 	public var client:Dynamic;
-	public var nmeVideoElement(default, null):MediaElement;
 	public var play:Dynamic;
+	
+	public var __videoElement(default, null):MediaElement;
 	
 	private static inline var fps:Int = 30;
 	
-	private var nmeConnection: NetConnection;
 	private var timer:Timer;
 	
+	private var __connection:NetConnection;
 	
-	public function new(connection:NetConnection):Void {
+	
+	public function new (connection:NetConnection):Void {
 		
-		super();
+		super ();
 		
-		nmeVideoElement = cast Browser.document.createElement("video");
-		nmeConnection = connection;
+		__videoElement = cast Browser.document.createElement ("video");
+		__connection = connection;
 		
-		play = Reflect.makeVarArgs(nmePlay);
+		play = Reflect.makeVarArgs (__play);
 		
 	}
 	
 	
-	private function nmePlay(val:Array<Dynamic>):Void {
+	private function __play (val:Array<Dynamic>):Void {
 		
-		var url = Std.string(val[0]);
-		nmeVideoElement.src = url;
+		var url = Std.string (val[0]);
+		__videoElement.src = url;
 		
 	}
 	
@@ -82,30 +83,30 @@ class NetStream extends EventDispatcher {
 	
 	
 	
-	public function nmeBufferEmpty(e) {
+	public function __bufferEmpty (e) {
 		
-		nmeConnection.dispatchEvent(new NetStatusEvent(NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_EMPTY } ));
-		
-	}
-	
-	
-	public function nmeBufferStop(e) {
-		
-		nmeConnection.dispatchEvent(new NetStatusEvent(NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_STOP } ));
+		__connection.dispatchEvent (new NetStatusEvent (NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_EMPTY } ));
 		
 	}
 	
 	
-	public function nmeBufferStart(e) {
+	public function __bufferStop (e) {
 		
-		nmeConnection.dispatchEvent(new NetStatusEvent(NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_START } ));
+		__connection.dispatchEvent (new NetStatusEvent (NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_STOP } ));
 		
 	}
 	
 	
-	public function nmeNotFound(e) {
+	public function __bufferStart(e) {
 		
-		nmeConnection.dispatchEvent(new NetStatusEvent(NetStatusEvent.NET_STATUS, false, false, { code : CODE_PLAY_STREAMNOTFOUND } ));
+		__connection.dispatchEvent (new NetStatusEvent (NetStatusEvent.NET_STATUS, false, false, { code : CODE_BUFFER_START } ));
+		
+	}
+	
+	
+	public function __notFound(e) {
+		
+		__connection.dispatchEvent (new NetStatusEvent (NetStatusEvent.NET_STATUS, false, false, { code : CODE_PLAY_STREAMNOTFOUND } ));
 		
 	}
 	
@@ -141,6 +142,3 @@ class NetStream extends EventDispatcher {
 	
 	
 }
-
-
-#end

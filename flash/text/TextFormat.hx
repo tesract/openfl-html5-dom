@@ -1,7 +1,8 @@
 package flash.text;
-#if js
+
 
 import flash.utils.UInt;
+
 
 class TextFormat {
 	
@@ -27,7 +28,7 @@ class TextFormat {
 	public var url:String;
 	
 	
-	public function new(?in_font:String, ?in_size:Float, ?in_color:Int, ?in_bold:Bool, ?in_italic:Bool, ?in_underline:Bool, ?in_url:String, ?in_target:String, ?in_align:TextFormatAlign, ?in_leftMargin:Int, ?in_rightMargin:Int, ?in_indent:Int, ?in_leading:Int) {
+	public function new (?in_font:String, ?in_size:Float, ?in_color:Int, ?in_bold:Bool, ?in_italic:Bool, ?in_underline:Bool, ?in_url:String, ?in_target:String, ?in_align:TextFormatAlign, ?in_leftMargin:Int, ?in_rightMargin:Int, ?in_indent:Int, ?in_leading:Int) {
 		
 		font = in_font;
 		size = in_size;
@@ -46,9 +47,9 @@ class TextFormat {
 	}
 	
 	
-	public function clone():TextFormat {
+	public function clone ():TextFormat {
 		
-		var newFormat = new TextFormat(font, size, color, bold, italic, underline, url, target);
+		var newFormat = new TextFormat (font, size, color, bold, italic, underline, url, target);
 		
 		newFormat.align = align;
 		newFormat.leftMargin = leftMargin;
@@ -69,6 +70,3 @@ class TextFormat {
 	
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum StageDisplayState {
@@ -9,6 +8,3 @@ enum StageDisplayState {
 	FULL_SCREEN_INTERACTIVE;
 	
 }
-
-
-#end

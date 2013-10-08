@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 class KeyboardEvent extends Event {
@@ -18,9 +17,9 @@ class KeyboardEvent extends Event {
 	public var shiftKey:Bool;
 	
 	
-	public function new(type:String, bubbles:Bool = false, cancelable:Bool = false, inCharCode:Int = 0, inKeyCode:Int = 0, inKeyLocation:Int = 0, inCtrlKey:Bool = false, inAltKey:Bool = false, inShiftKey:Bool = false, controlKeyValue:Bool = false, commandKeyValue:Bool = false) {
+	public function new (type:String, bubbles:Bool = false, cancelable:Bool = false, inCharCode:Int = 0, inKeyCode:Int = 0, inKeyLocation:Int = 0, inCtrlKey:Bool = false, inAltKey:Bool = false, inShiftKey:Bool = false, controlKeyValue:Bool = false, commandKeyValue:Bool = false) {
 		
-		super(type, bubbles, cancelable);
+		super (type, bubbles, cancelable);
 		
 		altKey = (inAltKey == null ? false : inAltKey);
 		charCode = (inCharCode == null ? 0 : inCharCode);
@@ -35,6 +34,3 @@ class KeyboardEvent extends Event {
 	
 	
 }
-
-
-#end

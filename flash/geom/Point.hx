@@ -1,16 +1,15 @@
 package flash.geom;
-#if js
 
 
 class Point {
 	
 	
-	public var length(get_length,null):Float;
+	public var length (get_length,null):Float;
 	public var x:Float;
 	public var y:Float;
 	
 	
-	public function new(inX:Float = 0, inY:Float = 0) {
+	public function new (inX:Float = 0, inY:Float = 0) {
 		
 		x = inX;
 		y = inY;
@@ -18,44 +17,44 @@ class Point {
 	}
 	
 	
-	public function add(v:Point):Point {
+	public function add (v:Point):Point {
 		
-		return new Point(v.x + x, v.y + y);
-		
-	}
-	
-	
-	public function clone():Point {
-		
-		return new Point(x, y);
+		return new Point (v.x + x, v.y + y);
 		
 	}
 	
 	
-	public static function distance(pt1:Point, pt2:Point):Float {
+	public function clone ():Point {
+		
+		return new Point (x, y);
+		
+	}
+	
+	
+	public static function distance (pt1:Point, pt2:Point):Float {
 		
 		var dx = pt1.x - pt2.x;
 		var dy = pt1.y - pt2.y;
-		return Math.sqrt(dx * dx + dy * dy);
+		return Math.sqrt (dx * dx + dy * dy);
 		
 	}
 	
 	
-	public function equals(toCompare:Point):Bool {
+	public function equals (toCompare:Point):Bool {
 		
 		return toCompare.x == x && toCompare.y == y;
 		
 	}
 	
 	
-	public static function interpolate(pt1:Point, pt2:Point, f:Float):Point {
+	public static function interpolate (pt1:Point, pt2:Point, f:Float):Point {
 		
-		return new Point(pt2.x + f * (pt1.x - pt2.x), pt2.y + f * (pt1.y - pt2.y));
+		return new Point (pt2.x + f * (pt1.x - pt2.x), pt2.y + f * (pt1.y - pt2.y));
 		
 	}
 	
 	
-	public function normalize(thickness:Float):Void {
+	public function normalize (thickness:Float):Void {
 		
 		if (x == 0 && y == 0) {
 			
@@ -63,7 +62,7 @@ class Point {
 			
 		} else {
 			
-			var norm = thickness / Math.sqrt(x * x + y * y);
+			var norm = thickness / Math.sqrt (x * x + y * y);
 			x *= norm;
 			y *= norm;
 			
@@ -72,7 +71,7 @@ class Point {
 	}
 	
 	
-	public function offset(dx:Float, dy:Float):Void {
+	public function offset (dx:Float, dy:Float):Void {
 		
 		x += dx;
 		y += dy;
@@ -80,23 +79,23 @@ class Point {
 	}
 	
 	
-	public static function polar(len:Float, angle:Float):Point {
+	public static function polar (len:Float, angle:Float):Point {
 		
-		return new Point(len * Math.cos(angle), len * Math.sin(angle));
+		return new Point (len * Math.cos (angle), len * Math.sin (angle));
 		
 	}
 	
 	
-	inline public function setTo(xa:Float, ya:Float):Void {	
+	inline public function setTo (xa:Float, ya:Float):Void {	
 		
 		x = xa;
 		y = ya;
 	}
 	
 	
-	public function subtract(v:Point):Point {
+	public function subtract (v:Point):Point {
 		
-		return new Point(x - v.x, y - v.y);
+		return new Point (x - v.x, y - v.y);
 		
 	}
 	
@@ -108,14 +107,11 @@ class Point {
 	
 	
 	
-	private function get_length():Float {
+	private function get_length ():Float {
 		
-		return Math.sqrt(x * x + y * y);
+		return Math.sqrt (x * x + y * y);
 		
 	}
 	
 	
 }
-
-
-#end

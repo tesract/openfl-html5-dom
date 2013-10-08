@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 import flash.events.Event;
@@ -25,22 +24,22 @@ class Sound extends EventDispatcher {
 	static inline var MEDIA_TYPE_WAV = "audio/wav; codecs=\"1\"";
 	static inline var MEDIA_TYPE_AAC = "audio/mp4; codecs=\"mp4a.40.2\"";
 	
-	public var bytesLoaded(default, null):Int;
-	public var bytesTotal(default, null):Int;
-	public var id3(default, null):ID3Info;
-	public var isBuffering(default, null):Bool;
-	public var length(default, null):Float;
-	public var url(default, null):String;
+	public var bytesLoaded (default, null):Int;
+	public var bytesTotal (default, null):Int;
+	public var id3 (default, null):ID3Info;
+	public var isBuffering (default, null):Bool;
+	public var length (default, null):Float;
+	public var url (default, null):String;
 	
-	private var nmeSoundCache:URLLoader;
-	private var nmeSoundChannels:Map<Int, SoundChannel>;
-	private var nmeSoundIdx:Int;
-	private var nmeStreamUrl:String;
+	private var __soundCache:URLLoader;
+	private var __soundChannels:Map<Int, SoundChannel>;
+	private var __soundIdx:Int;
+	private var __streamUrl:String;
 
 	
-	public function new(stream:URLRequest = null, context:SoundLoaderContext = null):Void {
+	public function new (stream:URLRequest = null, context:SoundLoaderContext = null):Void {
 		
-		super(this);
+		super (this);
 		
 		bytesLoaded = 0;
 		bytesTotal = 0;
@@ -49,91 +48,115 @@ class Sound extends EventDispatcher {
 		length = 0;
 		url = null;
 		
-		nmeSoundChannels = new Map<Int, SoundChannel>();
-		nmeSoundIdx = 0;
+		__soundChannels = new Map<Int, SoundChannel> ();
+		__soundIdx = 0;
 		
 		if (stream != null) {
 			
-			load(stream, context);
+			load (stream, context);
 		}
 		
 	}
 	
 	
-	public function close():Void {
+	public function close ():Void {
 		
 		
 		
 	}
 	
 	
-	public function load(stream:URLRequest, context:SoundLoaderContext = null):Void {
+	public function load (stream:URLRequest, context:SoundLoaderContext = null):Void {
 		
-		nmeLoad(stream, context);
-		
-	}
-	
-	
-	private function nmeAddEventListeners():Void {
-		
-		nmeSoundCache.addEventListener(Event.COMPLETE, nmeOnSoundLoaded);
-		nmeSoundCache.addEventListener(IOErrorEvent.IO_ERROR, nmeOnSoundLoadError);
+		__load (stream, context);
 		
 	}
 	
 	
-	public static function nmeCanPlayMime(mime:String):Bool {
+	public function play (startTime:Float = 0.0, loops:Int = 0, sndTransform:SoundTransform = null):SoundChannel {
 		
-		var audio:MediaElement = cast Browser.document.createElement("audio");
+		if (__streamUrl == null) return null;
 		
-		var playable = function(ok:String) {
+		// -- GC the sound when the following closure is executed
+		var self = this;
+		var curIdx = __soundIdx;
+		var removeRef = function () {
+			
+			self.__soundChannels.remove (curIdx);
+			
+		}
+		// --
+		
+		var channel = SoundChannel.__create (__streamUrl, startTime, loops, sndTransform, removeRef);
+		__soundChannels.set (curIdx, channel);
+		__soundIdx++;
+		var audio = channel.__audio;
+		
+		return channel;
+		
+	}
+	
+	
+	private function __addEventListeners ():Void {
+		
+		__soundCache.addEventListener (Event.COMPLETE, __onSoundLoaded);
+		__soundCache.addEventListener (IOErrorEvent.IO_ERROR, __onSoundLoadError);
+		
+	}
+	
+	
+	public static function __canPlayMime (mime:String):Bool {
+		
+		var audio:MediaElement = cast Browser.document.createElement ("audio");
+		
+		var playable = function (ok:String) {
 			
 			if (ok != "" && ok != "no") return true; else return false;
 		}
 		
 		//return playable(audio.canPlayType(mime));
-		return playable(audio.canPlayType(mime, null));
+		return playable (audio.canPlayType (mime, null));
 		
 	}
 	
 	
-	public static function nmeCanPlayType(extension:String):Bool {
+	public static function __canPlayType (extension:String):Bool {
 		
-		var mime = nmeMimeForExtension(extension);
+		var mime = __mimeForExtension (extension);
 		if (mime == null) return false;
-		return nmeCanPlayMime(mime);
+		return __canPlayMime (mime);
 		
 	}
 	
 	
-	public function nmeLoad(stream:URLRequest, context:SoundLoaderContext = null, mime:String = ""):Void {
+	public function __load (stream:URLRequest, context:SoundLoaderContext = null, mime:String = ""):Void {
 		
 		#if debug
 		if (mime == null) {
 			
-			var url = stream.url.split("?");
-			var extension = url[0].substr(url[0].lastIndexOf(".") + 1);
-			mime = nmeMimeForExtension(extension);
+			var url = stream.url.split ("?");
+			var extension = url[0].substr (url[0].lastIndexOf (".") + 1);
+			mime = __mimeForExtension (extension);
 			
 		}
 		
-		if (mime == null || !nmeCanPlayMime(mime))
-			trace("Warning: '" + stream.url + "' with type '" + mime + "' may not play on this browser.");
+		if (mime == null || !__canPlayMime (mime))
+			trace ("Warning: '" + stream.url + "' with type '" + mime + "' may not play on this browser.");
 		#end
 		
-		nmeStreamUrl = stream.url;
+		__streamUrl = stream.url;
 		
 		// initiate a network request, so the resource is cached by the browser
 		try {
 			
-			nmeSoundCache = new URLLoader();
-			nmeAddEventListeners();
-			nmeSoundCache.load(stream);
+			__soundCache = new URLLoader ();
+			__addEventListeners ();
+			__soundCache.load (stream);
 			
-		} catch(e:Dynamic) {
+		} catch (e:Dynamic) {
 			
 			#if debug
-			trace("Warning: Could not preload '" + stream.url + "'");
+			trace ("Warning: Could not preload '" + stream.url + "'");
 			#end
 			
 		}
@@ -141,7 +164,7 @@ class Sound extends EventDispatcher {
 	}
 	
 	
-	private static inline function nmeMimeForExtension(extension:String):String {
+	private static inline function __mimeForExtension (extension:String):String {
 		
 		var mime:String = null;
 		
@@ -160,34 +183,10 @@ class Sound extends EventDispatcher {
 	}
 	
 	
-	private function nmeRemoveEventListeners():Void {
+	private function __removeEventListeners ():Void {
 		
-		nmeSoundCache.removeEventListener(Event.COMPLETE, nmeOnSoundLoaded, false);
-		nmeSoundCache.removeEventListener(IOErrorEvent.IO_ERROR, nmeOnSoundLoadError, false);
-		
-	}
-	
-	
-	public function play(startTime:Float = 0.0, loops:Int = 0, sndTransform:SoundTransform = null):SoundChannel {
-		
-		if (nmeStreamUrl == null) return null;
-		
-		// -- GC the sound when the following closure is executed
-		var self = this;
-		var curIdx = nmeSoundIdx;
-		var removeRef = function() {
-			
-			self.nmeSoundChannels.remove(curIdx);
-			
-		}
-		// --
-		
-		var channel = SoundChannel.nmeCreate(nmeStreamUrl, startTime, loops, sndTransform, removeRef);
-		nmeSoundChannels.set(curIdx, channel);
-		nmeSoundIdx++;
-		var audio = channel.nmeAudio;
-		
-		return channel;
+		__soundCache.removeEventListener (Event.COMPLETE, __onSoundLoaded, false);
+		__soundCache.removeEventListener (IOErrorEvent.IO_ERROR, __onSoundLoadError, false);
 		
 	}
 	
@@ -199,30 +198,27 @@ class Sound extends EventDispatcher {
 	
 	
 	
-	private function nmeOnSoundLoadError(evt:IOErrorEvent):Void {
+	private function __onSoundLoadError (evt:IOErrorEvent):Void {
 		
-		nmeRemoveEventListeners();
+		__removeEventListeners ();
 		
 		#if debug
-		trace("Error loading sound '" + nmeStreamUrl + "'");
+		trace ("Error loading sound '" + __streamUrl + "'");
 		#end
 		
-		var evt = new IOErrorEvent(IOErrorEvent.IO_ERROR);
-		dispatchEvent(evt);
+		var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
+		dispatchEvent (evt);
 		
 	}
 	
 	
-	private function nmeOnSoundLoaded(evt:Event):Void {
+	private function __onSoundLoaded (evt:Event):Void {
 		
-		nmeRemoveEventListeners();
-		var evt = new Event(Event.COMPLETE);
-		dispatchEvent(evt);
+		__removeEventListeners ();
+		var evt = new Event (Event.COMPLETE);
+		dispatchEvent (evt);
 		
 	}
 	
 	
 }
-
-
-#end

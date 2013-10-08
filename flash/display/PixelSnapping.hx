@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum PixelSnapping {
@@ -9,6 +8,3 @@ enum PixelSnapping {
 	ALWAYS;
 	
 }
-
-
-#end

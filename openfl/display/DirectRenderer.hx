@@ -17,32 +17,32 @@ class DirectRenderer extends DisplayObject {
 	
 	public var render(get_render, set_render):Dynamic;
 	
-	private var nmeContext:RenderingContext;
-	private var nmeGraphics:Graphics;
-	private var nmeRenderMethod:Dynamic;
+	private var __context:RenderingContext;
+	private var __graphics:Graphics;
+	private var __renderMethod:Dynamic;
 	
 	
 	public function new(inType:String = "DirectRenderer") {
 		
 		super();
 		
-		nmeGraphics = new Graphics();
+		__graphics = new Graphics();
 		
-		nmeGraphics.nmeSurface.width = Lib.current.stage.stageWidth;
-		nmeGraphics.nmeSurface.height = Lib.current.stage.stageHeight;
+		__graphics.__surface.width = Lib.current.stage.stageWidth;
+		__graphics.__surface.height = Lib.current.stage.stageHeight;
 		
-		if (inType == "OpenGLView" && nmeGraphics != null) {
+		if (inType == "OpenGLView" && __graphics != null) {
 			
-			nmeContext = nmeGraphics.nmeSurface.getContext("webgl");
+			__context = __graphics.__surface.getContext ("webgl");
 			
-			if (nmeContext == null) {
+			if (__context == null) {
 				
-				nmeContext = nmeGraphics.nmeSurface.getContext("experimental-webgl");
+				__context = __graphics.__surface.getContext ("experimental-webgl");
 				
 			}
 			
 			#if debug
-			nmeContext = untyped WebGLDebugUtils.makeDebugContext(nmeContext);
+			__context = untyped WebGLDebugUtils.makeDebugContext(__context);
 			#end
 			
 		}
@@ -50,26 +50,26 @@ class DirectRenderer extends DisplayObject {
 	}
 	
 	
-	public override function nmeGetGraphics():Graphics {
+	public override function __getGraphics():Graphics {
 		
-		return nmeGraphics;
+		return __graphics;
 		
 	}
 	
 	
-	private override function nmeRender(inMask:CanvasElement = null, clipRect:Rectangle = null) {
+	private override function __render(inMask:CanvasElement = null, clipRect:Rectangle = null) {
 		
-		if (!nmeCombinedVisible) return;
+		if (!__combinedVisible) return;
 		
-		var gfx = nmeGetGraphics();
+		var gfx = __getGraphics();
 		if (gfx == null) return;
 		
-		gfx.nmeSurface.width = stage.stageWidth;
-		gfx.nmeSurface.height = stage.stageHeight;
+		gfx.__surface.width = stage.stageWidth;
+		gfx.__surface.height = stage.stageHeight;
 		
-		if (nmeContext != null) {
+		if (__context != null) {
 			
-			GL.nmeContext = nmeContext;
+			GL.__context = __context;
 			
 			var rect = null;
 			
@@ -99,15 +99,15 @@ class DirectRenderer extends DisplayObject {
 	
 	private function get_render():Dynamic {
 		
-		return nmeRenderMethod;
+		return __renderMethod;
 		
 	}
 	
 	
 	private function set_render(value:Dynamic):Dynamic {
 		
-		nmeRenderMethod = value;
-		nmeRender();
+		__renderMethod = value;
+		__render();
 		
 		return value;
 		

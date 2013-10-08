@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum StageAlign {
@@ -14,6 +13,3 @@ enum StageAlign {
 	BOTTOM;
 	
 }
-
-
-#end

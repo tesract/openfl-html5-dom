@@ -23,7 +23,7 @@ class OpenGLView extends DirectRenderer {
 		
 		super("OpenGLView");
 		
-		GL.nmeContext = nmeContext;
+		GL.__context = __context;
 		
 	}
 	
@@ -45,7 +45,7 @@ class OpenGLView extends DirectRenderer {
 		
 		var view = new OpenGLView ();
 		
-		if (view.nmeContext == null) {
+		if (view.__context == null) {
 			
 			return false;
 			

@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 enum FontType {
@@ -8,6 +7,3 @@ enum FontType {
 	DEVICE;
 	
 }
-
-
-#end

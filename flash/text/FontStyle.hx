@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 enum FontStyle {
@@ -10,6 +9,3 @@ enum FontStyle {
 	BOLD;
 	
 }
-
-
-#end

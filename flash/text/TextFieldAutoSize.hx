@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 class TextFieldAutoSize {
@@ -11,14 +10,4 @@ class TextFieldAutoSize {
 	public static inline var RIGHT:String = "RIGHT";
 	
 	
-	public function new() {
-		
-		
-		
-	}
-	
-	
 }
-
-
-#end

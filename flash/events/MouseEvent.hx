@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 import flash.display.InteractiveObject;
@@ -37,9 +36,9 @@ class MouseEvent extends Event {
 	public var stageY:Float;
 	
 	
-	public function new(type:String, bubbles:Bool = true, cancelable:Bool = false, localX:Float = 0, localY:Float = 0, relatedObject:InteractiveObject = null, ctrlKey:Bool = false, altKey:Bool = false, shiftKey:Bool = false, buttonDown:Bool = false, delta:Int = 0, commandKey:Bool = false, clickCount:Int = 0) {
+	public function new (type:String, bubbles:Bool = true, cancelable:Bool = false, localX:Float = 0, localY:Float = 0, relatedObject:InteractiveObject = null, ctrlKey:Bool = false, altKey:Bool = false, shiftKey:Bool = false, buttonDown:Bool = false, delta:Int = 0, commandKey:Bool = false, clickCount:Int = 0) {
 		
-		super(type, bubbles, cancelable);
+		super (type, bubbles, cancelable);
 		
 		this.shiftKey = shiftKey;
 		this.altKey = altKey;
@@ -56,9 +55,9 @@ class MouseEvent extends Event {
 	}
 	
 	
-	public static function nmeCreate(type:String, event:js.html.MouseEvent, local:Point, target:InteractiveObject):MouseEvent {
+	public static function __create (type:String, event:js.html.MouseEvent, local:Point, target:InteractiveObject):MouseEvent {
 		
-		var nmeMouseDown = false;
+		var __mouseDown = false;
 		var delta = 2;
 		
 		if (type == MouseEvent.MOUSE_WHEEL) {
@@ -67,13 +66,13 @@ class MouseEvent extends Event {
 			if (mouseEvent.wheelDelta) { /* IE/Opera. */
 				#if (!haxe_210 && !haxe3)
 				if (js.Lib.isOpera)
-					delta = Std.int(mouseEvent.wheelDelta / 40);
+					delta = Std.int (mouseEvent.wheelDelta / 40);
 				else
 				#end
-					delta = Std.int(mouseEvent.wheelDelta / 120);
+					delta = Std.int (mouseEvent.wheelDelta / 120);
 			} else if (mouseEvent.detail) { /** Mozilla case. */
 				
-				Std.int( -mouseEvent.detail);
+				Std.int (-mouseEvent.detail);
 				
 			}
 			
@@ -82,7 +81,7 @@ class MouseEvent extends Event {
 		// source: http://unixpapa.com/js/mouse.html
 		if (type == MouseEvent.MOUSE_DOWN) {
 			
-			nmeMouseDown = if (event.which != null) 
+			__mouseDown = if (event.which != null) 
 				event.which == 1
 			else if (event.button != null) 
 				#if (haxe_210 || haxe3)
@@ -96,20 +95,20 @@ class MouseEvent extends Event {
 			
 			if (event.which != null) 
 				if (event.which == 1)
-					nmeMouseDown = false;
+					__mouseDown = false;
 			else if (event.button != null) 
 				#if (haxe_210 || haxe3)
 				if (event.button == 0)
 				#else
 				if (js.Lib.isIE && event.button == 1 || event.button == 0) 
 				#end
-					nmeMouseDown = false;
+					__mouseDown = false;
 			else 
-				nmeMouseDown = false;
+				__mouseDown = false;
 			
 		}
 		
-		var pseudoEvent = new MouseEvent(type, true, false, local.x, local.y, null, event.ctrlKey, event.altKey, event.shiftKey, nmeMouseDown, delta);
+		var pseudoEvent = new MouseEvent (type, true, false, local.x, local.y, null, event.ctrlKey, event.altKey, event.shiftKey, __mouseDown, delta);
 		pseudoEvent.stageX = Lib.current.stage.mouseX;
 		pseudoEvent.stageY = Lib.current.stage.mouseY;
 		pseudoEvent.target = target;
@@ -119,9 +118,9 @@ class MouseEvent extends Event {
 	}
 	
 	
-	override public function nmeCreateSimilar(type:String, related:InteractiveObject = null, targ:InteractiveObject = null):Event {
+	override public function __createSimilar (type:String, related:InteractiveObject = null, targ:InteractiveObject = null):Event {
 		
-		var result = new MouseEvent(type, bubbles, cancelable, localX, localY, related == null ? relatedObject : related, ctrlKey, altKey, shiftKey, buttonDown, delta, commandKey, clickCount);
+		var result = new MouseEvent (type, bubbles, cancelable, localX, localY, related == null ? relatedObject : related, ctrlKey, altKey, shiftKey, buttonDown, delta, commandKey, clickCount);
 		
 		if (targ != null) {
 			
@@ -134,7 +133,7 @@ class MouseEvent extends Event {
 	}
 	
 	
-	public function updateAfterEvent():Void {
+	public function updateAfterEvent ():Void {
 		
 		
 		
@@ -142,6 +141,3 @@ class MouseEvent extends Event {
 	
 	
 }
-
-
-#end

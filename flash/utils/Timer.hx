@@ -1,5 +1,4 @@
 package flash.utils;
-#if js
 
 
 import flash.events.EventDispatcher;
@@ -9,17 +8,17 @@ import flash.events.TimerEvent;
 class Timer extends EventDispatcher {
 	
 	
-	public var currentCount(default, null):Int;
-	public var delay(default, set_delay):Float;
-	public var repeatCount(default, set_repeatCount):Int;
-	public var running(default, null):Bool;
+	public var currentCount (default, null):Int;
+	public var delay (default, set_delay):Float;
+	public var repeatCount (default, set_repeatCount):Int;
+	public var running (default, null):Bool;
 
 	private var timerId:Int;
 	
 
-	public function new(delay:Float, repeatCount:Int = 0):Void {
+	public function new (delay:Float, repeatCount:Int = 0):Void {
 		
-		super();
+		super ();
 		
 		this.running = false;
 		this.delay = delay;
@@ -29,7 +28,7 @@ class Timer extends EventDispatcher {
 	}
 	
 	
-	public function reset():Void {
+	public function reset ():Void {
 		
 		stop();
 		currentCount = 0;
@@ -37,21 +36,21 @@ class Timer extends EventDispatcher {
 	}
 	
 	
-	public function start():Void {
+	public function start ():Void {
 		
 		if (running) return;
 		
 		running = true;
-		timerId = untyped window.setInterval(__onInterval, Std.int(delay));
+		timerId = untyped window.setInterval (__onInterval, Std.int (delay));
 		
 	}
 	
 	
-	public function stop():Void {
+	public function stop ():Void {
 		
 		if (timerId != null) {
 			
-			untyped window.clearInterval(timerId);
+			untyped window.clearInterval (timerId);
 			timerId = null;
 			
 		}
@@ -68,7 +67,7 @@ class Timer extends EventDispatcher {
 	
 	
 	
-	private function __onInterval():Void {
+	private function __onInterval ():Void {
 		
 		currentCount ++;
 		
@@ -94,17 +93,17 @@ class Timer extends EventDispatcher {
 	
 	
 	
-	private function set_delay(v:Float):Float {
+	private function set_delay (v:Float):Float {
 		
 		if (v != delay) {
 			
 			var wasRunning = running;
 			
-			if (running) stop();
+			if (running) stop ();
 			
 			this.delay = v;
 			
-			if (wasRunning) start();
+			if (wasRunning) start ();
 			
 		}
 		
@@ -113,11 +112,11 @@ class Timer extends EventDispatcher {
 	}
 	
 	
-	private function set_repeatCount(v:Int):Int {
+	private function set_repeatCount (v:Int):Int {
 		
 		if (running && v != 0 && v <= currentCount) {
 			
-			stop();
+			stop ();
 			
 		}
 		
@@ -128,6 +127,3 @@ class Timer extends EventDispatcher {
 	
 	
 }
-
-
-#end

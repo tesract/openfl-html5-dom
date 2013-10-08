@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 class SoundTransform {
@@ -13,7 +12,8 @@ class SoundTransform {
 	public var volume:Float;
 	
 	
-	public function new(vol:Float = 1, panning:Float = 0):Void {
+	public function new (vol:Float = 1, panning:Float = 0):Void {
+		
 		volume = vol;
 		pan = panning;
 		leftToLeft = 0;
@@ -25,6 +25,3 @@ class SoundTransform {
 	
 	
 }
-
-
-#end

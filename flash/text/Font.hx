@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 import flash.display.Graphics;
@@ -16,28 +15,28 @@ class Font {
 	public static inline var DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
 	public static inline var DEFAULT_CLASS_NAME = "flash.text.Font";
 	
-	public var fontName(default, set_fontName):String;
-	public var fontStyle(default, null):FontStyle;
-	public var fontType(default, null):FontType;
+	public var fontName (default, set_fontName):String;
+	public var fontStyle (default, null):FontStyle;
+	public var fontType (default, null):FontType;
 	
-	private static var nmeFontData:Array<Dynamic>;
-	private static var nmeRegisteredFonts = new Array<Font> ();
+	private static var __fontData:Array<Dynamic>;
+	private static var __registeredFonts = new Array<Font> ();
 	
-	private var nmeFontScale:Float;
-	private var nmeGlyphData:Map<Int, GlyphData>;
-	private var nmeMetrics:Array<Int>;
+	private var __fontScale:Float;
+	private var __glyphData:Map<Int, GlyphData>;
+	private var __metrics:Array<Int>;
 	
 	
-	public function new() {
+	public function new () {
 		
-		nmeMetrics = [];
-		nmeFontScale = DEFAULT_FONT_SCALE;
-		var className = Type.getClassName(Type.getClass(this));
+		__metrics = [];
+		__fontScale = DEFAULT_FONT_SCALE;
+		var className = Type.getClassName (Type.getClass (this));
 		
-		if (nmeFontData == null) {
+		if (__fontData == null) {
 			
-			nmeFontData = [];
-			nmeFontData[cast DEFAULT_FONT_NAME] = Unserializer.run (DEFAULT_FONT_DATA);
+			__fontData = [];
+			__fontData[cast DEFAULT_FONT_NAME] = Unserializer.run (DEFAULT_FONT_DATA);
 			
 		}
 		
@@ -47,14 +46,14 @@ class Font {
 			
 		} else {
 			
-			fontName = className.split(".").pop();
+			fontName = className.split (".").pop ();
 			
 		}
 		
 	}
 	
 	
-	public static function enumerateFonts(enumerateDeviceFonts:Bool = false):Array<Font> {
+	public static function enumerateFonts (enumerateDeviceFonts:Bool = false):Array<Font> {
 		
 		/*var sans = new Font();
 		sans.fontName = DEFAULT_FONT_NAME;
@@ -62,27 +61,27 @@ class Font {
 		sans.fontType = DEVICE;
 		return [sans];*/
 		
-		return nmeRegisteredFonts.copy();
+		return __registeredFonts.copy ();
 		
 	}
 	
 	
-	public function hasGlyph(str:String) {
+	public function hasGlyph (str:String) {
 		
-		return nmeGlyphData.exists(str.charCodeAt(0));
+		return __glyphData.exists (str.charCodeAt (0));
 		
 	}
 	
 	
-	public function nmeGetAdvance(inGlyph:Int, height:Int):Int {
+	public function __getAdvance (inGlyph:Int, height:Int):Int {
 		
-		var m = nmeMetrics[inGlyph];
+		var m = __metrics[inGlyph];
 		
 		if (m == null) {
 			
-			var glyph = nmeGlyphData.get(inGlyph);
+			var glyph = __glyphData.get (inGlyph);
 			if (glyph == null) return 0;
-			nmeMetrics[inGlyph] = m = Std.int(glyph._width * nmeFontScale);
+			__metrics[inGlyph] = m = Std.int (glyph._width * __fontScale);
 			
 		}
 		
@@ -98,7 +97,7 @@ class Font {
 	
 	
 	// hxswfml ttf2hash myfont.ttf -glyphs [32-126] > myfont.hash; haxe -resource myfont.hash@myfont ...; Font.registerFont( Resource.get( "myfont" ) );
-	public static function nmeOfResource(resourceName:String, fontName:String = ""):String {
+	public static function __ofResource (resourceName:String, fontName:String = ""):String {
 		
 		var data = Unserializer.run (Resource.getString(resourceName));
 		
@@ -110,12 +109,12 @@ class Font {
 			
 			if (fontName == "") { 
 				
-				nmeFontData[cast resourceName] = data.hash;
+				__fontData[cast resourceName] = data.hash;
 				fontName = data.fontName;
 				
 			}
 			
-			nmeFontData[cast data.fontName] = data.hash;
+			__fontData[cast data.fontName] = data.hash;
 			
 		}
 		
@@ -124,9 +123,9 @@ class Font {
 	}
 	
 	
-	public function nmeRender(graphics:Graphics, inChar:Int, inX:Int, inY:Int, inOutline:Bool):Void {
+	public function __render (graphics:Graphics, inChar:Int, inX:Int, inY:Int, inOutline:Bool):Void {
 		var index = 0;
-		var glyph = nmeGlyphData.get(inChar);
+		var glyph = __glyphData.get (inChar);
 		
 		if (glyph == null) return;
 		
@@ -137,9 +136,9 @@ class Font {
 			
 			switch (c) {
 				
-				case 1: graphics.moveTo(inX + data[index++] * nmeFontScale, inY + data[index++] * nmeFontScale);
-				case 2: graphics.lineTo(inX + data[index++] * nmeFontScale, inY + data[index++] * nmeFontScale);
-				case 3: graphics.curveTo(inX + data[index++] * nmeFontScale, inY + data[index++] * nmeFontScale, inX + data[index++] * nmeFontScale, inY + data[index++] * nmeFontScale);
+				case 1: graphics.moveTo(inX + data[index++] * __fontScale, inY + data[index++] * __fontScale);
+				case 2: graphics.lineTo(inX + data[index++] * __fontScale, inY + data[index++] * __fontScale);
+				case 3: graphics.curveTo(inX + data[index++] * __fontScale, inY + data[index++] * __fontScale, inX + data[index++] * __fontScale, inY + data[index++] * __fontScale);
 				
 			}
 			
@@ -148,26 +147,26 @@ class Font {
 	}
 	
 	
-	public function nmeSetScale(scale:Float):Void {
+	public function __setScale (scale:Float):Void {
 		
-		nmeFontScale = scale / 1024;
+		__fontScale = scale / 1024;
 		
 	}
 	
 	
-	public static function registerFont(font:Class<Dynamic>) {
+	public static function registerFont (font:Class<Dynamic>) {
 		
 		var instance = cast (Type.createInstance (font, []), Font);
 		
 		if (instance != null) {
 			
-			if (Reflect.hasField(font, "resourceName")) {
+			if (Reflect.hasField (font, "resourceName")) {
 				
-				instance.fontName = nmeOfResource (Reflect.field(font, "resourceName"));
+				instance.fontName = __ofResource (Reflect.field (font, "resourceName"));
 				
 			}
 			
-			nmeRegisteredFonts.push (instance);
+			__registeredFonts.push (instance);
 			
 		}
 		
@@ -181,7 +180,7 @@ class Font {
 	
 	
 	
-	private function set_fontName(name:String) {
+	private function set_fontName (name:String) {
 
 		if (name == "_sans" || name == "_serif" || name == "_typewriter") {
 			
@@ -191,13 +190,13 @@ class Font {
 		
 		this.fontName = name;
 		
-		if (nmeFontData[cast fontName] == null) {
+		if (__fontData[cast fontName] == null) {
 			
 			try {
 				
-				nmeOfResource(name);
+				__ofResource (name);
 				
-			} catch(e:Dynamic) {
+			} catch (e:Dynamic) {
 				
 				this.fontName = DEFAULT_FONT_NAME;
 				
@@ -205,13 +204,13 @@ class Font {
 			
 		} 
 		
-		if (nmeFontData[cast fontName] != null) {
+		if (__fontData[cast fontName] != null) {
 			
 			try {
 				
-				nmeGlyphData = nmeFontData[cast fontName];
+				__glyphData = __fontData[cast fontName];
 				
-			} catch(e:Dynamic) {
+			} catch (e:Dynamic) {
 				
 				this.fontName = DEFAULT_FONT_NAME;
 				
@@ -256,6 +255,3 @@ typedef GlyphData = {
 	var data:Array<Float>;
 	
 }
-
-
-#end

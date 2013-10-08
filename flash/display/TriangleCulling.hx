@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum TriangleCulling {
@@ -9,6 +8,3 @@ enum TriangleCulling {
 	POSITIVE;
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.BlendMode;
@@ -30,52 +29,52 @@ import js.Browser;
 class BitmapData implements IBitmapDrawable {
 	
 	
-	public var height(get_height, null):Int;
-	public var nmeImageData:ImageData;
-	public var nmeGLTexture:GLTexture;
-	public var nmeReferenceCount:Int;
+	public var height (get_height, null):Int;
 	public var rect:Rectangle;
-	public var transparent(get_transparent, null):Bool;
-	public var width(get_width,null):Int;
+	public var transparent (get_transparent, null):Bool;
+	public var width (get_width, null):Int;
 	
-	private var nmeAssignedBitmaps:Int;
-	private var nmeCopyPixelList:Array<CopyPixelAtom>;
-	private var nmeImageDataChanged:Bool;
-	private var nmeInitColor:Int;
-	private var nmeLease:ImageDataLease;
-	private var nmeLeaseNum:Int;
-	private var nmeLocked:Bool;
-	private var nmeTransparent:Bool;
-	private var nmeTransparentFiller:CanvasElement;
+	public var __imageData:ImageData;
+	public var __gLTexture:GLTexture;
+	public var __referenceCount:Int;
 	
-	private var _nmeId:String;
-	private var _nmeTextureBuffer:CanvasElement;
+	private var __assignedBitmaps:Int;
+	private var __copyPixelList:Array<CopyPixelAtom>;
+	private var __imageDataChanged:Bool;
+	private var __initColor:Int;
+	private var __lease:ImageDataLease;
+	private var __leaseNum:Int;
+	private var __locked:Bool;
+	private var __transparent:Bool;
+	private var __transparentFiller:CanvasElement;
+	private var ___id:String;
+	private var ___textureBuffer:CanvasElement;
 	
 	
-	public function new(width:Int, height:Int, transparent:Bool = true, inFillColor:Int = 0xFFFFFFFF) {
+	public function new (width:Int, height:Int, transparent:Bool = true, inFillColor:Int = 0xFFFFFFFF) {
 		
-		nmeLocked = false;
-		nmeReferenceCount = 0;
-		nmeLeaseNum = 0;
-		nmeLease = new ImageDataLease();
-		nmeBuildLease();
+		__locked = false;
+		__referenceCount = 0;
+		__leaseNum = 0;
+		__lease = new ImageDataLease ();
+		__buildLease ();
 		
-		_nmeTextureBuffer = cast Browser.document.createElement('canvas');
-		_nmeTextureBuffer.width = width;
-		_nmeTextureBuffer.height = height;
-		_nmeId = Uuid.uuid();
-		Lib.nmeSetSurfaceId(_nmeTextureBuffer, _nmeId);
+		___textureBuffer = cast Browser.document.createElement ('canvas');
+		___textureBuffer.width = width;
+		___textureBuffer.height = height;
+		___id = Uuid.uuid ();
+		Lib.__setSurfaceId (___textureBuffer, ___id);
 		
-		nmeTransparent = transparent;
-		rect = new Rectangle(0, 0, width, height);
+		__transparent = transparent;
+		rect = new Rectangle (0, 0, width, height);
 		
-		if (nmeTransparent) {
+		if (__transparent) {
 			
-			nmeTransparentFiller = cast Browser.document.createElement('canvas');
-			nmeTransparentFiller.width = width;
-			nmeTransparentFiller.height = height;
+			__transparentFiller = cast Browser.document.createElement ('canvas');
+			__transparentFiller.width = width;
+			__transparentFiller.height = height;
 			
-			var ctx = nmeTransparentFiller.getContext('2d');
+			var ctx = __transparentFiller.getContext ('2d');
 			ctx.fillStyle = 'rgba(0,0,0,0);';
 			ctx.fill();
 			
@@ -83,29 +82,29 @@ class BitmapData implements IBitmapDrawable {
 
 		if (inFillColor != null && width > 0 && height > 0) {
 			
-			if (!nmeTransparent) inFillColor |= 0xFF000000;
+			if (!__transparent) inFillColor |= 0xFF000000;
 			
-			nmeInitColor = inFillColor;
-			nmeFillRect(rect, inFillColor);
+			__initColor = inFillColor;
+			__fillRect(rect, inFillColor);
 			
 		}
 		
 	}
 	
 	
-	public function applyFilter(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, filter:BitmapFilter):Void {
+	public function applyFilter (sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, filter:BitmapFilter):Void {
 		
 		if (sourceBitmapData == this && sourceRect.x == destPoint.x && sourceRect.y == destPoint.y) {
 			
-			filter.nmeApplyFilter(handle(), sourceRect);
+			filter.__applyFilter (handle (), sourceRect);
 			
 		} else {
 			
-			var bitmapData = new BitmapData(Std.int (sourceRect.width), Std.int (sourceRect.height));
-			bitmapData.copyPixels(sourceBitmapData, sourceRect, new Point());
-			filter.nmeApplyFilter(bitmapData.handle());
+			var bitmapData = new BitmapData (Std.int (sourceRect.width), Std.int (sourceRect.height));
+			bitmapData.copyPixels (sourceBitmapData, sourceRect, new Point());
+			filter.__applyFilter (bitmapData.handle ());
 			
-			copyPixels(bitmapData, bitmapData.rect, destPoint);
+			copyPixels (bitmapData, bitmapData.rect, destPoint);
 			
 		}
 		
@@ -119,7 +118,7 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	private function clipRect(r:Rectangle):Rectangle {
+	private function clipRect (r:Rectangle):Rectangle {
 		
 		if (r.x < 0) {
 			
@@ -160,74 +159,74 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public function clone():BitmapData {
+	public function clone ():BitmapData {
 		
-		var bitmapData = new BitmapData(width, height, nmeTransparent);
-		var rect = new Rectangle(0, 0, width, height);
+		var bitmapData = new BitmapData (width, height, __transparent);
+		var rect = new Rectangle (0, 0, width, height);
 		
-		bitmapData.setPixels(rect, getPixels(rect));
-		bitmapData.nmeBuildLease();
+		bitmapData.setPixels (rect, getPixels(rect));
+		bitmapData.__buildLease ();
 		
 		return bitmapData;
 		
 	}
 	
 	
-	public function colorTransform(rect:Rectangle, colorTransform:ColorTransform) {
+	public function colorTransform (rect:Rectangle, colorTransform:ColorTransform) {
 		
 		if (rect == null) return;
-		rect = clipRect(rect);
+		rect = clipRect (rect);
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			nmeBuildLease();
-			var ctx:CanvasRenderingContext2D = handle().getContext('2d');
+			__buildLease ();
+			var ctx:CanvasRenderingContext2D = handle ().getContext ('2d');
 			
-			var imagedata = ctx.getImageData(rect.x, rect.y, rect.width, rect.height);
+			var imagedata = ctx.getImageData (rect.x, rect.y, rect.width, rect.height);
 			var offsetX:Int;
 			
 			for (i in 0...imagedata.data.length >> 2) {
 				
 				offsetX = i * 4;
-				imagedata.data[offsetX] = Std.int((imagedata.data[offsetX] * colorTransform.redMultiplier) + colorTransform.redOffset);
-				imagedata.data[offsetX + 1] = Std.int((imagedata.data[offsetX + 1] * colorTransform.greenMultiplier) + colorTransform.greenOffset);
-				imagedata.data[offsetX + 2] = Std.int((imagedata.data[offsetX + 2] * colorTransform.blueMultiplier) + colorTransform.blueOffset);
-				imagedata.data[offsetX + 3] = Std.int((imagedata.data[offsetX + 3] * colorTransform.alphaMultiplier) + colorTransform.alphaOffset);
+				imagedata.data[offsetX] = Std.int ((imagedata.data[offsetX] * colorTransform.redMultiplier) + colorTransform.redOffset);
+				imagedata.data[offsetX + 1] = Std.int ((imagedata.data[offsetX + 1] * colorTransform.greenMultiplier) + colorTransform.greenOffset);
+				imagedata.data[offsetX + 2] = Std.int ((imagedata.data[offsetX + 2] * colorTransform.blueMultiplier) + colorTransform.blueOffset);
+				imagedata.data[offsetX + 3] = Std.int ((imagedata.data[offsetX + 3] * colorTransform.alphaMultiplier) + colorTransform.alphaOffset);
 				
 			}
 			
-			ctx.putImageData(imagedata, rect.x, rect.y);
+			ctx.putImageData (imagedata, rect.x, rect.y);
 			
 		} else {
 			
-			var s = 4 * (Math.round(rect.x) + (Math.round(rect.y) * nmeImageData.width));
+			var s = 4 * (Math.round (rect.x) + (Math.round (rect.y) * __imageData.width));
 			var offsetY:Int;
 			var offsetX:Int;
 			
-			for (i in 0...Math.round(rect.height)) {
+			for (i in 0...Math.round (rect.height)) {
 				
-				offsetY = (i * nmeImageData.width);
+				offsetY = (i * __imageData.width);
 				
-				for (j in 0...Math.round(rect.width)) {
+				for (j in 0...Math.round (rect.width)) {
 					
 					offsetX = 4 * (j + offsetY);
-					nmeImageData.data[s + offsetX] = Std.int((nmeImageData.data[s + offsetX] * colorTransform.redMultiplier) + colorTransform.redOffset);
-					nmeImageData.data[s + offsetX + 1] = Std.int((nmeImageData.data[s + offsetX + 1] * colorTransform.greenMultiplier) + colorTransform.greenOffset);
-					nmeImageData.data[s + offsetX + 2] = Std.int((nmeImageData.data[s + offsetX + 2] * colorTransform.blueMultiplier) + colorTransform.blueOffset);
-					nmeImageData.data[s + offsetX + 3] = Std.int((nmeImageData.data[s + offsetX + 3] * colorTransform.alphaMultiplier) + colorTransform.alphaOffset);
+					__imageData.data[s + offsetX] = Std.int ((__imageData.data[s + offsetX] * colorTransform.redMultiplier) + colorTransform.redOffset);
+					__imageData.data[s + offsetX + 1] = Std.int ((__imageData.data[s + offsetX + 1] * colorTransform.greenMultiplier) + colorTransform.greenOffset);
+					__imageData.data[s + offsetX + 2] = Std.int ((__imageData.data[s + offsetX + 2] * colorTransform.blueMultiplier) + colorTransform.blueOffset);
+					__imageData.data[s + offsetX + 3] = Std.int ((__imageData.data[s + offsetX + 3] * colorTransform.alphaMultiplier) + colorTransform.alphaOffset);
 					
 				}
 				
 			}
 			
-			nmeImageDataChanged = true;
+			__imageDataChanged = true;
 			
 		}
 		
 	}
 	
 	
-	public function compare(inBitmapTexture:BitmapData):Int {
+	public function compare (inBitmapTexture:BitmapData):Int {
 		
 		throw "bitmapData.compare is currently not supported for HTML5";
 		return 0x00000000;
@@ -235,20 +234,20 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public function copyChannel(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, sourceChannel:Int, destChannel:Int):Void {
+	public function copyChannel (sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, sourceChannel:Int, destChannel:Int):Void {
 		
-		rect = clipRect(rect);
+		rect = clipRect (rect);
 		if (rect == null) return;
 		
-		if (destChannel == BitmapDataChannel.ALPHA && !nmeTransparent) return;
-		if (sourceBitmapData.handle() == null || _nmeTextureBuffer == null || sourceRect.width <= 0 || sourceRect.height <= 0 ) return;
-		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle().width) sourceRect.width = sourceBitmapData.handle().width - sourceRect.x;
-		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle().height) sourceRect.height = sourceBitmapData.handle().height - sourceRect.y;
+		if (destChannel == BitmapDataChannel.ALPHA && !__transparent) return;
+		if (sourceBitmapData.handle () == null || ___textureBuffer == null || sourceRect.width <= 0 || sourceRect.height <= 0 ) return;
+		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle ().width) sourceRect.width = sourceBitmapData.handle ().width - sourceRect.x;
+		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle ().height) sourceRect.height = sourceBitmapData.handle ().height - sourceRect.y;
 		
-		var doChannelCopy = function(imageData:ImageData) {
+		var doChannelCopy = function (imageData:ImageData) {
 			
-			var srcCtx:CanvasRenderingContext2D = sourceBitmapData.handle().getContext('2d');
-			var srcImageData = srcCtx.getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+			var srcCtx:CanvasRenderingContext2D = sourceBitmapData.handle ().getContext ('2d');
+			var srcImageData = srcCtx.getImageData (sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
 			
 			var destIdx = -1;
 			
@@ -274,10 +273,10 @@ class BitmapData implements IBitmapDrawable {
 				
 			}
 			
-			var pos = 4 * (Math.round(destPoint.x) + (Math.round(destPoint.y) * imageData.width)) + destIdx;
-			var boundR = Math.round(4 * (destPoint.x + sourceRect.width));
+			var pos = 4 * (Math.round (destPoint.x) + (Math.round (destPoint.y) * imageData.width)) + destIdx;
+			var boundR = Math.round (4 * (destPoint.x + sourceRect.width));
 			
-			var setPos = function(val:Int) {
+			var setPos = function (val:Int) {
 				
 				if ((pos % (imageData.width * 4)) > boundR - 1) {
 					
@@ -316,42 +315,42 @@ class BitmapData implements IBitmapDrawable {
 			
 			while (srcIdx < srcImageData.data.length) {
 				
-				setPos(srcImageData.data[srcIdx]);
+				setPos (srcImageData.data[srcIdx]);
 				srcIdx += 4;
 				
 			}
 			
 		}
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			nmeBuildLease();
+			__buildLease ();
 			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imageData = ctx.getImageData(0, 0, width, height);
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imageData = ctx.getImageData (0, 0, width, height);
 			
-			doChannelCopy(imageData);
-			ctx.putImageData(imageData, 0, 0);
+			doChannelCopy (imageData);
+			ctx.putImageData (imageData, 0, 0);
 			
 		} else {
 			
-			doChannelCopy(nmeImageData);
-			nmeImageDataChanged = true;
+			doChannelCopy (__imageData);
+			__imageDataChanged = true;
 			
 		}
 		
 	}
 	
 	
-	public function copyPixels(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, alphaBitmapData:BitmapData = null, alphaPoint:Point = null, mergeAlpha:Bool = false):Void {
+	public function copyPixels (sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, alphaBitmapData:BitmapData = null, alphaPoint:Point = null, mergeAlpha:Bool = false):Void {
 		
-		if (sourceBitmapData.handle() == null || _nmeTextureBuffer == null || sourceBitmapData.handle().width == 0 || sourceBitmapData.handle().height == 0 || sourceRect.width <= 0 || sourceRect.height <= 0 ) return;
-		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle().width) sourceRect.width = sourceBitmapData.handle().width - sourceRect.x;
-		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle().height) sourceRect.height = sourceBitmapData.handle().height - sourceRect.y;
+		if (sourceBitmapData.handle () == null || ___textureBuffer == null || sourceBitmapData.handle ().width == 0 || sourceBitmapData.handle ().height == 0 || sourceRect.width <= 0 || sourceRect.height <= 0 ) return;
+		if (sourceRect.x + sourceRect.width > sourceBitmapData.handle ().width) sourceRect.width = sourceBitmapData.handle ().width - sourceRect.x;
+		if (sourceRect.y + sourceRect.height > sourceBitmapData.handle ().height) sourceRect.height = sourceBitmapData.handle ().height - sourceRect.y;
 		
-		if (alphaBitmapData != null && alphaBitmapData.nmeTransparent) {
+		if (alphaBitmapData != null && alphaBitmapData.__transparent) {
 			
-			if (alphaPoint == null) alphaPoint = new Point();
+			if (alphaPoint == null) alphaPoint = new Point ();
 			
 			var bitmapData = new BitmapData (sourceBitmapData.width, sourceBitmapData.height, true);
 			bitmapData.copyPixels (sourceBitmapData, sourceRect, new Point (sourceRect.x, sourceRect.y));
@@ -361,48 +360,48 @@ class BitmapData implements IBitmapDrawable {
 			
 		}
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			nmeBuildLease();
+			__buildLease ();
 			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
 			
 			if (!mergeAlpha) {
 				
-				if (nmeTransparent && sourceBitmapData.nmeTransparent) {
+				if (__transparent && sourceBitmapData.__transparent) {
 					
-					var trpCtx:CanvasRenderingContext2D = sourceBitmapData.nmeTransparentFiller.getContext('2d');
-					var trpData = trpCtx.getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
-					ctx.putImageData(trpData, destPoint.x, destPoint.y);
+					var trpCtx:CanvasRenderingContext2D = sourceBitmapData.__transparentFiller.getContext ('2d');
+					var trpData = trpCtx.getImageData (sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
+					ctx.putImageData (trpData, destPoint.x, destPoint.y);
 					
 				}
 				
 			}
 			
-			ctx.drawImage(sourceBitmapData.handle(), sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destPoint.x, destPoint.y, sourceRect.width, sourceRect.height);
+			ctx.drawImage (sourceBitmapData.handle (), sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destPoint.x, destPoint.y, sourceRect.width, sourceRect.height);
 			
 		} else {
 			
-			//var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			//ctx.putImageData (sourceBitmapData._nmeTextureBuffer.getContext('2d').getImageData(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height), destPoint.x, destPoint.y);
+			//var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			//ctx.putImageData (sourceBitmapData.___textureBuffer.getContext ('2d').getImageData (sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height), destPoint.x, destPoint.y);
 			
 			
 			//var offsetX = Std.int (destPoint.x - sourceRect.x);
 			//var offsetY = Std.int (destPoint.y - sourceRect.y);
 			//
-			//var wasLocked = sourceBitmapData.nmeLocked;
+			//var wasLocked = sourceBitmapData.__locked;
 			//if (!wasLocked) sourceBitmapData.lock();
 			//
 			//var sourceRectX = Std.int (sourceRect.x);
 			//var sourceRectY = Std.int (sourceRect.y);
 			//var sourceRectWidth = Std.int (sourceRect.width);
 			//var sourceRectHeight = Std.int (sourceRect.height);
-			//var targetData = nmeImageData.data;
-			//var sourceData = sourceBitmapData.nmeImageData.data;
+			//var targetData = __imageData.data;
+			//var sourceData = sourceBitmapData.__imageData.data;
 			//var targetWidth = width;
 			//var sourceWidth = sourceBitmapData.width;
 			//
-			//if (sourceBitmapData.nmeImageData != null) {
+			//if (sourceBitmapData.__imageData != null) {
 				//
 				//for (sourceX in sourceRectX...sourceRectWidth + 1) {
 					//
@@ -427,55 +426,55 @@ class BitmapData implements IBitmapDrawable {
 			//
 			//
 			//
-			//nmeImageData.data[offset] = (color & 0x00FF0000) >>> 16;
-			//nmeImageData.data[offset + 1] = (color & 0x0000FF00) >>> 8;
-			//nmeImageData.data[offset + 2] = (color & 0x000000FF);
+			//__imageData.data[offset] = (color & 0x00FF0000) >>> 16;
+			//__imageData.data[offset + 1] = (color & 0x0000FF00) >>> 8;
+			//__imageData.data[offset + 2] = (color & 0x000000FF);
 			//
-			//if (nmeTransparent) {
+			//if (__transparent) {
 				//
-				//nmeImageData.data[offset + 3] = (color & 0xFF000000) >>> 24;
+				//__imageData.data[offset + 3] = (color & 0xFF000000) >>> 24;
 				//
 			//} else {
 				//
-				//nmeImageData.data[offset + 3] = (0xFF);
+				//__imageData.data[offset + 3] = (0xFF);
 				//
 			//}
 			//
-			//nmeImageDataChanged = true;
+			//__imageDataChanged = true;
 			//
-			nmeCopyPixelList[nmeCopyPixelList.length] = { handle: sourceBitmapData.handle(), transparentFiller:  (mergeAlpha ? null : sourceBitmapData.nmeTransparentFiller), sourceX: sourceRect.x, sourceY: sourceRect.y, sourceWidth: sourceRect.width, sourceHeight: sourceRect.height, destX: destPoint.x, destY: destPoint.y };
+			__copyPixelList[__copyPixelList.length] = { handle: sourceBitmapData.handle (), transparentFiller: (mergeAlpha ? null : sourceBitmapData.__transparentFiller), sourceX: sourceRect.x, sourceY: sourceRect.y, sourceWidth: sourceRect.width, sourceHeight: sourceRect.height, destX: destPoint.x, destY: destPoint.y };
 			
 		}
 		
 	}
 	
 	
-	public function destroy():Void {
+	public function destroy ():Void {
 		
-		_nmeTextureBuffer = null;
-		
-	}
-	
-	
-	public function dispose():Void {
-		
-		nmeClearCanvas();
-		_nmeTextureBuffer = null;
-		nmeLeaseNum = 0;
-		nmeLease = null;
-		nmeImageData = null;
+		___textureBuffer = null;
 		
 	}
 	
 	
-	public function draw(source:IBitmapDrawable, matrix:Matrix = null, inColorTransform:ColorTransform = null, blendMode:BlendMode = null, clipRect:Rectangle = null, smoothing:Bool = false):Void {
+	public function dispose ():Void {
 		
-		nmeBuildLease();
-		source.drawToSurface(handle(), matrix, inColorTransform, blendMode, clipRect, smoothing);
+		__clearCanvas ();
+		___textureBuffer = null;
+		__leaseNum = 0;
+		__lease = null;
+		__imageData = null;
+		
+	}
+	
+	
+	public function draw (source:IBitmapDrawable, matrix:Matrix = null, inColorTransform:ColorTransform = null, blendMode:BlendMode = null, clipRect:Rectangle = null, smoothing:Bool = false):Void {
+		
+		__buildLease ();
+		source.drawToSurface (handle (), matrix, inColorTransform, blendMode, clipRect, smoothing);
 		
 		if (inColorTransform != null) {
 			
-			var rect = new Rectangle();
+			var rect = new Rectangle ();
 			var object:DisplayObject = cast source;
 			
 			rect.x = matrix != null ? matrix.tx : 0;
@@ -483,81 +482,81 @@ class BitmapData implements IBitmapDrawable {
 			
 			try {
 				
-				rect.width = Reflect.getProperty(source, "width");
-				rect.height = Reflect.getProperty(source, "height");
+				rect.width = Reflect.getProperty (source, "width");
+				rect.height = Reflect.getProperty (source, "height");
 				
 			} catch(e:Dynamic) {
 				
-				rect.width = handle().width;
-				rect.height = handle().height;
+				rect.width = handle ().width;
+				rect.height = handle ().height;
 				
 			}
 			
-			this.colorTransform(rect, inColorTransform);
+			this.colorTransform (rect, inColorTransform);
 			
 		}
 		
 	}
 	
 	
-	public function drawToSurface(inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
+	public function drawToSurface (inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
 		
-		nmeBuildLease();
-		var ctx:CanvasRenderingContext2D = inSurface.getContext('2d');
+		__buildLease ();
+		var ctx:CanvasRenderingContext2D = inSurface.getContext ('2d');
 		
 		if (matrix != null) {
 			
-			ctx.save();
+			ctx.save ();
 			
 			if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1) {
 				
-				ctx.translate(matrix.tx, matrix.ty);
+				ctx.translate (matrix.tx, matrix.ty);
 				
 			} else {
 				
-				Lib.nmeSetImageSmoothing(ctx, smoothing);
-				ctx.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+				Lib.__setImageSmoothing (ctx, smoothing);
+				ctx.setTransform (matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
 				
 			}
 			
-			ctx.drawImage(handle(), 0, 0);
+			ctx.drawImage (handle (), 0, 0);
 			ctx.restore();
 			
 		} else {
 			
-			ctx.drawImage(handle(), 0, 0);
+			ctx.drawImage (handle (), 0, 0);
 			
 		}
 		
 		if (inColorTransform != null) {
 			
-			this.colorTransform(new Rectangle(0, 0, handle().width, handle().height), inColorTransform);
+			this.colorTransform (new Rectangle(0, 0, handle ().width, handle ().height), inColorTransform);
 			
 		}
 		
 	}
 	
 	
-	public function fillRect(rect:Rectangle, color:Int):Void {
+	public function fillRect (rect:Rectangle, color:Int):Void {
 		
 		if (rect == null) return;
 		if (rect.width <= 0 || rect.height <= 0) return;
 		
-		if (rect.x == 0 && rect.y == 0 && rect.width == _nmeTextureBuffer.width && rect.height == _nmeTextureBuffer.height) {
+		if (rect.x == 0 && rect.y == 0 && rect.width == ___textureBuffer.width && rect.height == ___textureBuffer.height) {
 			
-			if (nmeTransparent) {
+			if (__transparent) {
 				
-				if ((color >>> 24 == 0) || color == nmeInitColor) {
+				if ((color >>> 24 == 0) || color == __initColor) {
 					
-					return nmeClearCanvas();
+					return __clearCanvas ();
 					
 				}
 				
 			} else {
 				
-				if ((color | 0xFF000000) == (nmeInitColor | 0xFF000000)) {
+				if ((color | 0xFF000000) == (__initColor | 0xFF000000)) {
 					
-					return nmeClearCanvas();
+					return __clearCanvas ();
 					
 				}
 				
@@ -565,20 +564,20 @@ class BitmapData implements IBitmapDrawable {
 			
 		}
 		
-		return nmeFillRect(rect, color);
+		return __fillRect (rect, color);
 		
 	}
 	
 	
-	public function floodFill(x:Int, y:Int, color:Int):Void {
+	public function floodFill (x:Int, y:Int, color:Int):Void {
 		
-		var wasLocked = nmeLocked;
-		if (!nmeLocked) lock();
+		var wasLocked = __locked;
+		if (!__locked) lock ();
 		
-		var queue = new Array<Point>();
-		queue.push(new Point(x, y));
+		var queue = new Array<Point> ();
+		queue.push (new Point (x, y));
 		
-		var old = getPixel32(x, y);
+		var old = getPixel32 (x, y);
 		var iterations = 0;
 		
 		var search = new Array ();
@@ -601,7 +600,7 @@ class BitmapData implements IBitmapDrawable {
 		
 		while (queue.length > 0) {
 			
-			currPoint = queue.shift();
+			currPoint = queue.shift ();
 			++iterations;
 			
 			var x = Std.int (currPoint.x);
@@ -612,34 +611,35 @@ class BitmapData implements IBitmapDrawable {
 			
 			search[x][y] = true;
 			
-			if (getPixel32(x, y) == old) {
+			if (getPixel32 (x, y) == old) {
 				
-				setPixel32(x, y, color);
+				setPixel32 (x, y, color);
 				
 				if (!search[x + 1][y]) {
-					queue.push(new Point(x + 1, y));
+					queue.push (new Point (x + 1, y));
 				} 
 				if (!search[x][y + 1]) {
-					queue.push(new Point(x, y + 1));
+					queue.push (new Point (x, y + 1));
 				} 
 				if (x > 0 && !search[x - 1][y]) {
-					queue.push(new Point(x - 1, y));
+					queue.push (new Point (x - 1, y));
 				} 
 				if (y > 0 && !search[x][y - 1]) {
-					queue.push(new Point(x, y - 1));
+					queue.push (new Point (x, y - 1));
 				}
 			}
 		}
 		
-		if (!wasLocked) unlock();
+		if (!wasLocked) unlock ();
+		
    }
 	
 	
-	public function getColorBoundsRect(mask:Int, color:Int, findColor:Bool = true):Rectangle {
+	public function getColorBoundsRect (mask:Int, color:Int, findColor:Bool = true):Rectangle {
 		
 		var me = this;
 		
-		var doGetColorBoundsRect = function(data:Uint8ClampedArray) {
+		var doGetColorBoundsRect = function (data:Uint8ClampedArray) {
 			
 			var minX = me.width, maxX = 0, minY = me.height, maxY = 0, i = 0;
 			
@@ -651,8 +651,8 @@ class BitmapData implements IBitmapDrawable {
 					
 					if ((value & mask) == color) {
 						
-						var x = Math.round((i % (me.width * 4)) / 4);
-						var y = Math.round(i / (me.width * 4));
+						var x = Math.round ((i % (me.width * 4)) / 4);
+						var y = Math.round (i / (me.width * 4));
 						
 						if (x < minX) minX = x;
 						if (x > maxX) maxX = x;
@@ -665,8 +665,8 @@ class BitmapData implements IBitmapDrawable {
 					
 					if ((value & mask) != color) {
 						
-						var x = Math.round((i % (me.width * 4)) / 4);
-						var y = Math.round(i / (me.width * 4));
+						var x = Math.round ((i % (me.width * 4)) / 4);
+						var y = Math.round (i / (me.width * 4));
 						
 						if (x < minX) minX = x;
 						if (x > maxX) maxX = x;
@@ -683,41 +683,41 @@ class BitmapData implements IBitmapDrawable {
 			
 			if (minX < maxX && minY < maxY) {
 				
-				return new Rectangle(minX, minY, maxX - minX + 1 /* +1 - bug? */, maxY - minY);
+				return new Rectangle (minX, minY, maxX - minX + 1 /* +1 - bug? */, maxY - minY);
 				
 			} else {
 				
-				return new Rectangle(0, 0, me.width, me.height);
+				return new Rectangle (0, 0, me.width, me.height);
 				
 			}
 			
 		}
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			var ctx = _nmeTextureBuffer.getContext('2d');
-			var imageData = ctx.getImageData(0, 0, width, height);
+			var ctx = ___textureBuffer.getContext ('2d');
+			var imageData = ctx.getImageData (0, 0, width, height);
 			
-			return doGetColorBoundsRect(imageData.data);
+			return doGetColorBoundsRect (imageData.data);
 			
 		} else {
 			
-			return doGetColorBoundsRect(nmeImageData.data);
+			return doGetColorBoundsRect (__imageData.data);
 			
 		}
 		
 	}
 	
 	
-	private function getInt32(offset:Int, data:Uint8ClampedArray) {
+	private function getInt32 (offset:Int, data:Uint8ClampedArray) {
 		
-		return (nmeTransparent ? data[offset + 3] : 0xFF) << 24 | data[offset] << 16 | data[offset + 1] << 8 | data[offset + 2]; 
+		return (__transparent ? data[offset + 3] : 0xFF) << 24 | data[offset] << 16 | data[offset + 1] << 8 | data[offset + 2]; 
 		
 		// code to deal with 31-bit ints.
 		
 		//var b5, b6, b7, b8, pow = Math.pow;
 		//
-		//b5 = if (!nmeTransparent) 0xFF; else data[offset + 3] & 0xFF;
+		//b5 = if (!__transparent) 0xFF; else data[offset + 3] & 0xFF;
 		//b6 = data[offset] & 0xFF;
 		//b7 = data[offset + 1] & 0xFF;
 		//b8 = data[offset + 2] & 0xFF;
@@ -731,82 +731,82 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public function getPixel(x:Int, y:Int):Int {
+	public function getPixel (x:Int, y:Int):Int {
 		
 		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return 0;
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imagedata = ctx.getImageData(x, y, 1, 1);
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imagedata = ctx.getImageData (x, y, 1, 1);
 			
-			return (imagedata.data[0] << 16) |(imagedata.data[1] << 8) |(imagedata.data[2]);
+			return (imagedata.data[0] << 16) | (imagedata.data[1] << 8) | (imagedata.data[2]);
 			
 		} else {
 			
 			var offset = (4 * y * width + x * 4);
 			
-			return (nmeImageData.data[offset] << 16) |(nmeImageData.data[offset + 1] << 8) |(nmeImageData.data[offset + 2]);
+			return (__imageData.data[offset] << 16) | (__imageData.data[offset + 1] << 8) | (__imageData.data[offset + 2]);
 			
 		}
 		
 	}
 	
 	
-	public function getPixel32(x:Int, y:Int) {
+	public function getPixel32 (x:Int, y:Int) {
 		
 		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return 0;
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			return getInt32(0, ctx.getImageData(x, y, 1, 1).data);
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			return getInt32 (0, ctx.getImageData (x, y, 1, 1).data);
 			
 		} else {
 			
-			return getInt32((4 * y * _nmeTextureBuffer.width + x * 4), nmeImageData.data);
+			return getInt32 ((4 * y * ___textureBuffer.width + x * 4), __imageData.data);
 			
 		}
 		
 	}
 	
 	
-	public function getPixels(rect:Rectangle):ByteArray {
+	public function getPixels (rect:Rectangle):ByteArray {
 		
-		var len = Math.round(4 * rect.width * rect.height);
-		var byteArray = new ByteArray();
+		var len = Math.round (4 * rect.width * rect.height);
+		var byteArray = new ByteArray ();
 		byteArray.length = len;
 		//var byteArray = new ByteArray(len);
 		
-		rect = clipRect(rect);
+		rect = clipRect (rect);
 		if (rect == null) return byteArray;
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imagedata = ctx.getImageData(rect.x, rect.y, rect.width, rect.height);
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imagedata = ctx.getImageData (rect.x, rect.y, rect.width, rect.height);
 			
 			for (i in 0...len) {
 				
-				byteArray.writeByte(imagedata.data[i]);
+				byteArray.writeByte (imagedata.data[i]);
 				
 			}
 			
 		} else {
 			
-			var offset = Math.round(4 * nmeImageData.width * rect.y + rect.x * 4);
+			var offset = Math.round (4 * __imageData.width * rect.y + rect.x * 4);
 			var pos = offset;
-			var boundR = Math.round(4 * (rect.x + rect.width));
+			var boundR = Math.round (4 * (rect.x + rect.width));
 			
 			for (i in 0...len) {
 				
-				if (((pos) % (nmeImageData.width * 4)) > boundR - 1) {
+				if (((pos) % (__imageData.width * 4)) > boundR - 1) {
 					
-					pos += nmeImageData.width * 4 - boundR;
+					pos += __imageData.width * 4 - boundR;
 					
 				}
 				
-				byteArray.writeByte(nmeImageData.data[pos]);
+				byteArray.writeByte (__imageData.data[pos]);
 				pos++;
 				
 			}
@@ -818,9 +818,9 @@ class BitmapData implements IBitmapDrawable {
 		
 	}
 
-	inline public static function getRGBAPixels(bitmapData:BitmapData):ByteArray {
+	inline public static function getRGBAPixels (bitmapData:BitmapData):ByteArray {
 
-		var p = bitmapData.getPixels(new Rectangle(0, 0, bitmapData.width, bitmapData.height));
+		var p = bitmapData.getPixels (new Rectangle (0, 0, bitmapData.width, bitmapData.height));
 		var num = bitmapData.width * bitmapData.height;
 
         p.position = 0;
@@ -833,10 +833,10 @@ class BitmapData implements IBitmapDrawable {
 			var blue = p.readByte();
 
             p.position = pos;
-			p.writeByte(red);
-			p.writeByte(green);
-			p.writeByte(blue);
-			p.writeByte(alpha);
+			p.writeByte (red);
+			p.writeByte (green);
+			p.writeByte (blue);
+			p.writeByte (alpha);
 
 		}
 
@@ -844,20 +844,20 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public inline function handle() {
+	public inline function handle () {
 		
-		return _nmeTextureBuffer;
+		return ___textureBuffer;
 		
 	}
 	
 	
 	public function hitTest(firstPoint:Point, firstAlphaThreshold:Int, secondObject:Dynamic, secondBitmapDataPoint:Point = null, secondAlphaThreshold:Int = 1):Bool {
 		
-		var type = Type.getClassName(Type.getClass(secondObject));
+		var type = Type.getClassName (Type.getClass (secondObject));
 		firstAlphaThreshold = firstAlphaThreshold & 0xFFFFFFFF;
 		
 		var me = this;
-		var doHitTest = function(imageData:ImageData) {
+		var doHitTest = function (imageData:ImageData) {
 			
 			// TODO: Use standard Haxe Type and Reflect classes?
 			if (secondObject.__proto__ == null || secondObject.__proto__.__class__ == null || secondObject.__proto__.__class__.__name__ == null) return false;
@@ -870,18 +870,18 @@ class BitmapData implements IBitmapDrawable {
 					rect.x -= firstPoint.x;
 					rect.y -= firstPoint.y;
 					
-					rect = me.clipRect(me.rect);
+					rect = me.clipRect (me.rect);
 					if (me.rect == null) return false;
 					
-					var boundingBox = new Rectangle(0, 0, me.width, me.height);
+					var boundingBox = new Rectangle (0, 0, me.width, me.height);
 					if (!rect.intersects(boundingBox)) return false;
 					
 					var diff = rect.intersection(boundingBox);
-					var offset = 4 * (Math.round(diff.x) + (Math.round(diff.y) * imageData.width)) + 3;
+					var offset = 4 * (Math.round (diff.x) + (Math.round (diff.y) * imageData.width)) + 3;
 					var pos = offset;
-					var boundR = Math.round(4 * (diff.x + diff.width));
+					var boundR = Math.round (4 * (diff.x + diff.width));
 					
-					while (pos < offset + Math.round(4 * (diff.width + imageData.width * diff.height))) {
+					while (pos < offset + Math.round (4 * (diff.width + imageData.width * diff.height))) {
 						
 						if ((pos % (imageData.width * 4)) > boundR - 1) {
 							
@@ -903,7 +903,7 @@ class BitmapData implements IBitmapDrawable {
 					var y = point.y - firstPoint.y;
 					
 					if (x < 0 || y < 0 || x >= me.width || y >= me.height) return false;
-					if (imageData.data[Math.round(4 * (y * me.width + x)) + 3] - firstAlphaThreshold > 0) return true;
+					if (imageData.data[Math.round (4 * (y * me.width + x)) + 3] - firstAlphaThreshold > 0) return true;
 					
 					return false;
 				
@@ -926,44 +926,278 @@ class BitmapData implements IBitmapDrawable {
 			
 		}
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			nmeBuildLease();
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imageData = ctx.getImageData(0, 0, width, height);
+			__buildLease ();
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imageData = ctx.getImageData (0, 0, width, height);
 			
-			return doHitTest(imageData);
+			return doHitTest (imageData);
 			
 		} else {
 			
-			return doHitTest(nmeImageData);
+			return doHitTest (__imageData);
 			
 		}
 		
 	}
 	
 	
-	public static function loadFromBytes(bytes:ByteArray, inRawAlpha:ByteArray = null, onload:BitmapData -> Void) {
+	public static function loadFromBytes (bytes:ByteArray, inRawAlpha:ByteArray = null, onload:BitmapData -> Void) {
 		
-		var bitmapData = new BitmapData(0, 0);
-		bitmapData.nmeLoadFromBytes(bytes, inRawAlpha, onload);
+		var bitmapData = new BitmapData (0, 0);
+		bitmapData.__loadFromBytes (bytes, inRawAlpha, onload);
 		return bitmapData;
 		
 	}
 	
 	
-	public function lock():Void {
+	public function lock ():Void {
 		
-		nmeLocked = true;
-		var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-		nmeImageData = ctx.getImageData(0, 0, width, height);
-		nmeImageDataChanged = false;
-		nmeCopyPixelList = [];
+		__locked = true;
+		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+		__imageData = ctx.getImageData (0, 0, width, height);
+		__imageDataChanged = false;
+		__copyPixelList = [];
 		
 	}
 	
 	
-	private static function nmeBase64Encode(bytes:ByteArray) {
+	public function noise (randomSeed:Int, low:Int = 0, high:Int = 255, channelOptions:Int = 7, grayScale:Bool = false):Void {
+		
+		var generator = new MinstdGenerator (randomSeed);
+		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+		
+		var imageData = null;
+		
+		if (__locked) {
+			
+			imageData = __imageData;
+			
+		} else {
+			
+			imageData = ctx.createImageData (___textureBuffer.width, ___textureBuffer.height);
+			
+		}
+		
+		for (i in 0...(___textureBuffer.width * ___textureBuffer.height)) {
+			
+			if (grayScale) {
+				
+				imageData.data[i * 4] = imageData.data[i * 4 + 1] = imageData.data[i * 4 + 2] = low + generator.nextValue () % (high - low + 1);
+				
+			} else {
+				
+				imageData.data[i * 4] = if (channelOptions & BitmapDataChannel.RED == 0) 0 else low + generator.nextValue () % (high - low + 1);
+				imageData.data[i * 4 + 1] = if (channelOptions & BitmapDataChannel.GREEN == 0) 0 else low + generator.nextValue () % (high - low + 1);
+				imageData.data[i * 4 + 2] = if (channelOptions & BitmapDataChannel.BLUE == 0) 0 else low + generator.nextValue () % (high - low + 1);
+				
+			}
+			
+			imageData.data[i * 4 + 3] = if (channelOptions & BitmapDataChannel.ALPHA == 0) 255 else low + generator.nextValue () % (high - low + 1);
+			
+		}
+		
+		if (__locked) {
+			
+			__imageDataChanged = true;
+			
+		} else {
+			
+			ctx.putImageData (imageData, 0, 0);
+			
+		}
+		
+	}
+	
+	
+	public function scroll (x:Int, y:Int):Void {
+		
+		throw ("bitmapData.scroll is currently not supported for HTML5");
+		
+	}
+	
+	
+	public function setPixel (x:Int, y:Int, color:Int):Void {
+		
+		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
+		
+		if (!__locked) {
+			
+			__buildLease ();
+			
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			
+			var imageData = ctx.createImageData (1, 1);
+			imageData.data[0] = (color & 0xFF0000) >>> 16;
+			imageData.data[1] = (color & 0x00FF00) >>> 8;
+			imageData.data[2] = (color & 0x0000FF);
+			if (__transparent) imageData.data[3] = (0xFF);
+			
+			ctx.putImageData (imageData, x, y);
+			
+		} else {
+			
+			var offset = (4 * y * __imageData.width + x * 4);
+			
+			__imageData.data[offset] = (color & 0xFF0000) >>> 16;
+			__imageData.data[offset + 1] = (color & 0x00FF00) >>> 8;
+			__imageData.data[offset + 2] = (color & 0x0000FF);
+			if (__transparent) __imageData.data[offset + 3] = (0xFF);
+			
+			__imageDataChanged = true;
+			
+		}
+		
+	}
+	
+	
+	public function setPixel32 (x:Int, y:Int, color:Int):Void {
+		
+		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
+		
+		if (!__locked) {
+			
+			__buildLease ();
+			
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imageData = ctx.createImageData (1, 1);
+			
+			imageData.data[0] = (color & 0xFF0000) >>> 16;
+			imageData.data[1] = (color & 0x00FF00) >>> 8;
+			imageData.data[2] = (color & 0x0000FF);
+			
+			if (__transparent) {
+				
+				imageData.data[3] = (color & 0xFF000000) >>> 24;
+				
+			} else {
+				
+				imageData.data[3] = (0xFF);
+				
+			}
+			
+			ctx.putImageData (imageData, x, y);
+			
+		} else {
+			
+			var offset = (4 * y * __imageData.width + x * 4);
+			
+			__imageData.data[offset] = (color & 0x00FF0000) >>> 16;
+			__imageData.data[offset + 1] = (color & 0x0000FF00) >>> 8;
+			__imageData.data[offset + 2] = (color & 0x000000FF);
+			
+			if (__transparent) {
+				
+				__imageData.data[offset + 3] = (color & 0xFF000000) >>> 24;
+				
+			} else {
+				
+				__imageData.data[offset + 3] = (0xFF);
+				
+			}
+			
+			__imageDataChanged = true;
+			
+		}
+		
+	}
+	
+	
+	public function setPixels (rect:Rectangle, byteArray:ByteArray):Void {
+		
+		rect = clipRect (rect);
+		if (rect == null) return;
+		
+		var len = Math.round (4 * rect.width * rect.height);
+		
+		if (!__locked) {
+			
+			var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+			var imageData = ctx.createImageData (rect.width, rect.height);
+			
+			for (i in 0...len) {
+				
+				imageData.data[i] = byteArray.readByte ();
+				
+			}
+			
+			ctx.putImageData (imageData, rect.x, rect.y);
+			
+		} else {
+			
+			var offset = Math.round (4 * __imageData.width * rect.y + rect.x * 4);
+			var pos = offset;
+			var boundR = Math.round (4 * (rect.x + rect.width));
+			
+			for (i in 0...len) {
+				
+				if (((pos) % (__imageData.width * 4)) > boundR - 1) {
+					
+					pos += __imageData.width * 4 - boundR;
+					
+				}
+				
+				__imageData.data[pos] = byteArray.readByte();
+				pos++;
+				
+			}
+			
+			__imageDataChanged = true;
+			
+		}
+		
+	}
+	
+	
+	public function threshold (sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, operation:String, threshold:Int, color:Int = 0, mask:Int = 0xFFFFFFFF, copySource:Bool = false):Int {
+		
+		trace ("BitmapData.threshold not implemented");
+		return 0;
+		
+	}
+	
+	
+	public function unlock (changeRect:Rectangle = null):Void {
+		
+		__locked = false;
+		
+		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+		
+		if (__imageDataChanged) {
+			
+			if (changeRect != null) {
+				
+				ctx.putImageData (__imageData, 0, 0, changeRect.x, changeRect.y, changeRect.width, changeRect.height);
+				
+			} else {
+				
+				ctx.putImageData (__imageData, 0, 0);
+				
+			}
+			
+		}
+		
+		for (copyCache in __copyPixelList) {
+			
+			if (__transparent && copyCache.transparentFiller != null) {
+				
+				var trpCtx:CanvasRenderingContext2D = copyCache.transparentFiller.getContext ('2d');
+				var trpData = trpCtx.getImageData (copyCache.sourceX, copyCache.sourceY, copyCache.sourceWidth, copyCache.sourceHeight);
+				ctx.putImageData (trpData, copyCache.destX, copyCache.destY);
+				
+			}
+			
+			ctx.drawImage (copyCache.handle, copyCache.sourceX, copyCache.sourceY, copyCache.sourceWidth, copyCache.sourceHeight, copyCache.destX, copyCache.destY, copyCache.sourceWidth, copyCache.sourceHeight);
+			
+		}
+		
+		__buildLease ();
+		
+	}
+	
+	
+	private static function __base64Encode (bytes:ByteArray) {
 		
 		var blob = "";
 		var codex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -973,24 +1207,24 @@ class BitmapData implements IBitmapDrawable {
 			
 			var by1 = 0, by2 = 0, by3 = 0;
 			
-			by1 = bytes.readByte();
+			by1 = bytes.readByte ();
 			
-			if (bytes.position < bytes.length) by2 = bytes.readByte();
-			if (bytes.position < bytes.length) by3 = bytes.readByte();
+			if (bytes.position < bytes.length) by2 = bytes.readByte ();
+			if (bytes.position < bytes.length) by3 = bytes.readByte ();
 			
 			var by4 = 0, by5 = 0, by6 = 0, by7 = 0;
 			
 			by4 = by1 >> 2;
-			by5 = ((by1 & 0x3) << 4) |(by2 >> 4);
-			by6 = ((by2 & 0xF) << 2) |(by3 >> 6);
+			by5 = ((by1 & 0x3) << 4) | (by2 >> 4);
+			by6 = ((by2 & 0xF) << 2) | (by3 >> 6);
 			by7 = by3 & 0x3F;
 			
-			blob += codex.charAt(by4);
-			blob += codex.charAt(by5);
+			blob += codex.charAt (by4);
+			blob += codex.charAt (by5);
 			
 			if (bytes.position < bytes.length) {
 				
-				blob += codex.charAt(by6);
+				blob += codex.charAt (by6);
 				
 			} else {
 				
@@ -1000,7 +1234,7 @@ class BitmapData implements IBitmapDrawable {
 			
 			if (bytes.position < bytes.length) {
 				
-				blob += codex.charAt(by7);
+				blob += codex.charAt (by7);
 				
 			} else {
 				
@@ -1015,142 +1249,142 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	private inline function nmeBuildLease():Void {
+	private inline function __buildLease ():Void {
 		
-		nmeLease.set(nmeLeaseNum++, Date.now().getTime());
-		
-	}
-	
-	
-	public inline function nmeClearCanvas():Void {
-		
-		var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-		ctx.clearRect(0, 0, _nmeTextureBuffer.width, _nmeTextureBuffer.height);
-		//_nmeTextureBuffer.width = _nmeTextureBuffer.width;
+		__lease.set (__leaseNum++, Date.now ().getTime ());
 		
 	}
 	
 	
-	public static function nmeCreateFromHandle(inHandle:CanvasElement):BitmapData {
+	public inline function __clearCanvas ():Void {
 		
-		var result = new BitmapData(0, 0);
-		result._nmeTextureBuffer = inHandle;
+		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
+		ctx.clearRect (0, 0, ___textureBuffer.width, ___textureBuffer.height);
+		//___textureBuffer.width = ___textureBuffer.width;
+		
+	}
+	
+	
+	public static function __createFromHandle (inHandle:CanvasElement):BitmapData {
+		
+		var result = new BitmapData (0, 0);
+		result.___textureBuffer = inHandle;
 		return result;
 		
 	}
 	
 	
-	public function nmeDecrNumRefBitmaps():Void {
+	public function __decrNumRefBitmaps ():Void {
 		
-		nmeAssignedBitmaps--;
+		__assignedBitmaps--;
 		
 	}
 	
 	
-	private function nmeFillRect(rect:Rectangle, color:Int) {
+	private function __fillRect (rect:Rectangle, color:Int) {
 		
-		nmeBuildLease();
+		__buildLease ();
 		
-		var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
+		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ('2d');
 		
 		var r = (color & 0xFF0000) >>> 16;
 		var g = (color & 0x00FF00) >>> 8;
 		var b = (color & 0x0000FF);
-		var a = (nmeTransparent) ?(color >>> 24) : 0xFF;
+		var a = (__transparent) ? (color >>> 24) : 0xFF;
 		
-		if (!nmeLocked) {
+		if (!__locked) {
 			
-			//if (nmeTransparent) {
+			//if (__transparent) {
 				//
-				//var trpCtx:CanvasRenderingContext2D = nmeTransparentFiller.getContext('2d');
-				//var trpData = trpCtx.getImageData(rect.x, rect.y, rect.width, rect.height);
+				//var trpCtx:CanvasRenderingContext2D = __transparentFiller.getContext ('2d');
+				//var trpData = trpCtx.getImageData (rect.x, rect.y, rect.width, rect.height);
 				//
-				//ctx.putImageData(trpData, rect.x, rect.y);
+				//ctx.putImageData (trpData, rect.x, rect.y);
 				//
 			//}
 			
 			var style = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (a / 255) + ')';
 			
 			ctx.fillStyle = style;
-			ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+			ctx.fillRect (rect.x, rect.y, rect.width, rect.height);
 			
 		} else {
 			
-			var s = 4 * (Math.round(rect.x) + (Math.round(rect.y) * nmeImageData.width));
+			var s = 4 * (Math.round (rect.x) + (Math.round (rect.y) * __imageData.width));
 			var offsetY:Int;
 			var offsetX:Int;
 			
-			for (i in 0...Math.round(rect.height)) {
+			for (i in 0...Math.round (rect.height)) {
 				
-				offsetY = (i * nmeImageData.width);
+				offsetY = (i * __imageData.width);
 				
-				for (j in 0...Math.round(rect.width)) {
+				for (j in 0...Math.round (rect.width)) {
 					
 					offsetX = 4 * (j + offsetY);
-					nmeImageData.data[s + offsetX] = r;
-					nmeImageData.data[s + offsetX + 1] = g;
-					nmeImageData.data[s + offsetX + 2] = b;
-					nmeImageData.data[s + offsetX + 3] = a;
+					__imageData.data[s + offsetX] = r;
+					__imageData.data[s + offsetX + 1] = g;
+					__imageData.data[s + offsetX + 2] = b;
+					__imageData.data[s + offsetX + 3] = a;
 					
 				}
 				
 			}
 			
-			nmeImageDataChanged = true;
-			//ctx.putImageData(nmeImageData, 0, 0, rect.x, rect.y, rect.width, rect.height);
+			__imageDataChanged = true;
+			//ctx.putImageData (__imageData, 0, 0, rect.x, rect.y, rect.width, rect.height);
 			
 		}
 		
 	}
 	
 	
-	public inline function nmeGetLease():ImageDataLease {
+	public inline function __getLease ():ImageDataLease {
 		
-		return nmeLease;
+		return __lease;
 		
 	}
 	
 	
-	private inline function nmeLoadFromBytes(bytes:ByteArray, inRawAlpha:ByteArray = null, ?onload:BitmapData -> Void) {
+	private inline function __loadFromBytes (bytes:ByteArray, inRawAlpha:ByteArray = null, ?onload:BitmapData -> Void) {
 		
 		var type = "";
 		
-		if (nmeIsPNG(bytes)) {
+		if (__isPNG (bytes)) {
 			
 			type = "image/png";
 			
-		} else if (nmeIsJPG(bytes)) {
+		} else if (__isJPG (bytes)) {
 			
 			type = "image/jpeg";
 			
 		} else {
 			
-			throw new IOError("BitmapData tried to read a PNG/JPG ByteArray, but found an invalid header.");
+			throw new IOError ("BitmapData tried to read a PNG/JPG ByteArray, but found an invalid header.");
 			
 		}
 		
-		var img:ImageElement = cast Browser.document.createElement("img");
-		var canvas = _nmeTextureBuffer;
+		var img:ImageElement = cast Browser.document.createElement ("img");
+		var canvas = ___textureBuffer;
 		
-		var drawImage = function(_) {
+		var drawImage = function (_) {
 			
 			canvas.width = img.width;
 			canvas.height = img.height;
 			
-			var ctx = canvas.getContext('2d');
-			ctx.drawImage(img, 0, 0);
+			var ctx = canvas.getContext ('2d');
+			ctx.drawImage (img, 0, 0);
 			
 			if (inRawAlpha != null) {
 				
-				var pixels = ctx.getImageData(0, 0, img.width, img.height);
+				var pixels = ctx.getImageData (0, 0, img.width, img.height);
 				
 				for (i in 0...inRawAlpha.length) {
 					
-					pixels.data[i * 4 + 3] = inRawAlpha.readUnsignedByte();
+					pixels.data[i * 4 + 3] = inRawAlpha.readUnsignedByte ();
 					
 				}
 				
-				ctx.putImageData(pixels, 0, 0);
+				ctx.putImageData (pixels, 0, 0);
 				
 			}
 			
@@ -1158,36 +1392,36 @@ class BitmapData implements IBitmapDrawable {
 			
 			if (onload != null) {
 				
-				onload(this);
+				onload (this);
 				
 			}
 			
 		}
 		
-		img.addEventListener("load", drawImage, false);
-		img.src = 'data:$type;base64,${nmeBase64Encode(bytes)}';
+		img.addEventListener ("load", drawImage, false);
+		img.src = 'data:$type;base64,${__base64Encode(bytes)}';
 		
 	}
 	
 	
-	public function nmeGetNumRefBitmaps():Int {
+	public function __getNumRefBitmaps ():Int {
 		
-		return nmeAssignedBitmaps;
-		
-	}
-	
-	
-	public function nmeIncrNumRefBitmaps():Void {
-		
-		nmeAssignedBitmaps++;
+		return __assignedBitmaps;
 		
 	}
 	
 	
-	private static function nmeIsJPG(bytes:ByteArray) {
+	public function __incrNumRefBitmaps ():Void {
+		
+		__assignedBitmaps++;
+		
+	}
+	
+	
+	private static function __isJPG (bytes:ByteArray) {
 		
 		bytes.position = 0;
-		return bytes.readByte() == 0xFF && bytes.readByte() == 0xD8;
+		return bytes.readByte () == 0xFF && bytes.readByte () == 0xD8;
 		/*if (bytes.readByte() == 0xFF && bytes.readByte() == 0xD8 && bytes.readByte() == 0xFF) {
 			
 			bytes.readByte();
@@ -1207,25 +1441,25 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	private static function nmeIsPNG(bytes:ByteArray) {
+	private static function __isPNG (bytes:ByteArray) {
 		
 		bytes.position = 0;
-		return (bytes.readByte() == 0x89 && bytes.readByte() == 0x50 && bytes.readByte() == 0x4E && bytes.readByte() == 0x47 && bytes.readByte() == 0x0D && bytes.readByte() == 0x0A && bytes.readByte() == 0x1A && bytes.readByte() == 0x0A);
+		return (bytes.readByte () == 0x89 && bytes.readByte () == 0x50 && bytes.readByte () == 0x4E && bytes.readByte () == 0x47 && bytes.readByte () == 0x0D && bytes.readByte () == 0x0A && bytes.readByte () == 0x1A && bytes.readByte () == 0x0A);
 		
 	}
 	
 	
-	public function nmeLoadFromFile(inFilename:String, inLoader:LoaderInfo = null) {
+	public function __loadFromFile (inFilename:String, inLoader:LoaderInfo = null) {
 		
-		var image:ImageElement = cast Browser.document.createElement("img");
+		var image:ImageElement = cast Browser.document.createElement ("img");
 		
 		if (inLoader != null) {
 			
-			var data:LoadData = { image: image, texture: _nmeTextureBuffer, inLoader: inLoader, bitmapData: this };
+			var data:LoadData = { image: image, texture: ___textureBuffer, inLoader: inLoader, bitmapData: this };
 			
-			image.addEventListener("load", nmeOnLoad.bind (data), false);
+			image.addEventListener ("load", __onLoad.bind (data), false);
 			// IE9 bug, force a load, if error called and complete is false.
-			image.addEventListener("error", function(e) { if (!image.complete) nmeOnLoad(data, e); }, false);
+			image.addEventListener ("error", function(e) { if (!image.complete) __onLoad (data, e); }, false);
 			
 		}
 		
@@ -1238,240 +1472,6 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	public function noise(randomSeed:Int, low:Int = 0, high:Int = 255, channelOptions:Int = 7, grayScale:Bool = false):Void {
-		
-		var generator = new MinstdGenerator(randomSeed);
-		var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-		
-		var imageData = null;
-		
-		if (nmeLocked) {
-			
-			imageData = nmeImageData;
-			
-		} else {
-			
-			imageData = ctx.createImageData(_nmeTextureBuffer.width, _nmeTextureBuffer.height);
-			
-		}
-		
-		for (i in 0...(_nmeTextureBuffer.width * _nmeTextureBuffer.height)) {
-			
-			if (grayScale) {
-				
-				imageData.data[i * 4] = imageData.data[i * 4 + 1] = imageData.data[i * 4 + 2] = low + generator.nextValue() % (high - low + 1);
-				
-			} else {
-				
-				imageData.data[i * 4] = if (channelOptions & BitmapDataChannel.RED == 0) 0 else low + generator.nextValue() % (high - low + 1);
-				imageData.data[i * 4 + 1] = if (channelOptions & BitmapDataChannel.GREEN == 0) 0 else low + generator.nextValue() % (high - low + 1);
-				imageData.data[i * 4 + 2] = if (channelOptions & BitmapDataChannel.BLUE == 0) 0 else low + generator.nextValue() % (high - low + 1);
-				
-			}
-			
-			imageData.data[i * 4 + 3] = if (channelOptions & BitmapDataChannel.ALPHA == 0) 255 else low + generator.nextValue() % (high - low + 1);
-			
-		}
-		
-		if (nmeLocked) {
-			
-			nmeImageDataChanged = true;
-			
-		} else {
-			
-			ctx.putImageData(imageData, 0, 0);
-			
-		}
-		
-	}
-	
-	
-	public function scroll(x:Int, y:Int):Void {
-		
-		throw("bitmapData.scroll is currently not supported for HTML5");
-		
-	}
-	
-	
-	public function setPixel(x:Int, y:Int, color:Int):Void {
-		
-		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
-		
-		if (!nmeLocked) {
-			
-			nmeBuildLease();
-			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			
-			var imageData = ctx.createImageData(1, 1);
-			imageData.data[0] = (color & 0xFF0000) >>> 16;
-			imageData.data[1] = (color & 0x00FF00) >>> 8;
-			imageData.data[2] = (color & 0x0000FF);
-			if (nmeTransparent) imageData.data[3] = (0xFF);
-			
-			ctx.putImageData(imageData, x, y);
-			
-		} else {
-			
-			var offset = (4 * y * nmeImageData.width + x * 4);
-			
-			nmeImageData.data[offset] = (color & 0xFF0000) >>> 16;
-			nmeImageData.data[offset + 1] = (color & 0x00FF00) >>> 8;
-			nmeImageData.data[offset + 2] = (color & 0x0000FF);
-			if (nmeTransparent) nmeImageData.data[offset + 3] = (0xFF);
-			
-			nmeImageDataChanged = true;
-			
-		}
-		
-	}
-	
-	
-	public function setPixel32(x:Int, y:Int, color:Int):Void {
-		
-		if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
-		
-		if (!nmeLocked) {
-			
-			nmeBuildLease();
-			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imageData = ctx.createImageData(1, 1);
-			
-			imageData.data[0] = (color & 0xFF0000) >>> 16;
-			imageData.data[1] = (color & 0x00FF00) >>> 8;
-			imageData.data[2] = (color & 0x0000FF);
-			
-			if (nmeTransparent) {
-				
-				imageData.data[3] = (color & 0xFF000000) >>> 24;
-				
-			} else {
-				
-				imageData.data[3] = (0xFF);
-				
-			}
-			
-			ctx.putImageData(imageData, x, y);
-			
-		} else {
-			
-			var offset = (4 * y * nmeImageData.width + x * 4);
-			
-			nmeImageData.data[offset] = (color & 0x00FF0000) >>> 16;
-			nmeImageData.data[offset + 1] = (color & 0x0000FF00) >>> 8;
-			nmeImageData.data[offset + 2] = (color & 0x000000FF);
-			
-			if (nmeTransparent) {
-				
-				nmeImageData.data[offset + 3] = (color & 0xFF000000) >>> 24;
-				
-			} else {
-				
-				nmeImageData.data[offset + 3] = (0xFF);
-				
-			}
-			
-			nmeImageDataChanged = true;
-			
-		}
-		
-	}
-	
-	
-	public function setPixels(rect:Rectangle, byteArray:ByteArray):Void {
-		
-		rect = clipRect(rect);
-		if (rect == null) return;
-		
-		var len = Math.round(4 * rect.width * rect.height);
-		
-		if (!nmeLocked) {
-			
-			var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-			var imageData = ctx.createImageData(rect.width, rect.height);
-			
-			for (i in 0...len) {
-				
-				imageData.data[i] = byteArray.readByte();
-				
-			}
-			
-			ctx.putImageData(imageData, rect.x, rect.y);
-			
-		} else {
-			
-			var offset = Math.round(4 * nmeImageData.width * rect.y + rect.x * 4);
-			var pos = offset;
-			var boundR = Math.round(4 * (rect.x + rect.width));
-			
-			for (i in 0...len) {
-				
-				if (((pos) % (nmeImageData.width * 4)) > boundR - 1) {
-					
-					pos += nmeImageData.width * 4 - boundR;
-					
-				}
-				
-				nmeImageData.data[pos] = byteArray.readByte();
-				pos++;
-				
-			}
-			
-			nmeImageDataChanged = true;
-			
-		}
-		
-	}
-	
-	
-	public function threshold(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, operation:String, threshold:Int, color:Int = 0, mask:Int = 0xFFFFFFFF, copySource:Bool = false):Int {
-		
-		trace("BitmapData.threshold not implemented");
-		return 0;
-		
-	}
-	
-	
-	public function unlock(changeRect:Rectangle = null):Void {
-		
-		nmeLocked = false;
-		
-		var ctx:CanvasRenderingContext2D = _nmeTextureBuffer.getContext('2d');
-		
-		if (nmeImageDataChanged) {
-			
-			if (changeRect != null) {
-				
-				ctx.putImageData(nmeImageData, 0, 0, changeRect.x, changeRect.y, changeRect.width, changeRect.height);
-				
-			} else {
-				
-				ctx.putImageData(nmeImageData, 0, 0);
-				
-			}
-			
-		}
-		
-		for (copyCache in nmeCopyPixelList) {
-			
-			if (nmeTransparent && copyCache.transparentFiller != null) {
-				
-				var trpCtx:CanvasRenderingContext2D = copyCache.transparentFiller.getContext('2d');
-				var trpData = trpCtx.getImageData(copyCache.sourceX, copyCache.sourceY, copyCache.sourceWidth, copyCache.sourceHeight);
-				ctx.putImageData(trpData, copyCache.destX, copyCache.destY);
-				
-			}
-			
-			ctx.drawImage(copyCache.handle, copyCache.sourceX, copyCache.sourceY, copyCache.sourceWidth, copyCache.sourceHeight, copyCache.destX, copyCache.destY, copyCache.sourceWidth, copyCache.sourceHeight);
-			
-		}
-		
-		nmeBuildLease();
-		
-	}
-	
-	
 	
 	
 	// Event Handlers
@@ -1479,7 +1479,7 @@ class BitmapData implements IBitmapDrawable {
 	
 	
 	
-	private function nmeOnLoad(data:LoadData, e) {
+	private function __onLoad (data:LoadData, e) {
 		
 		var canvas:CanvasElement = cast data.texture;
 		var width = data.image.width;
@@ -1489,19 +1489,19 @@ class BitmapData implements IBitmapDrawable {
 		
 		// TODO: Should copy later, only if the bitmapData is going to be modified
 		
-		var ctx:CanvasRenderingContext2D = canvas.getContext("2d");
-		ctx.drawImage(data.image, 0, 0, width, height);
+		var ctx:CanvasRenderingContext2D = canvas.getContext ("2d");
+		ctx.drawImage (data.image, 0, 0, width, height);
 		
 		data.bitmapData.width = width;
 		data.bitmapData.height = height;
-		data.bitmapData.rect = new Rectangle(0, 0, width, height);
-		data.bitmapData.nmeBuildLease();
+		data.bitmapData.rect = new Rectangle (0, 0, width, height);
+		data.bitmapData.__buildLease ();
 		
 		if (data.inLoader != null) {
 			
-			var e = new Event(Event.COMPLETE);
+			var e = new Event (Event.COMPLETE);
 			e.target = data.inLoader;
-			data.inLoader.dispatchEvent(e);
+			data.inLoader.dispatchEvent (e);
 			
 		}
 		
@@ -1515,11 +1515,11 @@ class BitmapData implements IBitmapDrawable {
 	
 	
 	
-	private inline function get_height():Int {
+	private inline function get_height ():Int {
 		
-		if ( _nmeTextureBuffer != null ) {
+		if ( ___textureBuffer != null ) {
 			
-			return _nmeTextureBuffer.height;
+			return ___textureBuffer.height;
 			
 		} else {
 			
@@ -1530,18 +1530,18 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	private function get_transparent():Bool {
+	private function get_transparent ():Bool {
 		
-		return nmeTransparent;
+		return __transparent;
 		
 	}
 	
 	
-	private inline function get_width():Int {
+	private inline function get_width ():Int {
 		
-		if ( _nmeTextureBuffer != null ) {
+		if ( ___textureBuffer != null ) {
 			
-			return _nmeTextureBuffer.width;
+			return ___textureBuffer.width;
 			
 		} else {
 			
@@ -1572,16 +1572,16 @@ class ImageDataLease {
 	public var time:Float;
 	
 	
-	public function new() {
+	public function new () {
 		
 		
 		
 	}
 	
 	
-	public function clone():ImageDataLease {
+	public function clone ():ImageDataLease {
 		
-		var leaseClone = new ImageDataLease();
+		var leaseClone = new ImageDataLease ();
 		leaseClone.seed = seed;
 		leaseClone.time = time;
 		return leaseClone;
@@ -1589,7 +1589,7 @@ class ImageDataLease {
 	}
 	
 	
-	public function set(s:Float, t:Float):Void { 
+	public function set (s:Float, t:Float):Void { 
 		
 		this.seed = s;
 		this.time = t;
@@ -1630,7 +1630,7 @@ private class MinstdGenerator {
 	private var value:Int;
 	
 
-	public function new(seed:Int) {
+	public function new (seed:Int) {
 		
 		if (seed == 0) {
 			
@@ -1673,6 +1673,3 @@ private class MinstdGenerator {
 	
 	
 }
-
-
-#end

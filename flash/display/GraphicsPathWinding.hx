@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 @:fakeEnum(String) enum GraphicsPathWinding {
@@ -8,6 +7,3 @@ package flash.display;
 	NON_ZERO;
 	
 }
-
-
-#end

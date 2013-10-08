@@ -1,5 +1,4 @@
 package flash.events;
-#if js
 
 
 import flash.events.EventPhase;
@@ -9,66 +8,66 @@ import flash.events.IEventDispatcher;
 class EventDispatcher implements IEventDispatcher {
 	
 	
-	private var nmeTarget:IEventDispatcher;
-	private var nmeEventMap:EventMap;
+	private var __target:IEventDispatcher;
+	private var __eventMap:EventMap;
 	
 	
-	public function new(target:IEventDispatcher = null):Void {
+	public function new (target:IEventDispatcher = null):Void {
 		
 		if (target != null) {
 			
-			nmeTarget = target;
+			__target = target;
 			
 		} else {
 			
-			nmeTarget = this;
+			__target = this;
 			
 		}
 		
-		nmeEventMap = [];
+		__eventMap = [];
 		
 	}
 	
 	
-	public function addEventListener(type:String, inListener:Dynamic -> Void, useCapture:Bool = false, inPriority:Int = 0, useWeakReference:Bool = false):Void {
+	public function addEventListener (type:String, inListener:Dynamic -> Void, useCapture:Bool = false, inPriority:Int = 0, useWeakReference:Bool = false):Void {
 		
 		var capture:Bool = (useCapture == null ? false : useCapture);
 		var priority:Int = (inPriority==null ? 0 : inPriority);
-		var list = getList(type);
+		var list = getList (type);
 		
-		if (!existList(type)) {
+		if (!existList (type)) {
 			
 			list = [];
-			setList(type, list);
+			setList (type, list);
 			
 		}
 		
-		list.push(new Listener(inListener, capture, priority));
-		list.sort(compareListeners);
+		list.push (new Listener (inListener, capture, priority));
+		list.sort (compareListeners);
 		
 	}
 	
 	
-	private static function compareListeners(l1:Listener, l2:Listener):Int {
+	private static function compareListeners (l1:Listener, l2:Listener):Int {
 		
-		return l1.mPriority == l2.mPriority ? 0 :(l1.mPriority > l2.mPriority? -1 : 1);
+		return l1.mPriority == l2.mPriority ? 0 : (l1.mPriority > l2.mPriority ? -1 : 1);
 		
 	}
 	
 	
-	public function dispatchEvent(event:Event):Bool {
+	public function dispatchEvent (event:Event):Bool {
 		
 		if (event.target == null) {
 			
-			event.target = nmeTarget;
+			event.target = __target;
 			
 		}
 		
 		var capture = (event.eventPhase == EventPhase.CAPTURING_PHASE);
 		
-		if (existList(event.type)) {
+		if (existList (event.type)) {
 			
-			var list = getList(event.type);
+			var list = getList (event.type);
 			var idx = 0;
 			
 			while (idx < list.length) {
@@ -77,9 +76,9 @@ class EventDispatcher implements IEventDispatcher {
 				
 				if (listener.mUseCapture == capture) {
 					
-					listener.dispatchEvent(event);
+					listener.dispatchEvent (event);
 					
-					if (event.nmeGetIsCancelledNow()) {
+					if (event.__getIsCancelledNow ()) {
 						
 						return true;
 						
@@ -109,39 +108,39 @@ class EventDispatcher implements IEventDispatcher {
 	}
 	
 	
-	private function existList(type:String):Bool { 
+	private function existList (type:String):Bool { 
 		
-		untyped return (nmeEventMap != null && nmeEventMap[type] != __js__("undefined"));
-		
-	}
-	
-	
-	private function getList(type:String):ListenerList {
-		
-		untyped return nmeEventMap[type];
+		untyped return (__eventMap != null && __eventMap[type] != __js__("undefined"));
 		
 	}
 	
 	
-	public function hasEventListener(type:String):Bool {
+	private function getList (type:String):ListenerList {
 		
-		return existList(type);
+		untyped return __eventMap[type];
 		
 	}
 	
 	
-	public function removeEventListener(type:String, listener:Dynamic->Void, inCapture:Bool = false):Void {
+	public function hasEventListener (type:String):Bool {
 		
-		if (!existList(type)) return;
+		return existList (type);
 		
-		var list = getList(type);
+	}
+	
+	
+	public function removeEventListener (type:String, listener:Dynamic->Void, inCapture:Bool = false):Void {
+		
+		if (!existList (type)) return;
+		
+		var list = getList (type);
 		var capture:Bool = (inCapture == null ? false : inCapture);
 		
 		for (i in 0...list.length) {
 			
-			if (list[i].Is(listener, capture)) {
+			if (list[i].Is (listener, capture)) {
 				
-				list.splice(i, 1);
+				list.splice (i, 1);
 				return;
 				
 			}
@@ -151,23 +150,23 @@ class EventDispatcher implements IEventDispatcher {
 	}
 	
 	
-	private function setList(type:String, list:ListenerList):Void { 
+	private function setList (type:String, list:ListenerList):Void { 
 		
-		untyped nmeEventMap[type] = list;
+		untyped __eventMap[type] = list;
 		
 	}
 	
 	
-	public function toString():String { 
+	public function toString ():String { 
 		
 		return untyped "[ " +  this.__name__ + " ]";
 		
 	}
 	
 	
-	public function willTrigger(type:String):Bool {
+	public function willTrigger (type:String):Bool {
 		
-		return hasEventListener(type);
+		return hasEventListener (type);
 		
 	}
 	
@@ -186,7 +185,7 @@ class Listener {
 	private static var sIDs = 1;
 	
 	
-	public function new(inListener:Dynamic->Void, inUseCapture:Bool, inPriority:Int) {
+	public function new (inListener:Dynamic->Void, inUseCapture:Bool, inPriority:Int) {
 		
 		mListner = inListener;
 		mUseCapture = inUseCapture;
@@ -196,16 +195,16 @@ class Listener {
 	}
 	
 	
-	public function dispatchEvent(event:Event):Void {
+	public function dispatchEvent (event:Event):Void {
 		
 		mListner(event);
 		
 	}
 	
 	
-	public function Is(inListener:Dynamic->Void, inCapture:Bool):Bool {
+	public function Is (inListener:Dynamic->Void, inCapture:Bool):Bool {
 		
-		return Reflect.compareMethods(mListner, inListener) && mUseCapture == inCapture;
+		return Reflect.compareMethods (mListner, inListener) && mUseCapture == inCapture;
 		
 	}
 	
@@ -215,6 +214,3 @@ class Listener {
 
 typedef ListenerList = Array<Listener>;
 typedef EventMap = Array<ListenerList>;
-
-
-#end

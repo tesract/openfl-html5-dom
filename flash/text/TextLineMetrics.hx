@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 class TextLineMetrics {
@@ -13,7 +12,7 @@ class TextLineMetrics {
 	public var x:Float;
 	
 	
-	public function new(x:Float, width:Float, height:Float, ascent:Float, descent:Float, leading:Float) {
+	public function new (x:Float, width:Float, height:Float, ascent:Float, descent:Float, leading:Float) {
 		
 		this.x = x;
 		this.width = width;
@@ -26,6 +25,3 @@ class TextLineMetrics {
 	
 	
 }
-
-
-#end

@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 class GraphicsPathCommand {
@@ -13,6 +12,3 @@ class GraphicsPathCommand {
 	public static inline var CUBIC_CURVE_TO = 6;
 	
 }
-
-
-#end

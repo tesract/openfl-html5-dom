@@ -1,5 +1,4 @@
 package flash.text;
-#if js
 
 
 class AntiAliasType {
@@ -8,6 +7,3 @@ class AntiAliasType {
 	public static var NORMAL = "normal";
 	
 }
-
-
-#end

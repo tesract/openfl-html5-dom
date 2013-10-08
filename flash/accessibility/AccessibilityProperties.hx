@@ -1,5 +1,4 @@
 package flash.accessibility;
-#if js
 
 
 class AccessibilityProperties {
@@ -13,7 +12,7 @@ class AccessibilityProperties {
 	public var silent:Bool;
 	
 	
-	public function new() {
+	public function new () {
 		
 		description = "";
 		forceSimple = false;
@@ -24,7 +23,5 @@ class AccessibilityProperties {
 		
 	}
 	
+	
 }
-
-
-#end

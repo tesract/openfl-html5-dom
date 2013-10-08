@@ -440,50 +440,50 @@ class GL {
 	public static var drawingBufferWidth(get_drawingBufferWidth, null):Int;
 	public static var version(get_version, null):Int;
 	
-	public static var nmeContext:RenderingContext;
+	public static var __context:RenderingContext;
 	
 	
 	
 	public static function activeTexture(texture:Int):Void {
 		
-		nmeContext.activeTexture(texture);
+		__context.activeTexture(texture);
 		
 	}
 	
 	
 	public static function attachShader(program:GLProgram, shader:GLShader):Void {
 		
-		nmeContext.attachShader(program, shader);
+		__context.attachShader(program, shader);
 		
 	}
 	
 	
 	public static function bindAttribLocation(program:GLProgram, index:Int, name:String):Void {
 		
-		nmeContext.bindAttribLocation(program, index, name);
+		__context.bindAttribLocation(program, index, name);
 		
 	}
 	
 	
 	public static function bindBitmapDataTexture(texture:BitmapData):Void {
 		
-		if (texture.nmeGLTexture == null) {
+		if (texture.__gLTexture == null) {
 			
-			texture.nmeGLTexture = nmeContext.createTexture();
-			nmeContext.bindTexture(TEXTURE_2D, texture.nmeGLTexture);
+			texture.__gLTexture = __context.createTexture();
+			__context.bindTexture(TEXTURE_2D, texture.__gLTexture);
 			
-			nmeContext.texParameteri(TEXTURE_2D, TEXTURE_WRAP_S, CLAMP_TO_EDGE);
-			nmeContext.texParameteri(TEXTURE_2D, TEXTURE_WRAP_T, CLAMP_TO_EDGE);
-			nmeContext.texParameteri(TEXTURE_2D, TEXTURE_MIN_FILTER, NEAREST);
-			nmeContext.texParameteri(TEXTURE_2D, TEXTURE_MAG_FILTER, NEAREST);
+			__context.texParameteri(TEXTURE_2D, TEXTURE_WRAP_S, CLAMP_TO_EDGE);
+			__context.texParameteri(TEXTURE_2D, TEXTURE_WRAP_T, CLAMP_TO_EDGE);
+			__context.texParameteri(TEXTURE_2D, TEXTURE_MIN_FILTER, NEAREST);
+			__context.texParameteri(TEXTURE_2D, TEXTURE_MAG_FILTER, NEAREST);
 			
 			texture.lock();
-			nmeContext.texImage2D(TEXTURE_2D, 0, RGBA, RGBA, UNSIGNED_BYTE, texture.nmeImageData);
+			__context.texImage2D(TEXTURE_2D, 0, RGBA, RGBA, UNSIGNED_BYTE, texture.__imageData);
 			texture.unlock();
 			
 		} else {
 			
-			nmeContext.bindTexture(TEXTURE_2D, texture.nmeGLTexture);
+			__context.bindTexture(TEXTURE_2D, texture.__gLTexture);
 			
 		}
 		
@@ -492,63 +492,63 @@ class GL {
 	
 	public static function bindBuffer(target:Int, buffer:GLBuffer):Void {
 		
-		nmeContext.bindBuffer(target, buffer);
+		__context.bindBuffer(target, buffer);
 		
 	}
 	
 	
 	public static function bindFramebuffer(target:Int, framebuffer:GLFramebuffer):Void {
 		
-		nmeContext.bindFramebuffer(target, framebuffer);
+		__context.bindFramebuffer(target, framebuffer);
 		
 	}
 	
 	
 	public static function bindRenderbuffer(target:Int, renderbuffer:GLRenderbuffer):Void {
 		
-		nmeContext.bindRenderbuffer(target, renderbuffer);
+		__context.bindRenderbuffer(target, renderbuffer);
 		
 	}
 	
 	
 	public static function bindTexture(target:Int, texture:GLTexture):Void {
 		
-		nmeContext.bindTexture(target, texture);
+		__context.bindTexture(target, texture);
 		
 	}
 	
 	
 	public static function blendColor(red:Float, green:Float, blue:Float, alpha:Float):Void {
 		
-		nmeContext.blendColor(red, green, blue, alpha);
+		__context.blendColor(red, green, blue, alpha);
 		
 	}
 	
 	
 	public static function blendEquation(mode:Int):Void {
 		
-		nmeContext.blendEquation(mode);
+		__context.blendEquation(mode);
 		
 	}
 	
 	
 	public static function blendEquationSeparate(modeRGB:Int, modeAlpha:Int):Void {
 		
-		nmeContext.blendEquationSeparate(modeRGB, modeAlpha);
+		__context.blendEquationSeparate(modeRGB, modeAlpha);
 		
 	}
 	
 	
 	public static function blendFunc(sfactor:Int, dfactor:Int):Void {
 		
-		nmeContext.blendFunc(sfactor, dfactor);
+		__context.blendFunc(sfactor, dfactor);
 		
 	}
 	
 	
 	public static function blendFuncSeparate(srcRGB:Int, dstRGB:Int, srcAlpha:Int, dstAlpha:Int):Void {
 		
-		nmeContext.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+		__context.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 		
 	}
 	
@@ -556,343 +556,343 @@ class GL {
 	//public static function bufferData(target:Int, data:IMemoryRange, usage:Int):Void {
 	public static function bufferData(target:Int, data:ArrayBufferView, usage:Int):Void {
 		
-		nmeContext.bufferData(target, data, usage);
+		__context.bufferData(target, data, usage);
 		
 	}
 	
 	
 	public static function bufferSubData(target:Int, offset:Int, data:ArrayBufferView):Void {
 		
-		nmeContext.bufferSubData(target, offset, data);
+		__context.bufferSubData(target, offset, data);
 		
 	}
 	
 	
 	public static function checkFramebufferStatus(target:Int):Int {
 		
-		return nmeContext.checkFramebufferStatus(target);
+		return __context.checkFramebufferStatus(target);
 		
 	}
 	
 	
 	public static function clear(mask:Int):Void {
 		
-		nmeContext.clear(mask);
+		__context.clear(mask);
 		
 	}
 	
 	
 	public static function clearColor(red:Float, green:Float, blue:Float, alpha:Float):Void {
 		
-		nmeContext.clearColor(red, green, blue, alpha);
+		__context.clearColor(red, green, blue, alpha);
 		
 	}
 	
 	
 	public static function clearDepth(depth:Float):Void {
 		
-		nmeContext.clearDepth(depth);
+		__context.clearDepth(depth);
 		
 	}
 	
 	
 	public static function clearStencil(s:Int):Void {
 		
-		nmeContext.clearStencil(s);
+		__context.clearStencil(s);
 		
 	}
 	
 	
 	public static function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool):Void {
 		
-		nmeContext.colorMask(red, green, blue, alpha);
+		__context.colorMask(red, green, blue, alpha);
 		
 	}
 	
 	
 	public static function compileShader(shader:GLShader):Void {
 		
-		nmeContext.compileShader(shader);
+		__context.compileShader(shader);
 		
 	}
 	
 	
 	public static function compressedTexImage2D(target:Int, level:Int, internalformat:Int, width:Int, height:Int, border:Int, data:ArrayBufferView):Void {
 		
-		nmeContext.compressedTexImage2D(target, level, internalformat, width, height, border, data);
+		__context.compressedTexImage2D(target, level, internalformat, width, height, border, data);
 		
 	}
 	
 	
 	public static function compressedTexSubImage2D(target:Int, level:Int, xoffset:Int, yoffset:Int, width:Int, height:Int, format:Int, data:ArrayBufferView):Void {
 		
-		nmeContext.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
+		__context.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
 		
 	}
 	
 	
 	public static function copyTexImage2D(target:Int, level:Int, internalformat:Int, x:Int, y:Int, width:Int, height:Int, border:Int):Void {
 		
-		nmeContext.copyTexImage2D(target, level, internalformat, x, y, width, height, border);
+		__context.copyTexImage2D(target, level, internalformat, x, y, width, height, border);
 		
 	}
 	
 	
 	public static function copyTexSubImage2D(target:Int, level:Int, xoffset:Int, yoffset:Int, x:Int, y:Int, width:Int, height:Int):Void {
 		
-		nmeContext.copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+		__context.copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 		
 	}
 	
 	
 	public static function createBuffer():GLBuffer {
 		
-		return nmeContext.createBuffer();
+		return __context.createBuffer();
 		
 	}
 	
 	
 	public static function createFramebuffer():GLFramebuffer {
 		
-		return nmeContext.createFramebuffer();
+		return __context.createFramebuffer();
 		
 	}
 	
 	
 	public static function createProgram():GLProgram {
 		
-		return nmeContext.createProgram();
+		return __context.createProgram();
 		
 	}
 	
 	
 	public static function createRenderbuffer():GLRenderbuffer {
 		
-		return nmeContext.createRenderbuffer();
+		return __context.createRenderbuffer();
 		
 	}
 	
 	
 	public static function createShader(type:Int):GLShader {
 		
-		return nmeContext.createShader(type);
+		return __context.createShader(type);
 		
 	}
 	
 	
 	public static function createTexture():GLTexture {
 		
-		return nmeContext.createTexture();
+		return __context.createTexture();
 		
 	}
 	
 	
 	public static function cullFace(mode:Int):Void {
 		
-		nmeContext.cullFace(mode);
+		__context.cullFace(mode);
 		
 	}
 	
 	
 	public static function deleteBuffer(buffer:GLBuffer):Void {
 		
-		nmeContext.deleteBuffer(buffer);
+		__context.deleteBuffer(buffer);
 		
 	}
 	
 	
 	public static function deleteFramebuffer(framebuffer:GLFramebuffer):Void {
 		
-		nmeContext.deleteFramebuffer(framebuffer);
+		__context.deleteFramebuffer(framebuffer);
 		
 	}
 	
 	
 	public static function deleteProgram(program:GLProgram):Void {
 		
-		nmeContext.deleteProgram(program);
+		__context.deleteProgram(program);
 		
 	}
 	
 	
 	public static function deleteRenderbuffer(renderbuffer:GLRenderbuffer):Void {
 		
-		nmeContext.deleteRenderbuffer(renderbuffer);
+		__context.deleteRenderbuffer(renderbuffer);
 		
 	}
 	
 	
 	public static function deleteShader(shader:GLShader):Void {
 		
-		nmeContext.deleteShader(shader);
+		__context.deleteShader(shader);
 		
 	}
 	
 	
 	public static function deleteTexture(texture:GLTexture):Void {
 		
-		nmeContext.deleteTexture(texture);
+		__context.deleteTexture(texture);
 		
 	}
 	
 	
 	public static function depthFunc(func:Int):Void {
 		
-		nmeContext.depthFunc(func);
+		__context.depthFunc(func);
 		
 	}
 	
 	
 	public static function depthMask(flag:Bool):Void {
 		
-		nmeContext.depthMask(flag);
+		__context.depthMask(flag);
 		
 	}
 	
 	
 	public static function depthRange(zNear:Float, zFar:Float):Void {
 		
-		nmeContext.depthRange(zNear, zFar);
+		__context.depthRange(zNear, zFar);
 		
 	}
 	
 	
 	public static function detachShader(program:GLProgram, shader:GLShader):Void {
 		
-		nmeContext.detachShader(program, shader);
+		__context.detachShader(program, shader);
 		
 	}
 	
 	
 	public static function disable(cap:Int):Void {
 		
-		nmeContext.disable(cap);
+		__context.disable(cap);
 		
 	}
 	
 	
 	public static function disableVertexAttribArray(index:Int):Void {
 		
-		nmeContext.disableVertexAttribArray(index);
+		__context.disableVertexAttribArray(index);
 		
 	}
 	
 	
 	public static function drawArrays(mode:Int, first:Int, count:Int):Void {
 		
-		nmeContext.drawArrays(mode, first, count);
+		__context.drawArrays(mode, first, count);
 		
 	}
 	
 	
 	public static function drawElements(mode:Int, count:Int, type:Int, offset:Int):Void {
 		
-		nmeContext.drawElements(mode, count, type, offset);
+		__context.drawElements(mode, count, type, offset);
 		
 	}
 	
 	
 	public static function enable(cap:Int):Void {
 		
-		nmeContext.enable(cap);
+		__context.enable(cap);
 		
 	}
 	
 	
 	public static function enableVertexAttribArray(index:Int):Void {
 		
-		nmeContext.enableVertexAttribArray(index);
+		__context.enableVertexAttribArray(index);
 		
 	}
 	
 	
 	public static function finish():Void {
 		
-		nmeContext.finish();
+		__context.finish();
 		
 	}
 	
 	
 	public static function flush():Void {
 		
-		nmeContext.flush();
+		__context.flush();
 		
 	}
 	
 	
 	public static function framebufferRenderbuffer(target:Int, attachment:Int, renderbuffertarget:Int, renderbuffer:GLRenderbuffer):Void {
 		
-		nmeContext.framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+		__context.framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 		
 	}
 	
 	
 	public static function framebufferTexture2D(target:Int, attachment:Int, textarget:Int, texture:GLTexture, level:Int):Void {
 		
-		nmeContext.framebufferTexture2D(target, attachment, textarget, texture, level);
+		__context.framebufferTexture2D(target, attachment, textarget, texture, level);
 		
 	}
 	
 	
 	public static function frontFace(mode:Int):Void {
 		
-		nmeContext.frontFace(mode);
+		__context.frontFace(mode);
 		
 	}
 	
 	
 	public static function generateMipmap(target:Int):Void {
 		
-		nmeContext.generateMipmap(target);
+		__context.generateMipmap(target);
 		
 	}
 	
 	
 	public static function getActiveAttrib(program:GLProgram, index:Int):GLActiveInfo {
 		
-		return nmeContext.getActiveAttrib(program, index);
+		return __context.getActiveAttrib(program, index);
 		
 	}
 	
 	
 	public static function getActiveUniform(program:GLProgram, index:Int):GLActiveInfo {
 		
-		return nmeContext.getActiveUniform(program, index);
+		return __context.getActiveUniform(program, index);
 		
 	}
 	
 	
 	public static function getAttachedShaders(program:GLProgram):Array<GLShader> {
 		
-		return nmeContext.getAttachedShaders(program);
+		return __context.getAttachedShaders(program);
 		
 	}
 	
 	
 	public static function getAttribLocation(program:GLProgram, name:String):Int {
 		
-		return nmeContext.getAttribLocation(program, name);
+		return __context.getAttribLocation(program, name);
 		
 	}
 	
 	
 	public static function getBufferParameter(target:Int, pname:Int):Dynamic {
 		
-		return nmeContext.getBufferParameter(target, pname);
+		return __context.getBufferParameter(target, pname);
 		
 	}
 	
 	
 	public static function getContextAttributes():GLContextAttributes {
 		
-		return nmeContext.getContextAttributes();
+		return __context.getContextAttributes();
 		
 	}
 	
 	
 	public static function getError():Int {
 		
-		return nmeContext.getError();
+		return __context.getError();
 		
 	}
 	
@@ -908,49 +908,49 @@ class GL {
 	
 	public static function getFramebufferAttachmentParameter(target:Int, attachment:Int, pname:Int):Dynamic {
 		
-		return nmeContext.getFramebufferAttachmentParameter(target, attachment, pname);
+		return __context.getFramebufferAttachmentParameter(target, attachment, pname);
 		
 	}
 	
 	
 	public static function getParameter(pname:Int):Dynamic {
 		
-		return nmeContext.getParameter(pname);
+		return __context.getParameter(pname);
 		
 	}
 	
 	
 	public static function getProgramInfoLog(program:GLProgram):String {
 		
-		return nmeContext.getProgramInfoLog(program);
+		return __context.getProgramInfoLog(program);
 		
 	}
 	
 	
 	public static function getProgramParameter(program:GLProgram, pname:Int):Int {
 		
-		return nmeContext.getProgramParameter(program, pname);
+		return __context.getProgramParameter(program, pname);
 		
 	}
 	
 	
 	public static function getRenderbufferParameter(target:Int, pname:Int):Dynamic {
 		
-		return nmeContext.getRenderbufferParameter(target, pname);
+		return __context.getRenderbufferParameter(target, pname);
 		
 	}
 	
 	
 	public static function getShaderInfoLog(shader:GLShader):String {
 		
-		return nmeContext.getShaderInfoLog(shader);
+		return __context.getShaderInfoLog(shader);
 		
 	}
 	
 	
 	public static function getShaderParameter(shader:GLShader, pname:Int):Int {
 		
-		return nmeContext.getShaderParameter(shader, pname);
+		return __context.getShaderParameter(shader, pname);
 		
 	}
 	
@@ -960,14 +960,14 @@ class GL {
 		// TODO
 		
 		return null;
-		//return nmeContext.getShader
+		//return __context.getShader
 		
 	}
 	
 	
 	public static function getShaderSource(shader:GLShader):String {
 		
-		return nmeContext.getShaderSource(shader);
+		return __context.getShaderSource(shader);
 		
 	}
 	
@@ -977,56 +977,56 @@ class GL {
 		// TODO
 		
 		return null;
-		//return nmeContext.getSuppo
+		//return __context.getSuppo
 		
 	}
 	
 	
 	public static function getTexParameter(target:Int, pname:Int):Dynamic {
 		
-		return nmeContext.getTexParameter(target, pname);
+		return __context.getTexParameter(target, pname);
 		
 	}
 	
 	
 	public static function getUniform(program:GLProgram, location:GLUniformLocation):Dynamic { 
 		
-		return nmeContext.getUniform(program, location);
+		return __context.getUniform(program, location);
 		
 	}
 	
 	
 	public static function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
 		
-		return nmeContext.getUniformLocation(program, name);
+		return __context.getUniformLocation(program, name);
 		
 	}
 	
 	
 	public static function getVertexAttrib(index:Int, pname:Int):Dynamic {
 		
-		return nmeContext.getVertexAttrib(index, pname);
+		return __context.getVertexAttrib(index, pname);
 		
 	}
 	
 	
 	public static function getVertexAttribOffset(index:Int, pname:Int):Int {
 		
-		return nmeContext.getVertexAttribOffset(index, pname);
+		return __context.getVertexAttribOffset(index, pname);
 		
 	}
 	
 	
 	public static function hint(target:Int, mode:Int):Void {
 		
-		nmeContext.hint(target, mode);
+		__context.hint(target, mode);
 		
 	}
 	
 	
 	public static function isBuffer(buffer:GLBuffer):Bool {
 		
-		return nmeContext.isBuffer(buffer);
+		return __context.isBuffer(buffer);
 		
 	}
 	
@@ -1037,401 +1037,401 @@ class GL {
 	
 	public static function isEnabled(cap:Int):Bool {
 		
-		return nmeContext.isEnabled(cap);
+		return __context.isEnabled(cap);
 		
 	}
 	
 	
 	public static function isFramebuffer(framebuffer:GLFramebuffer):Bool {
 		
-		return nmeContext.isFramebuffer(framebuffer);
+		return __context.isFramebuffer(framebuffer);
 		
 	}
 	
 	
 	public static function isProgram(program:GLProgram):Bool {
 		
-		return nmeContext.isProgram(program);
+		return __context.isProgram(program);
 		
 	}
 	
 	
 	public static function isRenderbuffer(renderbuffer:GLRenderbuffer):Bool {
 		
-		return nmeContext.isRenderbuffer(renderbuffer);
+		return __context.isRenderbuffer(renderbuffer);
 		
 	}
 	
 	
 	public static function isShader(shader:GLShader):Bool {
 		
-		return nmeContext.isShader(shader);
+		return __context.isShader(shader);
 		
 	}
 	
 	
 	public static function isTexture(texture:GLTexture):Bool {
 		
-		return nmeContext.isTexture(texture);
+		return __context.isTexture(texture);
 		
 	}
 	
 	
 	public static function lineWidth(width:Float):Void {
 		
-		nmeContext.lineWidth(width);
+		__context.lineWidth(width);
 		
 	}
 	
 	
 	public static function linkProgram(program:GLProgram):Void {
 		
-		nmeContext.linkProgram(program);
+		__context.linkProgram(program);
 		
 	}
 	
 	
 	public static function pixelStorei(pname:Int, param:Int):Void {
 		
-		nmeContext.pixelStorei(pname, param);
+		__context.pixelStorei(pname, param);
 		
 	}
 	
 	
 	public static function polygonOffset(factor:Float, units:Float):Void {
 		
-		nmeContext.polygonOffset(factor, units);
+		__context.polygonOffset(factor, units);
 		
 	}
 	
 	
 	public static function readPixels(x:Int, y:Int, width:Int, height:Int, format:Int, type:Int, pixels:ArrayBufferView):Void {
 		
-		// TODO: pixels? May need setting to work (canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});)
+		// TODO: pixels? May need setting to work (canvas.getContext ("experimental-webgl", {preserveDrawingBuffer: true});)
 		
-		nmeContext.readPixels(x, y, width, height, format, type, pixels);
+		__context.readPixels(x, y, width, height, format, type, pixels);
 		
 	}
 	
 	
 	public static function renderbufferStorage(target:Int, internalformat:Int, width:Int, height:Int):Void {
 		
-		nmeContext.renderbufferStorage(target, internalformat, width, height);
+		__context.renderbufferStorage(target, internalformat, width, height);
 		
 	}
 	
 	
 	public static function sampleCoverage(value:Float, invert:Bool):Void {
 		
-		nmeContext.sampleCoverage(value, invert);
+		__context.sampleCoverage(value, invert);
 		
 	}
 	
 	
 	public static function scissor(x:Int, y:Int, width:Int, height:Int):Void {
 		
-		nmeContext.scissor(x, y, width, height);
+		__context.scissor(x, y, width, height);
 		
 	}
 	
 	
 	public static function shaderSource(shader:GLShader, source:String):Void {
 		
-		nmeContext.shaderSource(shader, source);
+		__context.shaderSource(shader, source);
 		
 	}
 	
 	
 	public static function stencilFunc(func:Int, ref:Int, mask:Int):Void {
 		
-		nmeContext.stencilFunc(func, ref, mask);
+		__context.stencilFunc(func, ref, mask);
 		
 	}
 	
 	
 	public static function stencilFuncSeparate(face:Int, func:Int, ref:Int, mask:Int):Void {
 		
-		nmeContext.stencilFuncSeparate(face, func, ref, mask);
+		__context.stencilFuncSeparate(face, func, ref, mask);
 		
 	}
 	
 	
 	public static function stencilMask(mask:Int):Void {
 		
-		nmeContext.stencilMask(mask);
+		__context.stencilMask(mask);
 		
 	}
 	
 	
 	public static function stencilMaskSeparate(face:Int, mask:Int):Void {
 		
-		nmeContext.stencilMaskSeparate(face, mask);
+		__context.stencilMaskSeparate(face, mask);
 		
 	}
 	
 	
 	public static function stencilOp(fail:Int, zfail:Int, zpass:Int):Void {
 		
-		nmeContext.stencilOp(fail, zfail, zpass);
+		__context.stencilOp(fail, zfail, zpass);
 		
 	}
 	
 	
 	public static function stencilOpSeparate(face:Int, fail:Int, zfail:Int, zpass:Int):Void {
 		
-		nmeContext.stencilOpSeparate(face, fail, zfail, zpass);
+		__context.stencilOpSeparate(face, fail, zfail, zpass);
 		
 	}
 	
 	
 	public static function texImage2D(target:Int, level:Int, internalformat:Int, width:Int, height:Int, border:Int, format:Int, type:Int, pixels:ArrayBufferView):Void {
 		
-		nmeContext.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+		__context.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 		
 	}
 	
 	
 	public static function texParameterf(target:Int, pname:Int, param:Float):Void {
 		
-		nmeContext.texParameterf(target, pname, param);
+		__context.texParameterf(target, pname, param);
 		
 	}
 	
 	
 	public static function texParameteri(target:Int, pname:Int, param:Int):Void {
 		
-		nmeContext.texParameteri(target, pname, param);
+		__context.texParameteri(target, pname, param);
 		
 	}
 	
 	
 	public static function texSubImage2D(target:Int, level:Int, xoffset:Int, yoffset:Int, width:Int, height:Int, format:Int, type:Int, pixels:ArrayBufferView):Void {
 		
-		nmeContext.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+		__context.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 		
 	}
 	
 	
 	public static function uniform1f(location:GLUniformLocation, x:Float):Void {
 		
-		nmeContext.uniform1f(location, x);
+		__context.uniform1f(location, x);
 		
 	}
 	
 	
 	public static function uniform1fv(location:GLUniformLocation, x:Float32Array):Void {
 		
-		nmeContext.uniform1fv(location, x);
+		__context.uniform1fv(location, x);
 		
 	}
 	
 	
 	public static function uniform1i(location:GLUniformLocation, x:Int):Void {
 		
-		nmeContext.uniform1i(location, x);
+		__context.uniform1i(location, x);
 		
 	}
 	
 	
 	public static function uniform1iv(location:GLUniformLocation, v:Int32Array):Void {
 		
-		nmeContext.uniform1iv(location, v);
+		__context.uniform1iv(location, v);
 		
 	}
 	
 	
 	public static function uniform2f(location:GLUniformLocation, x:Float, y:Float):Void {
 		
-		nmeContext.uniform2f(location, x, y);
+		__context.uniform2f(location, x, y);
 		
 	}
 	
 	
 	public static function uniform2fv(location:GLUniformLocation, v:Float32Array):Void {
 		
-		nmeContext.uniform2fv(location, v);
+		__context.uniform2fv(location, v);
 		
 	}
 	
 	
 	public static function uniform2i(location:GLUniformLocation, x:Int, y:Int):Void {
 		
-		nmeContext.uniform2i(location, x, y);
+		__context.uniform2i(location, x, y);
 		
 	}
 	
 	
 	public static function uniform2iv(location:GLUniformLocation, v:Int32Array):Void {
 		
-		nmeContext.uniform2iv(location, v);
+		__context.uniform2iv(location, v);
 		
 	}
 	
 	
 	public static function uniform3f(location:GLUniformLocation, x:Float, y:Float, z:Float):Void {
 		
-		nmeContext.uniform3f(location, x, y, z);
+		__context.uniform3f(location, x, y, z);
 		
 	}
 	
 	
 	public static function uniform3fv(location:GLUniformLocation, v:Float32Array):Void {
 		
-		nmeContext.uniform3fv(location, v);
+		__context.uniform3fv(location, v);
 		
 	}
 	
 	
 	public static function uniform3i(location:GLUniformLocation, x:Int, y:Int, z:Int):Void {
 		
-		nmeContext.uniform3i(location, x, y, z);
+		__context.uniform3i(location, x, y, z);
 		
 	}
 	
 	
 	public static function uniform3iv(location:GLUniformLocation, v:Int32Array):Void {
 		
-		nmeContext.uniform3iv(location, v);
+		__context.uniform3iv(location, v);
 		
 	}
 	
 	
 	public static function uniform4f(location:GLUniformLocation, x:Float, y:Float, z:Float, w:Float):Void {
 		
-		nmeContext.uniform4f(location, x, y, z, w);
+		__context.uniform4f(location, x, y, z, w);
 		
 	}
 	
 	
 	public static function uniform4fv(location:GLUniformLocation, v:Float32Array):Void {
 		
-		nmeContext.uniform4fv(location, v);
+		__context.uniform4fv(location, v);
 		
 	}
 	
 	
 	public static function uniform4i(location:GLUniformLocation, x:Int, y:Int, z:Int, w:Int):Void {
 		
-		nmeContext.uniform4i(location, x, y, z, w);
+		__context.uniform4i(location, x, y, z, w);
 		
 	}
 	
 	
 	public static function uniform4iv(location:GLUniformLocation, v:Int32Array):Void {
 		
-		nmeContext.uniform4iv(location, v);
+		__context.uniform4iv(location, v);
 		
 	}
 	
 	
 	public static function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, v:Float32Array):Void {
 		
-		nmeContext.uniformMatrix2fv(location, transpose, v);
+		__context.uniformMatrix2fv(location, transpose, v);
 		
 	}
 	
 	
 	public static function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, v:Float32Array):Void {
 		
-		nmeContext.uniformMatrix3fv(location, transpose, v);
+		__context.uniformMatrix3fv(location, transpose, v);
 		
 	}
 	
 	
 	public static function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, v:Float32Array):Void {
 		
-		nmeContext.uniformMatrix4fv(location, transpose, v);
+		__context.uniformMatrix4fv(location, transpose, v);
 		
 	}
 	
 	
 	public static function uniformMatrix3D(location:GLUniformLocation, transpose:Bool, matrix:Matrix3D):Void {
 		
-		nmeContext.uniformMatrix4fv(location, transpose, new Float32Array(matrix.rawData));
+		__context.uniformMatrix4fv(location, transpose, new Float32Array(matrix.rawData));
 		
 	}
 	
 	
 	public static function useProgram(program:GLProgram):Void {
 		
-		nmeContext.useProgram(program);
+		__context.useProgram(program);
 		
 	}
 	
 	
 	public static function validateProgram(program:GLProgram):Void {
 		
-		nmeContext.validateProgram(program);
+		__context.validateProgram(program);
 		
 	}
 	
 	
 	public static function vertexAttrib1f(indx:Int, x:Float):Void {
 		
-		nmeContext.vertexAttrib1f(indx, x);
+		__context.vertexAttrib1f(indx, x);
 		
 	}
 	
 	
 	public static function vertexAttrib1fv(indx:Int, values:Float32Array):Void {
 		
-		nmeContext.vertexAttrib1fv(indx, values);
+		__context.vertexAttrib1fv(indx, values);
 		
 	}
 	
 	
 	public static function vertexAttrib2f(indx:Int, x:Float, y:Float):Void {
 		
-		nmeContext.vertexAttrib2f(indx, x, y);
+		__context.vertexAttrib2f(indx, x, y);
 		
 	}
 	
 	
 	public static function vertexAttrib2fv(indx:Int, values:Float32Array):Void {
 		
-		nmeContext.vertexAttrib2fv(indx, values);
+		__context.vertexAttrib2fv(indx, values);
 		
 	}
 	
 	
 	public static function vertexAttrib3f(indx:Int, x:Float, y:Float, z:Float):Void {
 		
-		nmeContext.vertexAttrib3f(indx, x, y, z);
+		__context.vertexAttrib3f(indx, x, y, z);
 		
 	}
 	
 	
 	public static function vertexAttrib3fv(indx:Int, values:Float32Array):Void {
 		
-		nmeContext.vertexAttrib3fv(indx, values);
+		__context.vertexAttrib3fv(indx, values);
 		
 	}
 	
 	
 	public static function vertexAttrib4f(indx:Int, x:Float, y:Float, z:Float, w:Float):Void {
 		
-		nmeContext.vertexAttrib4f(indx, x, y, z, w);
+		__context.vertexAttrib4f(indx, x, y, z, w);
 		
 	}
 	
 	
 	public static function vertexAttrib4fv(indx:Int, values:Float32Array):Void {
 		
-		nmeContext.vertexAttrib4fv(indx, values);
+		__context.vertexAttrib4fv(indx, values);
 		
 	}
 	
 	
 	public static function vertexAttribPointer(indx:Int, size:Int, type:Int, normalized:Bool, stride:Int, offset:Int):Void {
 		
-		nmeContext.vertexAttribPointer(indx, size, type, normalized, stride, offset);
+		__context.vertexAttribPointer(indx, size, type, normalized, stride, offset);
 		
 	}
 	
 	
 	public static function viewport(x:Int, y:Int, width:Int, height:Int):Void {
 		
-		nmeContext.viewport(x, y, width, height);
+		__context.viewport(x, y, width, height);
 		
 	}
 	

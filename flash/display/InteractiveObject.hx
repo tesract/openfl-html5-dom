@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.geom.Point;
@@ -12,15 +11,15 @@ class InteractiveObject extends DisplayObject {
 	public var focusRect:Dynamic;
 	public var mouseEnabled:Bool;
 	public var tabEnabled:Bool;
-	public var tabIndex(get_tabIndex, set_tabIndex):Int;
+	public var tabIndex (get_tabIndex, set_tabIndex):Int;
 	
-	private var nmeDoubleClickEnabled:Bool;
-	private var nmeTabIndex:Int;
+	private var __doubleClickEnabled:Bool;
+	private var __tabIndex:Int;
 	
 	
-	public function new() {
+	public function new () {
 		
-		super();
+		super ();
 		
 		tabEnabled = false;
 		mouseEnabled = true;
@@ -30,7 +29,14 @@ class InteractiveObject extends DisplayObject {
 	}
 	
 	
-	override private function nmeGetObjectUnderPoint(point:Point):DisplayObject {
+	override public function toString ():String {
+		
+		return "[InteractiveObject name=" + this.name + " id=" + ___id + "]";
+		
+	}
+	
+	
+	override private function __getObjectUnderPoint (point:Point):DisplayObject {
 		
 		if (!mouseEnabled) {
 			
@@ -38,16 +44,9 @@ class InteractiveObject extends DisplayObject {
 			
 		} else {
 			
-			return super.nmeGetObjectUnderPoint(point);
+			return super.__getObjectUnderPoint (point);
 			
 		}
-		
-	}
-	
-	
-	override public function toString():String {
-		
-		return "[InteractiveObject name=" + this.name + " id=" + _nmeId + "]";
 		
 	}
 	
@@ -59,11 +58,8 @@ class InteractiveObject extends DisplayObject {
 	
 	
 	
-	public function get_tabIndex():Int { return nmeTabIndex; }
-	public function set_tabIndex(inIndex:Int):Int { return nmeTabIndex = inIndex; }
+	public function get_tabIndex ():Int { return __tabIndex; }
+	public function set_tabIndex (inIndex:Int):Int { return __tabIndex = inIndex; }
 	
 
 }
-
-
-#end

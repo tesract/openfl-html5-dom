@@ -1,5 +1,4 @@
 package flash.utils;
-#if js
 
 
 enum CompressionAlgorithm {
@@ -10,6 +9,3 @@ enum CompressionAlgorithm {
 	GZIP;
 	
 }
-
-
-#end

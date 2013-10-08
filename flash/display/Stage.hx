@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 import flash.display.Graphics;
@@ -30,26 +29,27 @@ class Stage extends DisplayObjectContainer {
 	
 	
 	public static inline var NAME:String = "Stage";
-	public static var nmeAcceleration:Acceleration = { x: 0.0, y: 1.0, z: 0.0 };
 	public static var OrientationPortrait = 1;
 	public static var OrientationPortraitUpsideDown = 2;
 	public static var OrientationLandscapeRight = 3;
 	public static var OrientationLandscapeLeft = 4;
 	
+	public static var __acceleration:Acceleration = { x: 0.0, y: 1.0, z: 0.0 };
+	
 	public var align:StageAlign;
-	public var backgroundColor(get_backgroundColor, set_backgroundColor):Int;
-	@:isVar public var displayState(get_displayState, set_displayState):StageDisplayState;
-	public var focus(get_focus, set_focus):InteractiveObject;
-	public var frameRate(get_frameRate, set_frameRate):Float;
-	public var fullScreenHeight(get_fullScreenHeight, null):Int;
-	public var fullScreenWidth(get_fullScreenWidth, null):Int;
-	public var nmePointInPathMode(default, null):PointInPathMode;
-	@:isVar public var quality(get_quality, set_quality):String;
+	public var backgroundColor (get_backgroundColor, set_backgroundColor):Int;
+	@:isVar public var displayState (get_displayState, set_displayState):StageDisplayState;
+	public var focus (get_focus, set_focus):InteractiveObject;
+	public var frameRate (get_frameRate, set_frameRate):Float;
+	public var fullScreenHeight (get_fullScreenHeight, null):Int;
+	public var fullScreenWidth (get_fullScreenWidth, null):Int;
+	public var __pointInPathMode (default, null):PointInPathMode;
+	@:isVar public var quality (get_quality, set_quality):String;
 	public var scaleMode:StageScaleMode;
-	public var showDefaultContextMenu(get_showDefaultContextMenu, set_showDefaultContextMenu):Bool;
+	public var showDefaultContextMenu (get_showDefaultContextMenu, set_showDefaultContextMenu):Bool;
 	public var stageFocusRect:Bool;
-	public var stageHeight(get_stageHeight, null):Int;
-	public var stageWidth(get_stageWidth, null):Int;
+	public var stageHeight (get_stageHeight, null):Int;
+	public var stageWidth (get_stageWidth, null):Int;
 
 	#if stage3d
 	public var stage3Ds:Vector<Stage3D>;
@@ -58,68 +58,68 @@ class Stage extends DisplayObjectContainer {
 	private static inline var DEFAULT_FRAMERATE = 0.0;
 	private static inline var UI_EVENTS_QUEUE_MAX = 1000;
 	
-	private static var nmeMouseChanges:Array<String> = [ MouseEvent.MOUSE_OUT, MouseEvent.MOUSE_OVER, MouseEvent.ROLL_OUT, MouseEvent.ROLL_OVER ];
-	private static var nmeTouchChanges:Array<String> = [ TouchEvent.TOUCH_OUT, TouchEvent.TOUCH_OVER, TouchEvent.TOUCH_ROLL_OUT, TouchEvent.TOUCH_ROLL_OVER ];
+	private static var __mouseChanges:Array<String> = [ MouseEvent.MOUSE_OUT, MouseEvent.MOUSE_OVER, MouseEvent.ROLL_OUT, MouseEvent.ROLL_OVER ];
+	private static var __touchChanges:Array<String> = [ TouchEvent.TOUCH_OUT, TouchEvent.TOUCH_OVER, TouchEvent.TOUCH_ROLL_OUT, TouchEvent.TOUCH_ROLL_OVER ];
 	
-	private var nmeBackgroundColour:Int;
-	private var nmeDragBounds:Rectangle;
-	private var nmeDragObject:DisplayObject;
-	private var nmeDragOffsetX:Float;
-	private var nmeDragOffsetY:Float;
-	private var nmeFocusObject:InteractiveObject;
-	private var nmeFocusObjectActivated:Bool;
-	private var nmeFrameRate:Float;
-	private var nmeInterval:Int;
-	private var nmeInvalid:Bool;
-	private var nmeMouseOverObjects:Array<InteractiveObject>;
-	private var nmeShowDefaultContextMenu:Bool;
-	private var nmeStageActive:Bool;
-	private var nmeStageMatrix:Matrix;
-	private var nmeTimer:Dynamic;
-	private var nmeTouchInfo:Array<TouchInfo>;
-	private var nmeUIEventsQueue:Array<js.html.Event>;
-	private var nmeUIEventsQueueIndex:Int;
-	private var nmeWindowWidth:Int;
-	private var nmeWindowHeight:Int;
+	private var __backgroundColour:Int;
+	private var __dragBounds:Rectangle;
+	private var __dragObject:DisplayObject;
+	private var __dragOffsetX:Float;
+	private var __dragOffsetY:Float;
+	private var __focusObject:InteractiveObject;
+	private var __focusObjectActivated:Bool;
+	private var __frameRate:Float;
+	private var __interval:Int;
+	private var __invalid:Bool;
+	private var __mouseOverObjects:Array<InteractiveObject>;
+	private var __showDefaultContextMenu:Bool;
+	private var __stageActive:Bool;
+	private var __stageMatrix:Matrix;
+	private var __timer:Dynamic;
+	private var __touchInfo:Array<TouchInfo>;
+	private var __uIEventsQueue:Array<js.html.Event>;
+	private var __uIEventsQueueIndex:Int;
+	private var __windowWidth:Int;
+	private var __windowHeight:Int;
 	private var _mouseX:Float;
 	private var _mouseY:Float;
 	
 	
-	public function new(width:Int, height:Int) {
+	public function new (width:Int, height:Int) {
 		
 		super();
 		
-		nmeFocusObject = null;
-		nmeFocusObjectActivated = false;
-		nmeWindowWidth = width;
-		nmeWindowHeight = height;
+		__focusObject = null;
+		__focusObjectActivated = false;
+		__windowWidth = width;
+		__windowHeight = height;
 		stageFocusRect = false;
 		scaleMode = StageScaleMode.SHOW_ALL;
-		nmeStageMatrix = new Matrix();
+		__stageMatrix = new Matrix ();
 		tabEnabled = true;
 		frameRate = DEFAULT_FRAMERATE;
 		this.backgroundColor = 0xffffff;
 		name = NAME;
-		loaderInfo = LoaderInfo.create(null);
-		loaderInfo.parameters.width = Std.string(nmeWindowWidth);
-		loaderInfo.parameters.height = Std.string(nmeWindowHeight);
+		loaderInfo = LoaderInfo.create (null);
+		loaderInfo.parameters.width = Std.string (__windowWidth);
+		loaderInfo.parameters.height = Std.string (__windowHeight);
 		
-		nmePointInPathMode = Graphics.nmeDetectIsPointInPathMode();
-		nmeMouseOverObjects = [];
+		__pointInPathMode = Graphics.__detectIsPointInPathMode ();
+		__mouseOverObjects = [];
 		showDefaultContextMenu = true;
-		nmeTouchInfo = [];
-		nmeUIEventsQueue = untyped __new__("Array", UI_EVENTS_QUEUE_MAX);
-		nmeUIEventsQueueIndex = 0;
+		__touchInfo = [];
+		__uIEventsQueue = untyped __new__("Array", UI_EVENTS_QUEUE_MAX);
+		__uIEventsQueueIndex = 0;
 
 		#if stage3d
-		stage3Ds = new Vector();
-		stage3Ds.push(new Stage3D());
+		stage3Ds = new Vector ();
+		stage3Ds.push(new Stage3D ());
 		//alpha = 0;   // so that the stage itself does not preclude to see Stage3D OpenGLView
 		#end
 	}
 	
 	
-	public static dynamic function getOrientation():Int {
+	public static dynamic function getOrientation ():Int {
 		
 		var rotation:Int = untyped window.orientation;
 		var orientation:Int = OrientationPortrait;
@@ -138,17 +138,24 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	public function invalidate():Void {
+	public function invalidate ():Void {
 		
-		nmeInvalid = true;
+		__invalid = true;
 		
 	}
 	
 	
-	private function nmeCheckInOuts(event:Event, stack:Array<InteractiveObject>, touchInfo:TouchInfo = null) {
+	override public function toString ():String {
 		
-		var prev = (touchInfo == null ? nmeMouseOverObjects : touchInfo.touchOverObjects);
-		var changeEvents = (touchInfo == null ? nmeMouseChanges : nmeTouchChanges);
+		return "[Stage id=" + ___id + "]";
+		
+	}
+	
+	
+	private function __checkInOuts (event:Event, stack:Array<InteractiveObject>, touchInfo:TouchInfo = null) {
+		
+		var prev = (touchInfo == null ? __mouseOverObjects : touchInfo.touchOverObjects);
+		var changeEvents = (touchInfo == null ? __mouseChanges : __touchChanges);
 		
 		var new_n = stack.length;
 		var new_obj:InteractiveObject = (new_n > 0 ? stack[new_n - 1] : null);
@@ -160,13 +167,13 @@ class Stage extends DisplayObjectContainer {
 			// mouseOut/MouseOver goes up the object tree...
 			if (old_obj != null) {
 				
-				old_obj.nmeFireEvent(event.nmeCreateSimilar(changeEvents[0], new_obj, old_obj));
+				old_obj.__fireEvent (event.__createSimilar (changeEvents[0], new_obj, old_obj));
 				
 			}
 			
 			if (new_obj != null) {
 				
-				new_obj.nmeFireEvent(event.nmeCreateSimilar(changeEvents[1], old_obj, new_obj));
+				new_obj.__fireEvent (event.__createSimilar(changeEvents[1], old_obj, new_obj));
 				
 			}
 			
@@ -178,29 +185,29 @@ class Stage extends DisplayObjectContainer {
 				
 			}
 			
-			var rollOut = event.nmeCreateSimilar(changeEvents[2], new_obj, old_obj);
+			var rollOut = event.__createSimilar (changeEvents[2], new_obj, old_obj);
 			var i = old_n - 1;
 			
 			while (i >= common) {
 				
-				prev[i].dispatchEvent(rollOut);
+				prev[i].dispatchEvent (rollOut);
 				i--;
 				
 			}
 			
-			var rollOver = event.nmeCreateSimilar(changeEvents[3], old_obj);
+			var rollOver = event.__createSimilar (changeEvents[3], old_obj);
 			var i = new_n - 1;
 			
 			while (i >= common) {
 				
-				stack[i].dispatchEvent(rollOver);
+				stack[i].dispatchEvent (rollOver);
 				i--;
 				
 			}
 			
 			if (touchInfo == null) {
 				
-				nmeMouseOverObjects = stack;
+				__mouseOverObjects = stack;
 				
 			} else {
 				
@@ -213,157 +220,157 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	private function nmeDrag(point:Point):Void {
+	private function __drag (point:Point):Void {
 		
-		var p = nmeDragObject.parent;
+		var p = __dragObject.parent;
 		
 		if (p != null) {
 			
-			point = p.globalToLocal(point);
+			point = p.globalToLocal (point);
 			
 		}
 		
-		var x = point.x + nmeDragOffsetX;
-		var y = point.y + nmeDragOffsetY;
+		var x = point.x + __dragOffsetX;
+		var y = point.y + __dragOffsetY;
 		
-		if (nmeDragBounds != null) {
+		if (__dragBounds != null) {
 			
-			if (x < nmeDragBounds.x) {
+			if (x < __dragBounds.x) {
 				
-				x = nmeDragBounds.x;
+				x = __dragBounds.x;
 				
-			} else if (x > nmeDragBounds.right) {
+			} else if (x > __dragBounds.right) {
 				
-				x = nmeDragBounds.right;
+				x = __dragBounds.right;
 				
 			}
 			
-			if (y < nmeDragBounds.y) {
+			if (y < __dragBounds.y) {
 				
-				y = nmeDragBounds.y;
+				y = __dragBounds.y;
 				
-			} else if (y > nmeDragBounds.bottom) {
+			} else if (y > __dragBounds.bottom) {
 				
-				y = nmeDragBounds.bottom;
+				y = __dragBounds.bottom;
 				
 			}
 			
 		}
 		
-		nmeDragObject.x = x;
-		nmeDragObject.y = y;
+		__dragObject.x = x;
+		__dragObject.y = y;
 		
 	}
 	
 	
-	override private function nmeIsOnStage():Bool {
+	override private function __isOnStage ():Bool {
 		
 		return true;
 		
 	}
 	
 	
-	public function nmeProcessStageEvent(evt:js.html.Event):Void {
+	public function __processStageEvent (evt:js.html.Event):Void {
 		
-		evt.stopPropagation();
+		evt.stopPropagation ();
 		
 		switch (evt.type) {
 			
 			case "resize":
 				
-				nmeOnResize(Lib.nmeGetWidth(), Lib.nmeGetHeight());
+				__onResize(Lib.__getWidth (), Lib.__getHeight ());
 			
 			case "focus":
 				
-				nmeOnFocus (this);
+				__onFocus (this);
 				
-				if (!nmeFocusObjectActivated) {
+				if (!__focusObjectActivated) {
 					
-					nmeFocusObjectActivated = true;
+					__focusObjectActivated = true;
 					dispatchEvent (new Event (Event.ACTIVATE));
 					
 				}
 			
 			case "blur":
 				
-				if (nmeFocusObjectActivated) {
+				if (__focusObjectActivated) {
 					
-					nmeFocusObjectActivated = false;
+					__focusObjectActivated = false;
 					dispatchEvent (new Event (Event.DEACTIVATE));
 					
 				}
 			
 			case "mousemove":
 				
-				nmeOnMouse(cast evt, MouseEvent.MOUSE_MOVE);
+				__onMouse (cast evt, MouseEvent.MOUSE_MOVE);
 			
 			case "mousedown":
 				
-				nmeOnMouse(cast evt, MouseEvent.MOUSE_DOWN);
+				__onMouse (cast evt, MouseEvent.MOUSE_DOWN);
 			
 			case "mouseup":
 				
-				nmeOnMouse(cast evt, MouseEvent.MOUSE_UP);
+				__onMouse (cast evt, MouseEvent.MOUSE_UP);
 			
 			case "click":
 				
-				nmeOnMouse(cast evt, MouseEvent.CLICK);
+				__onMouse (cast evt, MouseEvent.CLICK);
 			
 			case "mousewheel":
 				
-				nmeOnMouse(cast evt, MouseEvent.MOUSE_WHEEL);
+				__onMouse (cast evt, MouseEvent.MOUSE_WHEEL);
 			
 			case "dblclick":
 				
-				nmeOnMouse(cast evt, MouseEvent.DOUBLE_CLICK);
+				__onMouse (cast evt, MouseEvent.DOUBLE_CLICK);
 			
 			case "keydown":
 				
 				var evt:js.html.KeyboardEvent = cast evt;
 				var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
-				keyCode = Keyboard.nmeConvertMozillaCode(keyCode);
+				keyCode = Keyboard.__convertMozillaCode (keyCode);
 				
-				nmeOnKey(keyCode, true, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+				__onKey (keyCode, true, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 			
 			case "keyup":
 				
 				var evt:js.html.KeyboardEvent = cast evt;
 				var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
-				keyCode = Keyboard.nmeConvertMozillaCode(keyCode);
+				keyCode = Keyboard.__convertMozillaCode (keyCode);
 				
-				nmeOnKey(keyCode, false, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+				__onKey (keyCode, false, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 			
 			case "touchstart":
 				
 				var evt:js.html.TouchEvent = cast evt;
-				evt.preventDefault();
-				var touchInfo = new TouchInfo();
-				nmeTouchInfo[evt.changedTouches[0].identifier] = touchInfo;
-				nmeOnTouch(evt, evt.changedTouches[0], TouchEvent.TOUCH_BEGIN, touchInfo, false);
+				evt.preventDefault ();
+				var touchInfo = new TouchInfo ();
+				__touchInfo[evt.changedTouches[0].identifier] = touchInfo;
+				__onTouch (evt, evt.changedTouches[0], TouchEvent.TOUCH_BEGIN, touchInfo, false);
 			
 			case "touchmove":
 				
 				var evt:js.html.TouchEvent = cast evt;
-				evt.preventDefault();
-				var touchInfo = nmeTouchInfo[evt.changedTouches[0].identifier];
-				nmeOnTouch(evt, evt.changedTouches[0], TouchEvent.TOUCH_MOVE, touchInfo, true);
+				evt.preventDefault ();
+				var touchInfo = __touchInfo[evt.changedTouches[0].identifier];
+				__onTouch (evt, evt.changedTouches[0], TouchEvent.TOUCH_MOVE, touchInfo, true);
 			
 			case "touchend":
 				
 				var evt:js.html.TouchEvent = cast evt;
-				evt.preventDefault();
-				var touchInfo = nmeTouchInfo[evt.changedTouches[0].identifier];
-				nmeOnTouch(evt, evt.changedTouches[0], TouchEvent.TOUCH_END, touchInfo, true);
-				nmeTouchInfo[evt.changedTouches[0].identifier] = null;
+				evt.preventDefault ();
+				var touchInfo = __touchInfo[evt.changedTouches[0].identifier];
+				__onTouch (evt, evt.changedTouches[0], TouchEvent.TOUCH_END, touchInfo, true);
+				__touchInfo[evt.changedTouches[0].identifier] = null;
 			
 			case Lib.HTML_ACCELEROMETER_EVENT_TYPE:
 				
 				var evt:DeviceMotionEvent = cast evt;
-				nmeHandleAccelerometer(evt);
+				__handleAccelerometer (evt);
 			
 			case Lib.HTML_ORIENTATION_EVENT_TYPE:
 				
-				nmeHandleOrientationChange();
+				__handleOrientationChange ();
 			
 			default:
 			
@@ -372,94 +379,94 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	public function nmeQueueStageEvent(evt:js.html.Event):Void {
+	public function __queueStageEvent (evt:js.html.Event):Void {
 		
-		nmeUIEventsQueue[nmeUIEventsQueueIndex++] = evt;
-		
-	}
-	
-	
-	public function nmeRenderAll() {
-		
-		nmeRender(null, null);
+		__uIEventsQueue[__uIEventsQueueIndex++] = evt;
 		
 	}
 	
 	
-	public function nmeRenderToCanvas(canvas:CanvasElement):Void {
+	public function __renderAll () {
+		
+		__render (null, null);
+		
+	}
+	
+	
+	public function __renderToCanvas (canvas:CanvasElement):Void {
 		
 		canvas.width = canvas.width;
-		nmeRender(canvas);
+		__render (canvas);
 		
 	}
 	
 	
-	private function nmeStageRender(?_) {
+	private function __stageRender (?_) {
 		
-		if (!nmeStageActive) {
+		if (!__stageActive) {
 			
-			nmeOnResize(nmeWindowWidth, nmeWindowHeight);
-			var event = new Event(Event.ACTIVATE);
+			__onResize (__windowWidth, __windowHeight);
+			var event = new Event (Event.ACTIVATE);
 			event.target = this;
-			nmeBroadcast(event);
-			nmeStageActive = true;
+			__broadcast (event);
+			__stageActive = true;
 			
 		}
 		
 		// Dispatch all queued UI events before the main render loop.
-		for (i in 0...nmeUIEventsQueueIndex) {
+		for (i in 0...__uIEventsQueueIndex) {
 			
-			if (nmeUIEventsQueue[i] != null) {
+			if (__uIEventsQueue[i] != null) {
 				
-				nmeProcessStageEvent(nmeUIEventsQueue[i]);
+				__processStageEvent (__uIEventsQueue[i]);
 				
 			}
 			
 		}
 		
-		nmeUIEventsQueueIndex = 0;
+		__uIEventsQueueIndex = 0;
 		
-		var event = new Event(Event.ENTER_FRAME);
-		this.nmeBroadcast(event);
+		var event = new Event (Event.ENTER_FRAME);
+		this.__broadcast (event);
 		
-		if (nmeInvalid) {
+		if (__invalid) {
 			
-			var event = new Event(Event.RENDER);
-			this.nmeBroadcast(event);
+			var event = new Event (Event.RENDER);
+			this.__broadcast (event);
 			
 		}
 		
-		this.nmeRenderAll();
+		this.__renderAll ();
 		
 	}
 	
 	
-	public function nmeStartDrag(sprite:Sprite, lockCenter:Bool = false, bounds:Rectangle = null) {
+	public function __startDrag (sprite:Sprite, lockCenter:Bool = false, bounds:Rectangle = null) {
 		
-		nmeDragBounds = (bounds==null) ? null : bounds.clone();
-		nmeDragObject = sprite;
+		__dragBounds = (bounds==null) ? null : bounds.clone ();
+		__dragObject = sprite;
 		
-		if (nmeDragObject != null) {
+		if (__dragObject != null) {
 			
-			var mouse = new Point(_mouseX, _mouseY);
-			var p = nmeDragObject.parent;
+			var mouse = new Point (_mouseX, _mouseY);
+			var p = __dragObject.parent;
 			
 			if (p != null) {
 				
-				mouse = p.globalToLocal(mouse);
+				mouse = p.globalToLocal (mouse);
 				
 			}
 			
 			if (lockCenter) {
 				
-				var bounds = sprite.getBounds(this);
-				nmeDragOffsetX = nmeDragObject.x - (bounds.width / 2 + bounds.x);
-				nmeDragOffsetY = nmeDragObject.y - (bounds.height / 2 + bounds.y);
+				var bounds = sprite.getBounds (this);
+				__dragOffsetX = __dragObject.x - (bounds.width / 2 + bounds.x);
+				__dragOffsetY = __dragObject.y - (bounds.height / 2 + bounds.y);
 				
 			} else {
 				
-				nmeDragOffsetX = nmeDragObject.x - mouse.x;
-				nmeDragOffsetY = nmeDragObject.y - mouse.y;
+				__dragOffsetX = __dragObject.x - mouse.x;
+				__dragOffsetY = __dragObject.y - mouse.y;
 				
 			}
 			
@@ -468,36 +475,29 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	public function nmeStopDrag(sprite:Sprite):Void {
+	public function __stopDrag (sprite:Sprite):Void {
 		
-		nmeDragBounds = null;
-		nmeDragObject = null;
+		__dragBounds = null;
+		__dragObject = null;
 		
 	}
 	
 	
-	public function nmeUpdateNextWake():Void {
+	public function __updateNextWake ():Void {
 		
-		if (nmeFrameRate == 0) {
+		if (__frameRate == 0) {
 			
-			var nmeRequestAnimationFrame:Dynamic = untyped __js__("window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame");
-			nmeRequestAnimationFrame(nmeUpdateNextWake);
-			nmeStageRender();
+			var __requestAnimationFrame:Dynamic = untyped __js__("window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame");
+			__requestAnimationFrame (__updateNextWake);
+			__stageRender ();
 			
 		} else {
 			
-			Browser.window.clearInterval(nmeTimer);
-			//nmeTimer = Browser.window.setInterval(cast nmeStageRender, nmeInterval, []);
-			nmeTimer = Browser.window.setInterval(cast nmeStageRender, nmeInterval);
+			Browser.window.clearInterval (__timer);
+			//__timer = Browser.window.setInterval(cast __stageRender, __interval, []);
+			__timer = Browser.window.setInterval (cast __stageRender, __interval);
 			
 		}
-		
-	}
-	
-	
-	override public function toString():String {
-		
-		return "[Stage id=" + _nmeId + "]";
 		
 	}
 	
@@ -509,33 +509,33 @@ class Stage extends DisplayObjectContainer {
 	
 	
 	
-	private function nmeHandleAccelerometer(evt:DeviceMotionEvent):Void {
+	private function __handleAccelerometer (evt:DeviceMotionEvent):Void {
 		
-		nmeAcceleration.x = evt.accelerationIncludingGravity.x;
-		nmeAcceleration.y = evt.accelerationIncludingGravity.y;
-		nmeAcceleration.z = evt.accelerationIncludingGravity.z;
+		__acceleration.x = evt.accelerationIncludingGravity.x;
+		__acceleration.y = evt.accelerationIncludingGravity.y;
+		__acceleration.z = evt.accelerationIncludingGravity.z;
 		
 	}
 	
 	
-	private function nmeHandleOrientationChange():Void {
+	private function __handleOrientationChange ():Void {
 		
 		//js.Lib.alert("orientation: " + getOrientation());
 		
 	}
 	
 	
-	private function nmeOnKey(code:Int, pressed:Bool, inChar:Int, ctrl:Bool, alt:Bool, shift:Bool, keyLocation:Int):Void {
+	private function __onKey (code:Int, pressed:Bool, inChar:Int, ctrl:Bool, alt:Bool, shift:Bool, keyLocation:Int):Void {
 		
 		var stack = new Array <InteractiveObject> ();
 		
-		if (nmeFocusObject == null) {
+		if (__focusObject == null) {
 			
-			this.nmeGetInteractiveObjectStack (stack);
+			this.__getInteractiveObjectStack (stack);
 			
 		} else {
 			
-			nmeFocusObject.nmeGetInteractiveObjectStack (stack);
+			__focusObject.__getInteractiveObjectStack (stack);
 			
 		}
 		
@@ -543,133 +543,133 @@ class Stage extends DisplayObjectContainer {
 			
 			var obj = stack[0];
 			var evt = new KeyboardEvent (pressed ? KeyboardEvent.KEY_DOWN : KeyboardEvent.KEY_UP, true, false, inChar, code, keyLocation, ctrl, alt, shift);
-			obj.nmeFireEvent (evt);
+			obj.__fireEvent (evt);
 			
 		}
 		
 	}
 	
 	
-	private function nmeOnFocus (target:InteractiveObject):Void {
+	private function __onFocus (target:InteractiveObject):Void {
 		
 		// Don't do MOUSE_FOCUS_CHANGE or KEY_FOCUS_CHANGE events; doing those
 		// would imply knowing whether the event was due to a user-initiated
 		// mouse or key event, and that's not knowable in this implementation
 		
 		// If the focus has changed
-		if (target != nmeFocusObject) {
+		if (target != __focusObject) {
 			
 			// If there was a previously focused object, fire the FOCUS_OUT
 			// event for it using the Flash event propogation semantics
-			// implemented in nmeFireEvent
+			// implemented in __fireEvent
 			
-			if (nmeFocusObject != null) {
+			if (__focusObject != null) {
 				
-				nmeFocusObject.nmeFireEvent (new FocusEvent (FocusEvent.FOCUS_OUT, true, false, nmeFocusObject, false, 0));
+				__focusObject.__fireEvent (new FocusEvent (FocusEvent.FOCUS_OUT, true, false, __focusObject, false, 0));
 				
 			}
 			
 			// Now dispatch a focus in event similarly using Flash event
 			// propogation semantics
-			target.nmeFireEvent (new FocusEvent (FocusEvent.FOCUS_IN, true, false, target, false, 0));
+			target.__fireEvent (new FocusEvent (FocusEvent.FOCUS_IN, true, false, target, false, 0));
 			
 			// Finally, store the updated focus object
-			nmeFocusObject = target;
+			__focusObject = target;
 			
 		}
 		
 	}
 	
 	
-	private function nmeOnMouse(event:js.html.MouseEvent, type:String) {
+	private function __onMouse (event:js.html.MouseEvent, type:String) {
 		
-		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect();
-		var point:Point = untyped new Point(event.clientX - rect.left, event.clientY - rect.top);
+		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
+		var point:Point = untyped new Point (event.clientX - rect.left, event.clientY - rect.top);
 		
-		if (nmeDragObject != null) {
+		if (__dragObject != null) {
 			
-			nmeDrag(point);
+			__drag (point);
 			
 		}
 		
-		var obj = nmeGetObjectUnderPoint(point);
+		var obj = __getObjectUnderPoint (point);
 		
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;
 		
-		var stack = new Array<InteractiveObject>();
-		if (obj != null) obj.nmeGetInteractiveObjectStack(stack);
+		var stack = new Array<InteractiveObject> ();
+		if (obj != null) obj.__getInteractiveObjectStack (stack);
 		
 		if (stack.length > 0) {
 			
 			//var global = obj.localToGlobal(point);
 			//var obj = stack[0];
 			
-			stack.reverse();
-			var local = obj.globalToLocal(point);
-			var evt = MouseEvent.nmeCreate(type, event, local, cast obj);
+			stack.reverse ();
+			var local = obj.globalToLocal (point);
+			var evt = MouseEvent.__create (type, event, local, cast obj);
 			
-			nmeCheckInOuts(evt, stack);
+			__checkInOuts (evt, stack);
 			
 			// MOUSE_DOWN brings focus to the clicked object, and takes it
 			// away from any currently focused object
 			if (type == MouseEvent.MOUSE_DOWN) {
 				
-				nmeOnFocus (stack[stack.length - 1]);
+				__onFocus (stack[stack.length - 1]);
 				
 			}
 			
-			obj.nmeFireEvent(evt);
+			obj.__fireEvent (evt);
 			
 		} else {
 			
-			var evt = MouseEvent.nmeCreate(type, event, point, null);
-			nmeCheckInOuts(evt, stack);
+			var evt = MouseEvent.__create (type, event, point, null);
+			__checkInOuts (evt, stack);
 			
 		}
 		
 	}
 	
 	
-	public function nmeOnResize(inW:Int, inH:Int):Void {
+	public function __onResize (inW:Int, inH:Int):Void {
 		
-		nmeWindowWidth = inW;
-		nmeWindowHeight = inH;
+		__windowWidth = inW;
+		__windowHeight = inH;
 		
-		var event = new Event(Event.RESIZE);
+		var event = new Event (Event.RESIZE);
 		event.target = this;
-		nmeBroadcast(event);
+		__broadcast (event);
 		
 	}
 	
 	
-	private function nmeOnTouch(event:js.html.TouchEvent, touch:js.html.Touch, type:String, touchInfo:TouchInfo, isPrimaryTouchPoint:Bool):Void {
+	private function __onTouch (event:js.html.TouchEvent, touch:js.html.Touch, type:String, touchInfo:TouchInfo, isPrimaryTouchPoint:Bool):Void {
 		
-		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect();
-		var point : Point = untyped new Point(touch.pageX - rect.left, touch.pageY - rect.top);
-		var obj = nmeGetObjectUnderPoint(point);
+		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
+		var point : Point = untyped new Point (touch.pageX - rect.left, touch.pageY - rect.top);
+		var obj = __getObjectUnderPoint (point);
 		
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;
 		
-		var stack = new Array<InteractiveObject>();
-		if (obj != null) obj.nmeGetInteractiveObjectStack(stack);
+		var stack = new Array<InteractiveObject> ();
+		if (obj != null) obj.__getInteractiveObjectStack (stack);
 		
 		if (stack.length > 0) {
 			
 			//var obj = stack[0];
 			
-			stack.reverse();
-			var local = obj.globalToLocal(point);
-			var evt = TouchEvent.nmeCreate(type, event, touch, local, cast obj);
+			stack.reverse ();
+			var local = obj.globalToLocal (point);
+			var evt = TouchEvent.__create (type, event, touch, local, cast obj);
 			
 			evt.touchPointID = touch.identifier;
 			evt.isPrimaryTouchPoint = isPrimaryTouchPoint;
 			
-			nmeCheckInOuts(evt, stack, touchInfo);
-			obj.nmeFireEvent(evt);
+			__checkInOuts (evt, stack, touchInfo);
+			obj.__fireEvent (evt);
 			
 			var mouseType = switch (type) {
 				
@@ -677,9 +677,9 @@ class Stage extends DisplayObjectContainer {
 				case TouchEvent.TOUCH_END: MouseEvent.MOUSE_UP;
 				default: 
 					
-					if (nmeDragObject != null) {
+					if (__dragObject != null) {
 						
-						nmeDrag(point);
+						__drag (point);
 						
 					}
 					
@@ -687,14 +687,14 @@ class Stage extends DisplayObjectContainer {
 				
 			}
 			
-			obj.nmeFireEvent(MouseEvent.nmeCreate(mouseType, cast evt, local, cast obj));
+			obj.__fireEvent (MouseEvent.__create (mouseType, cast evt, local, cast obj));
 			
 		} else {
 			
-			var evt = TouchEvent.nmeCreate(type, event, touch, point, null);
+			var evt = TouchEvent.__create (type, event, touch, point, null);
 			evt.touchPointID = touch.identifier;
 			evt.isPrimaryTouchPoint = isPrimaryTouchPoint;
-			nmeCheckInOuts(evt, stack, touchInfo);
+			__checkInOuts (evt, stack, touchInfo);
 			
 		}
 		
@@ -708,19 +708,19 @@ class Stage extends DisplayObjectContainer {
 	
 	
 	
-	private function get_backgroundColor():Int { return nmeBackgroundColour; }
-	private function set_backgroundColor(col:Int):Int { return nmeBackgroundColour = col; }
+	private function get_backgroundColor ():Int { return __backgroundColour; }
+	private function set_backgroundColor (col:Int):Int { return __backgroundColour = col; }
 	
 	
-	private inline function get_displayState():StageDisplayState { return this.displayState; }
-	private function set_displayState(displayState:StageDisplayState):StageDisplayState {
+	private inline function get_displayState ():StageDisplayState { return this.displayState; }
+	private function set_displayState (displayState:StageDisplayState):StageDisplayState {
 		
 		if (displayState != this.displayState && this.displayState != null) {
 			
 			switch (displayState) {
 				
-				case NORMAL: Lib.nmeDisableFullScreen();
-				case FULL_SCREEN, FULL_SCREEN_INTERACTIVE: Lib.nmeEnableFullScreen();
+				case NORMAL: Lib.__disableFullScreen ();
+				case FULL_SCREEN, FULL_SCREEN_INTERACTIVE: Lib.__enableFullScreen ();
 				
 			}
 			
@@ -732,25 +732,25 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	private function get_focus():InteractiveObject { return nmeFocusObject; }
-	private function set_focus(inObj:InteractiveObject):InteractiveObject {
+	private function get_focus ():InteractiveObject { return __focusObject; }
+	private function set_focus (inObj:InteractiveObject):InteractiveObject {
 		
-		nmeOnFocus(inObj);
-		// nmeOnFocus will have set nmeFocusObject to inObj
-		return nmeFocusObject;
+		__onFocus (inObj);
+		// __onFocus will have set __focusObject to inObj
+		return __focusObject;
 		
 	}
 	
 	
-	private function get_frameRate():Float { return nmeFrameRate; }
-	private function set_frameRate(speed:Float):Float {
+	private function get_frameRate ():Float { return __frameRate; }
+	private function set_frameRate (speed:Float):Float {
 		
 		if (speed == 0) {
 			
 			var window = Browser.window;
-			var nmeRequestAnimationFrame:Dynamic = untyped __js__("window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame");
+			var __requestAnimationFrame:Dynamic = untyped __js__("window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame");
 			
-			if (nmeRequestAnimationFrame == null) {
+			if (__requestAnimationFrame == null) {
 				
 				speed = 60;
 				
@@ -760,61 +760,61 @@ class Stage extends DisplayObjectContainer {
 		
 		if (speed != 0) {
 			
-			nmeInterval = Std.int( 1000.0/speed );
+			__interval = Std.int (1000.0 / speed);
 			
 		}
 		
-		nmeFrameRate = speed;
-		nmeUpdateNextWake();
+		__frameRate = speed;
+		__updateNextWake ();
 		
 		return speed;
 	}
 	
 	
-	private inline function get_fullScreenWidth():Int { return Lib.nmeFullScreenWidth(); }
-	private inline function get_fullScreenHeight():Int { return Lib.nmeFullScreenHeight(); }
+	private inline function get_fullScreenWidth ():Int { return Lib.__fullScreenWidth (); }
+	private inline function get_fullScreenHeight ():Int { return Lib.__fullScreenHeight (); }
 	
 	
-	private override function get_mouseX():Float { return _mouseX; }
-	private override function get_mouseY():Float { return _mouseY; }
+	private override function get_mouseX ():Float { return _mouseX; }
+	private override function get_mouseY ():Float { return _mouseY; }
 	
 	
-	private function get_quality():String { return this.quality != null ? this.quality : StageQuality.BEST; }
-	private function set_quality(inQuality:String):String { return this.quality = inQuality; }
+	private function get_quality ():String { return this.quality != null ? this.quality : StageQuality.BEST; }
+	private function set_quality (inQuality:String):String { return this.quality = inQuality; }
 	
 	
-	private inline function get_showDefaultContextMenu():Bool { return nmeShowDefaultContextMenu; }
-	private function set_showDefaultContextMenu(showDefaultContextMenu:Bool):Bool {
+	private inline function get_showDefaultContextMenu ():Bool { return __showDefaultContextMenu; }
+	private function set_showDefaultContextMenu (showDefaultContextMenu:Bool):Bool {
 		
 		if (showDefaultContextMenu != this.showDefaultContextMenu && this.showDefaultContextMenu != null) {
 			
 			if (!showDefaultContextMenu) {
 				
-				Lib.nmeDisableRightClick(); 
+				Lib.__disableRightClick (); 
 				
 			} else {
 				
-				Lib.nmeEnableRightClick();
+				Lib.__enableRightClick ();
 				
 			}
 			
 		}
 		
-		nmeShowDefaultContextMenu = showDefaultContextMenu;
+		__showDefaultContextMenu = showDefaultContextMenu;
 		return showDefaultContextMenu;
 		
 	}
 	
 	
-	override private function get_stage():Stage {
+	override private function get_stage ():Stage {
 		
-		return Lib.nmeGetStage();
+		return Lib.__getStage ();
 		
 	}
 	
 	
-	private function get_stageHeight():Int { return nmeWindowHeight; }
-	private function get_stageWidth():Int { return nmeWindowWidth; }
+	private function get_stageHeight ():Int { return __windowHeight; }
+	private function get_stageWidth ():Int { return __windowWidth; }
 	
 	
 }
@@ -826,7 +826,7 @@ private class TouchInfo {
 	public var touchOverObjects:Array<InteractiveObject>;
 	
 	
-	public function new() {
+	public function new () {
 		
 		touchOverObjects = [];
 		
@@ -834,6 +834,3 @@ private class TouchInfo {
 	
 	
 }
-
-
-#end

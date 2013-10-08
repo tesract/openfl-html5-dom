@@ -1,18 +1,14 @@
 package flash.errors;
-#if js
 
 
 class TypeError extends Error {
 	
 
-	public function new(inMessage:String = "") {
+	public function new (inMessage:String = "") {
 		
-		super(inMessage, 0);
+		super (inMessage, 0);
 		
 	}
 	
 	
 }
-
-
-#end

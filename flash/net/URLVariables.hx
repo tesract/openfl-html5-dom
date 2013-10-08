@@ -1,44 +1,43 @@
 package flash.net;
-#if js
 
 
 class URLVariables implements Dynamic {
 	
 	
-	public function new(inEncoded:String = null) {
+	public function new (inEncoded:String = null) {
 		
 		if (inEncoded != null) {
 			
-			decode(inEncoded);
+			decode (inEncoded);
 			
 		}
 		
 	}
 	
 	
-	public function decode(inVars:String):Void {
+	public function decode (inVars:String):Void {
 		
-		var fields = Reflect.fields(this);
+		var fields = Reflect.fields (this);
 		
 		for (f in fields) {
 			
-			Reflect.deleteField(this, f);
+			Reflect.deleteField (this, f);
 			
 		}
 		
-		var fields = inVars.split(";").join("&").split("&");
+		var fields = inVars.split (";").join ("&").split ("&");
 		
 		for (f in fields) {
 			
-			var eq = f.indexOf("=");
+			var eq = f.indexOf ("=");
 			
 			if (eq > 0) {
 				
-				Reflect.setField(this, StringTools.urlDecode(f.substr(0, eq)), StringTools.urlDecode(f.substr(eq + 1)));
+				Reflect.setField (this, StringTools.urlDecode (f.substr(0, eq)), StringTools.urlDecode (f.substr(eq + 1)));
 				
 			} else if (eq != 0) {
 				
-				Reflect.setField(this, StringTools.urlDecode(f), "");
+				Reflect.setField (this, StringTools.urlDecode (f), "");
 				
 			}
 			
@@ -47,23 +46,20 @@ class URLVariables implements Dynamic {
 	}
 	
 	
-	public function toString():String {
+	public function toString ():String {
 		
-		var result = new Array<String>();
-		var fields = Reflect.fields(this);
+		var result = new Array<String> ();
+		var fields = Reflect.fields (this);
 		
 		for (f in fields) {
 			
-			result.push(StringTools.urlEncode(f) + "=" + StringTools.urlEncode(Reflect.field(this, f)));
+			result.push (StringTools.urlEncode (f) + "=" + StringTools.urlEncode (Reflect.field (this, f)));
 			
 		}
 		
-		return result.join("&");
+		return result.join ("&");
 		
 	}
 	
 	
 }
-
-
-#end

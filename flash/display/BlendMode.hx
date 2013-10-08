@@ -1,5 +1,4 @@
 package flash.display;
-#if js
 
 
 enum BlendMode {
@@ -20,6 +19,3 @@ enum BlendMode {
 	SUBTRACT;
 	
 }
-
-
-#end

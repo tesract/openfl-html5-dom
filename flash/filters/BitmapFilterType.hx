@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 class BitmapFilterType {
@@ -9,6 +8,3 @@ class BitmapFilterType {
 	public inline static var OUTER = "outer";
 	
 }
-
-
-#end

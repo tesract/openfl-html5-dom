@@ -1,5 +1,4 @@
 package flash.filters;
-#if js
 
 
 import flash.geom.Point;
@@ -11,17 +10,17 @@ class BitmapFilter {
 	
 	
 	private var _mType:String;
-	private var _nmeCached:Bool;
+	private var ___cached:Bool;
 	
 
-	public function new(inType:String) {
+	public function new (inType:String) {
 		
 		_mType = inType;
 		
 	}
 	
 	
-	public function clone():BitmapFilter {
+	public function clone ():BitmapFilter {
 		
 		throw "Implement in subclass. BitmapFilter::clone";
 		return null;
@@ -29,14 +28,14 @@ class BitmapFilter {
 	}
 	
 	
-	public function nmePreFilter(surface:CanvasElement) {
+	public function __preFilter (surface:CanvasElement) {
 		
 		
 		
 	}
 	
 	
-	public function nmeApplyFilter(surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false) {
+	public function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false) {
 		
 		
 		
@@ -44,6 +43,3 @@ class BitmapFilter {
 	
 	
 }
-
-
-#end

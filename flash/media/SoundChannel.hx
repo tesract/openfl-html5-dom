@@ -1,5 +1,4 @@
 package flash.media;
-#if js
 
 
 import flash.events.Event;
@@ -11,96 +10,96 @@ import js.Browser;
 class SoundChannel extends EventDispatcher {
 	
 	
-	public var ChannelId(default, null):Int;
-	public var leftPeak(default, null):Float;
-	public var nmeAudio(default, null):MediaElement;
-	public var position(default, null):Float;
-	public var rightPeak(default, null):Float;
-	public var soundTransform(default, set_soundTransform):SoundTransform;
+	public var ChannelId (default, null):Int;
+	public var leftPeak (default, null):Float;
+	public var __audio (default, null):MediaElement;
+	public var position (default, null):Float;
+	public var rightPeak (default, null):Float;
+	public var soundTransform (default, set_soundTransform):SoundTransform;
 
-	private var nmeAudioCurrentLoop:Int;
-	private var nmeAudioTotalLoops:Int;
-	private var nmeRemoveRef:Void->Void;
-	private var nmeStartTime:Float;
+	private var __audioCurrentLoop:Int;
+	private var __audioTotalLoops:Int;
+	private var __removeRef:Void->Void;
+	private var __startTime:Float;
 	
 	
-	private function new():Void {
+	private function new ():Void {
 		
-		super(this);
+		super (this);
 		
 		ChannelId = -1;
 		leftPeak = 0.;
 		position = 0.;
 		rightPeak = 0.;
 		
-		nmeAudioCurrentLoop = 1;
-		nmeAudioTotalLoops = 1;
+		__audioCurrentLoop = 1;
+		__audioTotalLoops = 1;
 		
 	}
 	
 	
-	public static function nmeCreate(src:String, startTime:Float = 0.0, loops:Int = 0, sndTransform:SoundTransform = null, removeRef:Void->Void):SoundChannel {
+	public function stop ():Void {
 		
-		var channel = new SoundChannel();
-		
-		channel.nmeAudio = cast Browser.document.createElement("audio");
-		channel.nmeRemoveRef = removeRef;
-		channel.nmeAudio.addEventListener("ended", cast channel.__onSoundChannelFinished, false);
-		channel.nmeAudio.addEventListener("seeked", cast channel.__onSoundSeeked, false);
-		channel.nmeAudio.addEventListener("stalled", cast channel.__onStalled, false);
-		channel.nmeAudio.addEventListener("progress", cast channel.__onProgress, false);
-		
-		if (loops > 0) {
+		if (__audio != null) {
 			
-			channel.nmeAudioTotalLoops = loops;
-			// webkit-specific 
-			channel.nmeAudio.loop = true;
+			__audio.pause ();
+			__audio = null;
+			if (__removeRef != null) __removeRef ();
 			
 		}
 		
-		channel.nmeStartTime = startTime;
+	}
+	
+	
+	public static function __create (src:String, startTime:Float = 0.0, loops:Int = 0, sndTransform:SoundTransform = null, removeRef:Void->Void):SoundChannel {
+		
+		var channel = new SoundChannel ();
+		
+		channel.__audio = cast Browser.document.createElement ("audio");
+		channel.__removeRef = removeRef;
+		channel.__audio.addEventListener ("ended", cast channel.__onSoundChannelFinished, false);
+		channel.__audio.addEventListener ("seeked", cast channel.__onSoundSeeked, false);
+		channel.__audio.addEventListener ("stalled", cast channel.__onStalled, false);
+		channel.__audio.addEventListener ("progress", cast channel.__onProgress, false);
+		
+		if (loops > 0) {
+			
+			channel.__audioTotalLoops = loops;
+			// webkit-specific 
+			channel.__audio.loop = true;
+			
+		}
+		
+		channel.__startTime = startTime;
 		
 		if (startTime > 0.) {
 			
 			var onLoad = null;
 			
-			onLoad = function(_) { 
+			onLoad = function (_) { 
 				
-				channel.nmeAudio.currentTime = channel.nmeStartTime; 
-				channel.nmeAudio.play();
-				channel.nmeAudio.removeEventListener("canplaythrough", cast onLoad, false);
+				channel.__audio.currentTime = channel.__startTime; 
+				channel.__audio.play ();
+				channel.__audio.removeEventListener ("canplaythrough", cast onLoad, false);
 				
 			}
 			
-			channel.nmeAudio.addEventListener("canplaythrough", cast onLoad, false);
+			channel.__audio.addEventListener ("canplaythrough", cast onLoad, false);
 			
 		} else {
 			
-			channel.nmeAudio.autoplay = true;
+			channel.__audio.autoplay = true;
 			
 		}
 		
-		channel.nmeAudio.src = src;
+		channel.__audio.src = src;
 		
 		// note: the following line seems to crash completely on most browsers,
 		// maybe because the sound isn't loaded ?
 		
-		//if (startTime > 0.) channel.nmeAudio.currentTime = startTime;
+		//if (startTime > 0.) channel.__audio.currentTime = startTime;
 		
 		return channel;
-		
-	}
-	
-	
-	public function stop():Void {
-		
-		if (nmeAudio != null) {
-			
-			nmeAudio.pause();
-			nmeAudio = null;
-			if (nmeRemoveRef != null) nmeRemoveRef();
-			
-		}
 		
 	}
 	
@@ -112,71 +111,71 @@ class SoundChannel extends EventDispatcher {
 	
 	
 	
-	private function __onProgress(evt:Event):Void {
+	private function __onProgress (evt:Event):Void {
 		
 		#if debug
-		trace("sound progress: " + evt);
+		trace ("sound progress: " + evt);
 		#end
 		
 	}
 	
 	
-	private function __onSoundChannelFinished(evt:Event):Void {
+	private function __onSoundChannelFinished (evt:Event):Void {
 		
-		if (nmeAudioCurrentLoop >= nmeAudioTotalLoops) {
+		if (__audioCurrentLoop >= __audioTotalLoops) {
 			
-			nmeAudio.removeEventListener("ended", cast __onSoundChannelFinished, false);
-			nmeAudio.removeEventListener("seeked", cast __onSoundSeeked, false);
-			nmeAudio.removeEventListener("stalled", cast __onStalled, false);
-			nmeAudio.removeEventListener("progress", cast __onProgress, false);
-			nmeAudio = null;
+			__audio.removeEventListener ("ended", cast __onSoundChannelFinished, false);
+			__audio.removeEventListener ("seeked", cast __onSoundSeeked, false);
+			__audio.removeEventListener ("stalled", cast __onStalled, false);
+			__audio.removeEventListener ("progress", cast __onProgress, false);
+			__audio = null;
 			
-			var evt = new Event(Event.COMPLETE);
+			var evt = new Event (Event.COMPLETE);
 			evt.target = this;
-			dispatchEvent(evt);
+			dispatchEvent (evt);
 			
-			if (nmeRemoveRef != null) {
+			if (__removeRef != null) {
 				
-				nmeRemoveRef();
+				__removeRef ();
 				
 			}
 			
 		} else {
 			
 			// firefox-specific
-			nmeAudio.currentTime = nmeStartTime;
-			nmeAudio.play();
+			__audio.currentTime = __startTime;
+			__audio.play();
 			
 		}
 		
 	}
 	
 	
-	private function __onSoundSeeked(evt:Event):Void {
+	private function __onSoundSeeked (evt:Event):Void {
 		
-		if (nmeAudioCurrentLoop >= nmeAudioTotalLoops) {
+		if (__audioCurrentLoop >= __audioTotalLoops) {
 			
-			nmeAudio.loop = false;
+			__audio.loop = false;
 			stop();
 			
 		} else {
 			
-			nmeAudioCurrentLoop++;
+			__audioCurrentLoop++;
 			
 		}
 		
 	}
 	
 	
-	private function __onStalled(evt:Event):Void {
+	private function __onStalled (evt:Event):Void {
 		
 		#if debug
-		trace("sound stalled");
+		trace ("sound stalled");
 		#end
 		
-		if (nmeAudio != null) {
+		if (__audio != null) {
 			
-			nmeAudio.load();
+			__audio.load ();
 			
 		}
 		
@@ -190,15 +189,12 @@ class SoundChannel extends EventDispatcher {
 	
 	
 	
-	private function set_soundTransform(v:SoundTransform):SoundTransform {
+	private function set_soundTransform (v:SoundTransform):SoundTransform {
 		
-		nmeAudio.volume = v.volume;
+		__audio.volume = v.volume;
 		return this.soundTransform = v;
 		
 	}
 	
 	
 }
-
-
-#end

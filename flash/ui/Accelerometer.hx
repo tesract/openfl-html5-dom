@@ -1,5 +1,4 @@
 package flash.ui;
-#if js
 
 
 import flash.display.Stage;
@@ -8,14 +7,11 @@ import flash.display.Stage;
 class Accelerometer {
 	
 	
-	public static function get():Acceleration {
+	public static function get ():Acceleration {
 		
-		return Stage.nmeAcceleration;
+		return Stage.__acceleration;
 		
 	}
 	
 	
 }
-
-
-#end

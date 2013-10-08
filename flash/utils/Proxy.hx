@@ -1,11 +1,10 @@
 package flash.utils;
-#if js
 
 
 class Proxy {
 	
 	
-	function new() {
+	function new () {
 		
 		
 	}
@@ -24,6 +23,3 @@ class Proxy {
 	*/
 	
 }
-
-
-#end
