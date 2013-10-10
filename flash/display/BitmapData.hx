@@ -943,6 +943,15 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
+	public static function loadFromBase64 (base64:String, type:String, onload:BitmapData -> Void) {
+		
+		var bitmapData = new BitmapData (0, 0);
+		bitmapData.__loadFromBase64 (base64, type, onload);
+		return bitmapData;
+		
+	}
+	
+	
 	public static function loadFromBytes (bytes:ByteArray, inRawAlpha:ByteArray = null, onload:BitmapData -> Void) {
 		
 		var bitmapData = new BitmapData (0, 0);
@@ -1345,7 +1354,36 @@ class BitmapData implements IBitmapDrawable {
 	}
 	
 	
-	private inline function __loadFromBytes (bytes:ByteArray, inRawAlpha:ByteArray = null, ?onload:BitmapData -> Void) {
+	private inline function __loadFromBase64 (base64:String, type:String, ?onload:BitmapData -> Void):Void {
+		
+		var img:ImageElement = cast Browser.document.createElement ("img");
+		var canvas = ___textureBuffer;
+		
+		var drawImage = function (_) {
+			
+			canvas.width = img.width;
+			canvas.height = img.height;
+			
+			var ctx = canvas.getContext ('2d');
+			ctx.drawImage (img, 0, 0);
+			
+			rect = new Rectangle (0, 0, canvas.width, canvas.height);
+			
+			if (onload != null) {
+				
+				onload (this);
+				
+			}
+			
+		}
+		
+		img.addEventListener ("load", drawImage, false);
+		img.src = "data:" + type + ";base64," + base64;
+		
+	}
+	
+	
+	private inline function __loadFromBytes (bytes:ByteArray, inRawAlpha:ByteArray = null, ?onload:BitmapData -> Void):Void {
 		
 		var type = "";
 		
@@ -1363,20 +1401,12 @@ class BitmapData implements IBitmapDrawable {
 			
 		}
 		
-		var img:ImageElement = cast Browser.document.createElement ("img");
-		var canvas = ___textureBuffer;
-		
-		var drawImage = function (_) {
+		if (inRawAlpha != null) {
 			
-			canvas.width = img.width;
-			canvas.height = img.height;
-			
-			var ctx = canvas.getContext ('2d');
-			ctx.drawImage (img, 0, 0);
-			
-			if (inRawAlpha != null) {
+			__loadFromBase64 (__base64Encode (bytes), type, function (_) {
 				
-				var pixels = ctx.getImageData (0, 0, img.width, img.height);
+				var ctx = ___textureBuffer.getContext ('2d');
+				var pixels = ctx.getImageData (0, 0, ___textureBuffer.width, ___textureBuffer.height);
 				
 				for (i in 0...inRawAlpha.length) {
 					
@@ -1386,20 +1416,19 @@ class BitmapData implements IBitmapDrawable {
 				
 				ctx.putImageData (pixels, 0, 0);
 				
-			}
-			
-			rect = new Rectangle (0, 0, canvas.width, canvas.height);
-			
-			if (onload != null) {
+				if (onload != null) {
+					
+					onload (this);
+					
+				}
 				
-				onload (this);
-				
-			}
+			});
+			
+		} else {
+			
+			__loadFromBase64 (__base64Encode (bytes), type, onload);
 			
 		}
-		
-		img.addEventListener ("load", drawImage, false);
-		img.src = 'data:$type;base64,${__base64Encode(bytes)}';
 		
 	}
 	
