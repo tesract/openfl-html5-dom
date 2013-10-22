@@ -130,7 +130,7 @@ class SoundChannel extends EventDispatcher {
 			__audio.removeEventListener ("progress", cast __onProgress, false);
 			__audio = null;
 			
-			var evt = new Event (Event.COMPLETE);
+			var evt = new Event (Event.SOUND_COMPLETE);
 			evt.target = this;
 			dispatchEvent (evt);
 			
