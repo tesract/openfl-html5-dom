@@ -1,11 +1,11 @@
 {
-	"name": "openfl-html5",
+	"name": "openfl-html5-dom",
 	"url": "http://www.openfl.org",
 	"license": "MIT",
 	"tags": [],
-	"description": "OpenFL support for HTML5",
+	"description": "OpenFL support for HTML5 (using the DOM)",
 	"version": "1.1.0",
-	"releasenote": "Small patches",
+	"releasenote": "Rename from openfl-html5",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
