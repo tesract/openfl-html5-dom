@@ -15,7 +15,7 @@ before_install:
   - haxelib install format
   - haxelib install munit
   - git clone https://github.com/openfl/openfl-validation ~/openfl-validation
-  - haxelib dev openfl-html5 $(pwd)
+  - haxelib dev openfl-html5-dom $(pwd)
 
 script:
   - haxelib run openfl build ~/openfl-validation html5

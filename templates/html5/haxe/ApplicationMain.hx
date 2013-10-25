@@ -1,5 +1,5 @@
 #if !macro
-#if (openfl_html5 && !flambe)
+#if (openfl_html5_dom && !flambe)
 
 import ::APP_MAIN_PACKAGE::::APP_MAIN_CLASS::;
 import haxe.Resource;
