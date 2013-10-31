@@ -98,7 +98,14 @@ class Matrix3D {
 		return new Matrix3D (this.rawData.copy ());
 		
 	}
-	
+
+	public function copyFrom (other:Matrix3D):Void {
+		
+		for (i in 0...16) {
+			rawData[i] = other.rawData[i];
+		}
+
+	}
 	
 	public static function create2D (x:Float, y:Float, scale:Float = 1, rotation:Float = 0) {
 		
