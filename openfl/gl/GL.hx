@@ -898,9 +898,7 @@ class GL {
 	
 	public static function getExtension (name:String):Dynamic {
 		
-		// TODO
-		
-		return null;
+		return __context.getExtension(name);
 		
 	}
 	
@@ -973,10 +971,7 @@ class GL {
 	
 	public static function getSupportedExtensions ():Array<String> {
 		
-		// TODO
-		
-		return null;
-		//return __context.getSuppo
+		return __context.getSupportedExtensions();
 		
 	}
 	
