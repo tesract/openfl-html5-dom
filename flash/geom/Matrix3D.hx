@@ -135,7 +135,7 @@ class Matrix3D {
 	}
 	
 	
-	public static function createOrth (x0:Float, x1:Float,  y0:Float, y1:Float, zNear:Float, zFar:Float) {
+	public static function createOrtho (x0:Float, x1:Float,  y0:Float, y1:Float, zNear:Float, zFar:Float) {
 		
 		var sx = 1.0 / (x1 - x0);
 		var sy = 1.0 / (y1 - y0);
