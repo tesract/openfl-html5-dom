@@ -37,7 +37,8 @@ class Stage extends DisplayObjectContainer {
 	public static var __acceleration:Acceleration = { x: 0.0, y: 1.0, z: 0.0 };
 	
 	public var align:StageAlign;
-	public var backgroundColor (get_backgroundColor, set_backgroundColor):Int;
+	public var backgroundColor (get_backgroundColor, set_backgroundColor):Int; // Keeping for backward compatibility, for now
+	public var color (get, set):Int;
 	@:isVar public var displayState (get_displayState, set_displayState):StageDisplayState;
 	public var focus (get_focus, set_focus):InteractiveObject;
 	public var frameRate (get_frameRate, set_frameRate):Float;
@@ -710,6 +711,9 @@ class Stage extends DisplayObjectContainer {
 	
 	private function get_backgroundColor ():Int { return __backgroundColour; }
 	private function set_backgroundColor (col:Int):Int { return __backgroundColour = col; }
+	
+	private function get_color ():Int { return __backgroundColour; }
+	private function set_color (col:Int):Int { return __backgroundColour = col; }
 	
 	
 	private inline function get_displayState ():StageDisplayState { return this.displayState; }
