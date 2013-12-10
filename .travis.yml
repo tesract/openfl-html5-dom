@@ -11,7 +11,7 @@ before_install:
   - mkdir ~/haxelib
   - haxelib setup ~/haxelib
   - haxelib install openfl
-  - haxelib install hxtools
+  - haxelib install lime-tools
   - haxelib install format
   - haxelib install munit
   - git clone https://github.com/openfl/openfl-validation ~/openfl-validation
