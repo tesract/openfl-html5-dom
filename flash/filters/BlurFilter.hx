@@ -8,6 +8,7 @@ import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.Uint8ClampedArray;
 import flash.Vector;
+import flash.Lib;
 
 
 class BlurFilter extends BitmapFilter {
