@@ -34,7 +34,7 @@ class BlurFilter extends BitmapFilter {
 		MAX_BLUR_HEIGHT = Lib.current.stage.stageHeight;
 		
 		quality = ( inQuality == null ? 1 : inQuality);
-		var bgColor = Lib.current.stage.backgroundColor;
+		var bgColor = Lib.current.stage.color;
 		__bG = [(bgColor & 0xFF0000) >>> 16, (bgColor & 0x00FF00) >>> 8, (bgColor & 0x0000FF)];
 		
 	}
