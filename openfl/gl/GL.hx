@@ -765,7 +765,7 @@ class GL {
 	
 	public static function disable (cap:Int):Void {
 		
-		//__context.disable (cap);
+		__context.disable (cap);
 		
 	}
 	
@@ -793,7 +793,7 @@ class GL {
 	
 	public static function enable (cap:Int):Void {
 		
-		//__context.enable (cap);
+		__context.enable (cap);
 		
 	}
 	
