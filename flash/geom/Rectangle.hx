@@ -187,19 +187,19 @@ class Rectangle {
 	}
 	
 	
+	public function setEmpty ():Void {
+		
+		x = y = width = height = 0;
+		
+	}
+	
+	
 	public function setTo (xa:Float, ya:Float, widtha:Float, heighta:Float):Void {
 		
 		x = xa;
 		y = ya;
 		width = widtha;
 		height = heighta;
-		
-	}
-	
-	
-	public function setEmpty ():Void {
-		
-		x = y = width = height = 0;
 		
 	}
 	
