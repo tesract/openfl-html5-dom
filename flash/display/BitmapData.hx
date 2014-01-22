@@ -503,7 +503,10 @@ class BitmapData implements IBitmapDrawable {
 		
 		__buildLease ();
 		var ctx:CanvasRenderingContext2D = inSurface.getContext ('2d');
-		
+		if ( blendMode == BlendMode.ADD )
+		{
+			ctx.globalCompositeOperation = "lighter";
+		}
 		if (matrix != null) {
 			
 			ctx.save ();
@@ -532,6 +535,10 @@ class BitmapData implements IBitmapDrawable {
 			
 			this.colorTransform (new Rectangle(0, 0, handle ().width, handle ().height), inColorTransform);
 			
+		}
+		if ( blendMode == BlendMode.ADD )
+		{
+			ctx.globalCompositeOperation = "source-over";
 		}
 		
 	}
