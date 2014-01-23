@@ -1401,7 +1401,9 @@ class BitmapData implements IBitmapDrawable {
 		} else if (__isJPG (bytes)) {
 			
 			type = "image/jpeg";
+		} else if (__isGIF (bytes)) {
 			
+			type = "image/gif";
 		} else {
 			
 			throw new IOError ("BitmapData tried to read a PNG/JPG ByteArray, but found an invalid header.");
@@ -1482,6 +1484,21 @@ class BitmapData implements IBitmapDrawable {
 		bytes.position = 0;
 		return (bytes.readByte () == 0x89 && bytes.readByte () == 0x50 && bytes.readByte () == 0x4E && bytes.readByte () == 0x47 && bytes.readByte () == 0x0D && bytes.readByte () == 0x0A && bytes.readByte () == 0x1A && bytes.readByte () == 0x0A);
 		
+	}
+	
+	private static function __isGIF (bytes:ByteArray) {
+		
+		bytes.position = 0;
+		
+		//GIF8
+		if  (bytes.readByte () == 0x47 && bytes.readByte () == 0x49 && bytes.readByte () == 0x46 && bytes.readByte () == 38 )
+		{
+			var b = bytes.readByte();
+			
+			return ((b==7 || b==9) && bytes.readByte()==0x61 ); //(7|8)a
+		}
+		
+		return false;
 	}
 	
 	
