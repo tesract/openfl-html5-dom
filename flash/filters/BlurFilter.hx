@@ -55,7 +55,7 @@ class BlurFilter extends BitmapFilter {
 	}
 	
 	
-	public function __preFilter (surface:CanvasElement):Void {
+	public override function __preFilter (surface:CanvasElement):Void {
 		
 		var ctx:CanvasRenderingContext2D = surface.getContext ('2d');
 		__kernel = new Vector ();
@@ -161,7 +161,7 @@ class BlurFilter extends BitmapFilter {
 	}
 	
 	
-	public function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
+	public override function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
 		
 		if (surface.width > 0 && surface.height > 0) {
 			
