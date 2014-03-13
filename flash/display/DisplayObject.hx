@@ -1029,7 +1029,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		} else {
 			
 			__filters = new Array<BitmapFilter> ();
-			for (filter in filters) __filters.push (filter.clone ());
+			for (filter in filters) {
+				if (filter != null) {
+					__filters.push (filter.clone ());
+				}
+			}
 			invalidateGraphics ();
 			
 		}
