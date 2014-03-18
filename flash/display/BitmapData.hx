@@ -1405,6 +1405,7 @@ class BitmapData implements IBitmapDrawable {
 		} else if (__isGIF (bytes)) {
 			
 			type = "image/gif";
+			
 		} else {
 			
 			throw new IOError ("BitmapData tried to read a PNG/JPG/GIF ByteArray, but found an invalid header.");
@@ -1501,7 +1502,6 @@ class BitmapData implements IBitmapDrawable {
 		
 		return false;
 	}
-	
 	
 	public function __loadFromFile (inFilename:String, inLoader:LoaderInfo = null) {
 		
